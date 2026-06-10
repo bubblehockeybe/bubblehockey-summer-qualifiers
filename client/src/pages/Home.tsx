@@ -66,26 +66,26 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 
 const timelineSteps = [
   { num: "01", label: "MI-JUIN", badge: "INSERT COIN", title: "LANCEMENT", desc: "Le nouveau format est annoncé. Sessions découverte ouvertes à tous. Aucune expérience requise.", color: "#00f5ff" },
-  { num: "02", label: "FIN JUIN – JUILLET", badge: "LEVEL 1", title: "DÉCOUVERTE", desc: "Soirées d'initiation au Brussels Pinball Museum. Règles en 2 minutes, coaching autorisé, débutants bienvenus.", color: "#ff2d55" },
-  { num: "03", label: "JUILLET – AOÛT", badge: "LEVEL 2", title: "QUALIFICATIONS", desc: "Chaque soirée, des matchs comptent pour le leaderboard estival. Gagne des points, grimpe au classement.", color: "#ffd700" },
-  { num: "04", label: "FIN AOÛT", badge: "LAST CHANCE", title: "REPÊCHAGE", desc: "Soirée spéciale pour les équipes qui n'ont pas encore leur ticket. Les dernières places s'envolent ici.", color: "#ff2d55" },
-  { num: "05", label: "DÉBUT SEPTEMBRE", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "Top 8 ou Top 16. Playoffs, trophée pixel, ambiance de feu. Qui sera champion de Bruxelles ?", color: "#ffd700" },
+  { num: "02", label: "FIN JUIN - JUILLET", badge: "LEVEL 1", title: "DECOUVERTE", desc: "Soirées d'initiation au Brussels Pinball Museum. Règles en 2 minutes, coaching autorisé, débutants bienvenus.", color: "#ff2d55" },
+  { num: "03", label: "JUILLET - AOUT", badge: "LEVEL 2", title: "QUALIFICATIONS", desc: "Chaque soirée, des matchs comptent pour le leaderboard estival. Gagne des points, grimpe au classement.", color: "#ffd700" },
+  { num: "04", label: "FIN AOUT", badge: "LAST CHANCE", title: "REPECHAGE", desc: "Soirée spéciale pour les équipes qui n'ont pas encore leur ticket. Les dernières places s'envolent ici.", color: "#ff2d55" },
+  { num: "05", label: "DEBUT SEPTEMBRE", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "Top 8 ou Top 16. Playoffs, trophée pixel, ambiance de feu. Qui sera champion de Bruxelles ?", color: "#ffd700" },
 ];
 
 const sessionSteps = [
-  { icon: "🎮", time: "5–10 MIN", title: "ACCUEIL", desc: "Présentation, équipes, mise à l'aise." },
-  { icon: "⚡", time: "5 MIN", title: "DÉMO EXPRESS", desc: "Contrôles et règles en une partie." },
-  { icon: "🏒", time: "15–20 MIN", title: "ENTRAÎNEMENT", desc: "Coaching autorisé, essais libres." },
-  { icon: "🏆", time: "30–45 MIN", title: "MATCHS QUALIF", desc: "2 à 4 matchs par équipe, scores notés." },
-  { icon: "📸", time: "5–10 MIN", title: "CLÔTURE", desc: "Classement du soir, photos, invitation à revenir." },
+  { icon: "🎮", time: "5-10 MIN", title: "ACCUEIL", desc: "Présentation, équipes, mise à l'aise." },
+  { icon: "⚡", time: "5 MIN", title: "DEMO EXPRESS", desc: "Contrôles et règles en une partie." },
+  { icon: "🏒", time: "15-20 MIN", title: "ENTRAINEMENT", desc: "Coaching autorisé, essais libres." },
+  { icon: "🏆", time: "30-45 MIN", title: "MATCHS QUALIF", desc: "2 à 4 matchs par équipe, scores notés." },
+  { icon: "📸", time: "5-10 MIN", title: "CLOTURE", desc: "Classement du soir, photos, invitation à revenir." },
 ];
 
 const faqItems = [
-  { q: "ON NE CONNAÎT PAS LE JEU. ON PEUT VENIR ?", a: "C'est exactement pour ça qu'on a créé ces sessions. Le jeu s'apprend en quelques minutes, le staff est là, et vous jouerez plusieurs matchs dès la première soirée." },
-  { q: "ON DOIT ÊTRE DEUX POUR S'INSCRIRE ?", a: "Oui, le bubble hockey se joue en équipe de deux. Si vous venez seul, on peut vous trouver un partenaire sur place selon les disponibilités." },
-  { q: "COMBIEN ÇA COÛTE ?", a: "15 € par équipe, crédits d'entraînement inclus. Inscription en ligne ou directement sur place." },
-  { q: "COMMENT SAIT-ON SI ON EST QUALIFIÉ ?", a: "Le leaderboard estival est mis à jour après chaque soirée. Les équipes qualifiées sont annoncées sur le site. Une soirée Last Chance fin août donne une dernière chance." },
-  { q: "OÙ ÇA SE PASSE ?", a: "Au Brussels Pinball Museum. L'adresse et les horaires des sessions sont publiés sur cette page et sur les réseaux sociaux." },
+  { q: "ON NE CONNAIT PAS LE JEU. ON PEUT VENIR ?", a: "C'est exactement pour ça qu'on a créé ces sessions. Le jeu s'apprend en quelques minutes, le staff est là, et vous jouerez plusieurs matchs dès la première soirée." },
+  { q: "ON DOIT ETRE DEUX POUR S'INSCRIRE ?", a: "Oui, le bubble hockey se joue en équipe de deux. Si vous venez seul, on peut vous trouver un partenaire sur place selon les disponibilités." },
+  { q: "COMBIEN CA COUTE ?", a: "15 € par équipe, crédits d'entraînement inclus. Inscription en ligne ou directement sur place." },
+  { q: "COMMENT SAIT-ON SI ON EST QUALIFIE ?", a: "Le leaderboard estival est mis à jour après chaque soirée. Les équipes qualifiées sont annoncées sur le site. Une soirée Last Chance fin août donne une dernière chance." },
+  { q: "OU CA SE PASSE ?", a: "Au Brussels Pinball Museum. L'adresse et les horaires des sessions sont publiés sur cette page et sur les réseaux sociaux." },
 ];
 
 export default function Home() {
@@ -167,7 +167,7 @@ export default function Home() {
             <div
               style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ffd700", letterSpacing: "0.2em", marginBottom: "1.5rem", textShadow: "0 0 8px #ffd700" }}
             >
-              ★ BRUSSELS PINBALL MUSEUM · ÉTÉ 2026 ★
+              ★ BRUSSELS PINBALL MUSEUM · ETE 2026 ★
             </div>
           </motion.div>
 
@@ -268,7 +268,7 @@ export default function Home() {
                 }}
                 className="hover:bg-cyan-950 active:scale-95 transition-all"
               >
-                ? COMMENT ÇA MARCHE
+                ? COMMENT CA MARCHE
               </button>
             </a>
           </motion.div>
@@ -295,8 +295,8 @@ export default function Home() {
           className="relative z-10 mt-16 grid grid-cols-3 gap-4 w-full max-w-2xl px-4"
         >
           {[
-            { label: "PRIX / ÉQUIPE", value: "15", suffix: "€" },
-            { label: "JOUEURS / ÉQUIPE", value: "2", suffix: "" },
+            { label: "PRIX / EQUIPE", value: "15", suffix: "€" },
+            { label: "JOUEURS / EQUIPE", value: "2", suffix: "" },
             { label: "GRANDE FINALE", value: "SEPT", suffix: "" },
           ].map((stat, i) => (
             <div
@@ -319,7 +319,7 @@ export default function Home() {
       <section id="comment" className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // NIVEAU 0 — TUTORIEL
+            // NIVEAU 0 - TUTORIEL
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
             C'EST QUOI<br />LE BUBBLE HOCKEY ?
@@ -333,7 +333,7 @@ export default function Home() {
                 Le Brussels Pinball Museum possède l'une des rares machines de Bruxelles. Le jeu est simple à comprendre, difficile à maîtriser — exactement ce qu'il faut pour un tournoi estival.
               </p>
               <div className="flex flex-wrap gap-3">
-                {["ÉQUIPES DE 2", "DÉBUTANTS OK", "15€ / ÉQUIPE", "COACHING INCLUS"].map((tag) => (
+                {["EQUIPES DE 2", "DEBUTANTS OK", "15€ / EQUIPE", "COACHING INCLUS"].map((tag) => (
                   <span
                     key={tag}
                     style={{
@@ -367,10 +367,10 @@ export default function Home() {
       <section id="calendrier" className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #00f5ff22", borderBottom: "2px solid #00f5ff22" }}>
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // SÉLECTION DE NIVEAU
+            // SELECTION DE NIVEAU
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "3rem", lineHeight: 1.6 }}>
-            UN ÉTÉ POUR APPRENDRE.<br />SEPTEMBRE POUR GAGNER.
+            UN ETE POUR APPRENDRE.<br />SEPTEMBRE POUR GAGNER.
           </h2>
           <div className="space-y-6">
             {timelineSteps.map((step, i) => (
@@ -412,10 +412,10 @@ export default function Home() {
       <section id="sessions" className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // DÉROULEMENT D'UNE SOIRÉE
+            // DEROULEMENT D'UNE SOIREE
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "3rem", lineHeight: 1.6 }}>
-            UNE SESSION = 60 À 90 MIN.
+            UNE SESSION = 60 A 90 MIN.
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {sessionSteps.map((item, i) => (
@@ -444,10 +444,10 @@ export default function Home() {
       <section className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #ff2d5522", borderBottom: "2px solid #ff2d5522" }}>
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // SYSTÈME DE QUALIFICATION
+            // SYSTEME DE QUALIFICATION
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
-            4 FAÇONS DE DÉCROCHER<br />SON TICKET FINALE.
+            4 FACONS DE DECROCHER<br />SON TICKET FINALE.
           </h2>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
             {[
@@ -482,13 +482,13 @@ export default function Home() {
           <PixelBorder color="#ffd700">
             <div className="p-6" style={{ background: "#ffd70008" }}>
               <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ffd700", marginBottom: "1rem", letterSpacing: "0.15em" }}>
-                ★ BARÈME DES POINTS ★
+                ★ BAREME DES POINTS ★
               </div>
               <div className="flex flex-wrap gap-4">
                 {[
                   { label: "VICTOIRE", pts: "3 PTS", color: "#ffd700" },
-                  { label: "ÉGALITÉ", pts: "1 PT", color: "#00f5ff" },
-                  { label: "DÉFAITE", pts: "0 PT", color: "#606080" },
+                  { label: "EGALITE", pts: "1 PT", color: "#00f5ff" },
+                  { label: "DEFAITE", pts: "0 PT", color: "#606080" },
                 ].map((r) => (
                   <div key={r.label} className="flex items-center gap-3">
                     <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#a0a0c0" }}>{r.label}</span>
@@ -512,12 +512,12 @@ export default function Home() {
                 // FINAL BOSS
               </div>
               <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-                LA GRANDE FINALE<br />DÉBUT SEPTEMBRE.
+                LA GRANDE FINALE<br />DEBUT SEPTEMBRE.
               </h2>
               <div className="space-y-4">
                 {[
                   { num: "01", title: "POOLS", desc: "4 groupes de 4 équipes. 3 matchs chacune. Les 2 meilleures passent." },
-                  { num: "02", title: "TOP 8 — PLAYOFFS", desc: "Élimination directe en BO3. Quarts, demis, finale." },
+                  { num: "02", title: "TOP 8 - PLAYOFFS", desc: "Elimination directe en BO3. Quarts, demis, finale." },
                   { num: "03", title: "FINALE BO5", desc: "La grande finale en 5 matchs. Tension maximale." },
                   { num: "04", title: "DUEL FINAL 1V1", desc: "En cas d'égalité, les deux joueurs s'affrontent individuellement." },
                 ].map((item, i) => (
@@ -599,7 +599,7 @@ export default function Home() {
             // PLAYER REGISTRATION
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.6 }}>
-            INSCRIS TON ÉQUIPE.
+            INSCRIS TON EQUIPE.
           </h2>
           <p style={{ fontSize: "0.7rem", color: "#808090", lineHeight: 2.2, marginBottom: "2.5rem" }}>
             15 € par équipe de deux. Crédits d'entraînement inclus.<br />
@@ -612,7 +612,7 @@ export default function Home() {
                 <div className="grid sm:grid-cols-2 gap-5 mb-5">
                   <div>
                     <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                      NOM DE L'ÉQUIPE
+                      NOM DE L'EQUIPE
                     </label>
                     <input
                       type="text"
@@ -671,7 +671,7 @@ export default function Home() {
                       outline: "none",
                     }}
                   >
-                    <option value="session" style={{ background: "#0a0a1f" }}>SESSION DÉCOUVERTE</option>
+                    <option value="session" style={{ background: "#0a0a1f" }}>SESSION DECOUVERTE</option>
                     <option value="qualification" style={{ background: "#0a0a1f" }}>SESSION DE QUALIFICATION</option>
                     <option value="finale" style={{ background: "#0a0a1f" }}>GRANDE FINALE (SUR INVITATION)</option>
                   </select>
@@ -702,11 +702,11 @@ export default function Home() {
                 <div className="p-10 text-center" style={{ background: "#ffd70008" }}>
                   <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏆</div>
                   <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "1rem" }}>
-                    INSCRIPTION REÇUE !
+                    INSCRIPTION RECUE !
                   </div>
                   <p style={{ fontSize: "0.65rem", color: "#a0a0c0", lineHeight: 2.2 }}>
                     On revient vers vous rapidement avec les détails de votre session.<br />
-                    À très vite au Brussels Pinball Museum !
+                    A tres vite au Brussels Pinball Museum !
                   </p>
                   <div className="mt-4">
                     <BlinkText>
@@ -731,7 +731,7 @@ export default function Home() {
           BUBBLE HOCKEY SUMMER QUALIFIERS
         </div>
         <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#404060", marginBottom: "1rem" }}>
-          BRUSSELS PINBALL MUSEUM · ÉTÉ 2026
+          BRUSSELS PINBALL MUSEUM - ETE 2026
         </div>
         <a
           href="https://bubblehockey.be"
@@ -745,7 +745,7 @@ export default function Home() {
         <div className="mt-6">
           <BlinkText>
             <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#303050" }}>
-              © 2026 GAME OVER? NO — INSERT COIN.
+              © 2026 GAME OVER? NO - INSERT COIN.
             </span>
           </BlinkText>
         </div>
