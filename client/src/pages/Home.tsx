@@ -94,7 +94,7 @@ const faqItems = [
   { q: "ON NE CONNAIT PAS LE JEU. ON PEUT VENIR ?", a: "Oui, et c'est fait pour ca. L'entrainement du debut de soiree est gratuit et ouvert a tous. Vous apprenez les regles en 2 minutes, vous jouez des parties libres avec du coaching, et vous decidez ensuite si vous voulez tenter votre qualification." },
   { q: "C'EST GRATUIT OU PAYANT ?", a: "L'accueil et l'entrainement sont 100% gratuits. Vous pouvez revenir autant de dimanches que vous voulez sans payer. Les matchs de qualification coutent 15 EUR pour votre premiere tentative, puis 10 EUR pour chaque tentative suivante." },
   { q: "ON DOIT ETRE DEUX POUR VENIR ?", a: "Pour les matchs de qualification, oui : le bubble hockey se joue en equipe de deux. Pour l'entrainement gratuit, vous pouvez venir seul. On peut aussi vous trouver un partenaire sur place selon les disponibilites." },
-  { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026 au Brussels Pinball Museum. La grande finale aura lieu debut septembre, date exacte a confirmer." },
+  { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026, a partir de 19h00. Au Brussels Pinball Museum, 1501 chaussee de Wavre, 1160 Auderghem. La grande finale aura lieu debut septembre, date exacte a confirmer." },
   { q: "COMMENT ON SE QUALIFIE ?", a: "En gagnant vos matchs du soir, ou en accumulant des points au classement general. 16 equipes seront qualifiees pour la finale. Une soiree Last Chance le 30 aout donne une derniere chance aux equipes pas encore qualifiees." },
 ];
 
@@ -472,9 +472,31 @@ export default function Home() {
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
             TOUS LES DIMANCHES SOIR
           </h2>
-          <p style={{ fontSize: "0.7rem", color: "#a0a0c0", marginBottom: "2rem", lineHeight: 2 }}>
-            Du 5 juillet au 30 aout 2026 au Brussels Pinball Museum.
-          </p>
+          <div className="flex flex-wrap gap-6 mb-8">
+            <div className="flex items-start gap-3">
+              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9201;</span>
+              <div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>HEURE</div>
+                <div style={{ fontSize: "0.7rem", color: "#a0a0c0" }}>A partir de 19h00</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9679;</span>
+              <div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>LIEU</div>
+                <a
+                  href="https://maps.google.com/?q=1501+chaussee+de+wavre+1160+Auderghem+Bruxelles"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: "0.7rem", color: "#ffd700", textDecoration: "none" }}
+                  className="hover:underline"
+                >
+                  Brussels Pinball Museum<br />
+                  <span style={{ color: "#a0a0c0" }}>1501 chaussee de Wavre, 1160 Auderghem</span>
+                </a>
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
             {sessionDates.map((s, i) => (
               <motion.div
@@ -799,8 +821,11 @@ export default function Home() {
         <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "0.5rem" }}>
           BUBBLE HOCKEY SUMMER QUALIFIERS
         </div>
-        <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#404060", marginBottom: "1rem" }}>
+        <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#404060", marginBottom: "0.5rem" }}>
           BRUSSELS PINBALL MUSEUM - ETE 2026
+        </div>
+        <div style={{ fontSize: "0.6rem", color: "#404060", marginBottom: "1rem" }}>
+          1501 chaussee de Wavre, 1160 Auderghem &nbsp;|&nbsp; Dimanches a partir de 19h00
         </div>
         <a
           href="https://bubblehockey.be"
