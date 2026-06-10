@@ -231,10 +231,10 @@ export default function Home() {
           BH<span style={{ color: "#ff2d55" }}>▶</span>BXL
         </div>
         <div className="hidden md:flex gap-8">
-          {["COMMENT", "SESSIONS", "CALENDRIER", "FAQ"].map((item) => (
+          {["COMMENT", "SESSIONS", "CALENDRIER", "HALL OF FAME", "FAQ"].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase()}`}
+              href={`#${item.toLowerCase().replace(/ /g, "")}`}
               style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textDecoration: "none", letterSpacing: "0.1em" }}
               className="hover:text-yellow-300 transition-colors"
             >
@@ -781,7 +781,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FAQ ── */}
+      {/* ── HALL OF FAME ── */}
+      <section id="halloffame" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, #0a0a0f 0%, #1a0f00 50%, #0a0a0f 100%)", borderTop: "2px solid #ffd70033", borderBottom: "2px solid #ffd70033" }}>
+        {/* Motif etoiles pixel */}
+        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,215,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
+        <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
+          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
+            // QUALIFIES POUR LA FINALE
+          </div>
+          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 3vw, 2rem)", color: "#ffd700", textShadow: "0 0 20px #ffd700, 0 0 40px #ffd70055", marginBottom: "0.5rem" }}>
+            HALL OF FAME
+          </h2>
+          <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.8rem", color: "#888", marginBottom: "3rem" }}>
+            Les equipes qui ont decroché leur ticket pour la grande finale de septembre.
+          </p>
+
+          {/* Etat vide - aucun qualifie pour l'instant */}
+          <div style={{ border: "2px solid #ffd70033", background: "#ffd70008", padding: "3rem 2rem", textAlign: "center" }}>
+            {/* Trophee pixel */}
+            <div style={{ fontSize: "3rem", marginBottom: "1.5rem", filter: "grayscale(0.3)" }}>🏆</div>
+            <BlinkText>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: "#ffd700", letterSpacing: "0.15em", textShadow: "0 0 10px #ffd700" }}>
+                AUCUN QUALIFIE POUR L'INSTANT
+              </div>
+            </BlinkText>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "1.5rem" }}>
+              La premiere soiree de qualification a lieu le dimanche 5 juillet 2026.
+            </div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "0.5rem" }}>
+              2 equipes se qualifieront chaque dimanche soir.
+            </div>
+          </div>
+
+          {/* Grille des 16 slots */}
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04 }}
+                style={{
+                  border: "2px solid #ffd70022",
+                  background: "#ffd70006",
+                  padding: "12px 8px",
+                  textAlign: "center",
+                  position: "relative",
+                }}
+              >
+                {/* Coins pixel */}
+                <div style={{ position: "absolute", top: -2, left: -2, width: 6, height: 6, background: "#ffd70033" }} />
+                <div style={{ position: "absolute", top: -2, right: -2, width: 6, height: 6, background: "#ffd70033" }} />
+                <div style={{ position: "absolute", bottom: -2, left: -2, width: 6, height: 6, background: "#ffd70033" }} />
+                <div style={{ position: "absolute", bottom: -2, right: -2, width: 6, height: 6, background: "#ffd70033" }} />
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#ffd70044", marginBottom: "6px" }}>SLOT {String(i + 1).padStart(2, "0")}</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#333" }}>???</div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-6 text-center">
+            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#444" }}>
+              0 / 16 places attribuees · Prochaine session : 5 juillet 2026
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="faq" className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #00f5ff22" }}>
         <div className="max-w-3xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
