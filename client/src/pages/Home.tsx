@@ -276,7 +276,7 @@ export default function Home() {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0"
+            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0" style={{ minWidth: '140px' }}
           >
             <style>{`
               @keyframes sprite-walk-blue {
@@ -299,7 +299,10 @@ export default function Home() {
                 object-position: 0 0;
                 animation: sprite-walk-blue 0.6s steps(1) infinite;
                 image-rendering: pixelated;
-                filter: drop-shadow(0 0 8px #00f5ff88);
+                transform: scale(2.2);
+                transform-origin: center bottom;
+                filter: drop-shadow(0 0 12px #00f5ff);
+                margin-bottom: 48px;
               }
               .sprite-red {
                 width: 95px; height: 88px;
@@ -308,7 +311,10 @@ export default function Home() {
                 animation: sprite-walk-red 0.6s steps(1) infinite;
                 animation-delay: 0.15s;
                 image-rendering: pixelated;
-                filter: drop-shadow(0 0 8px #ff2d5588);
+                transform: scale(2.2);
+                transform-origin: center bottom;
+                filter: drop-shadow(0 0 12px #ff2d55);
+                margin-bottom: 48px;
               }
             `}</style>
             <img
@@ -371,7 +377,7 @@ export default function Home() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0"
+            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0" style={{ minWidth: '140px' }}
           >
             <img
               src="/manus-storage/sms-hockey-celebrate-red_86d6ea81.png"
