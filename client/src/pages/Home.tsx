@@ -117,6 +117,31 @@ function BlinkText({ children, className = "" }: { children: React.ReactNode; cl
 }
 
 // Compteur animé
+function SpritePlayer({ frames, glowColor, delay }: { frames: string[]; glowColor: string; delay: number }) {
+  const [frameIdx, setFrameIdx] = useState(0);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const interval = setInterval(() => {
+        setFrameIdx(i => (i + 1) % frames.length);
+      }, 180);
+      return () => clearInterval(interval);
+    }, delay * 100);
+    return () => clearTimeout(t);
+  }, [frames.length, delay]);
+  return (
+    <img
+      src={frames[frameIdx]}
+      alt="sprite"
+      style={{
+        width: 188,
+        height: 176,
+        imageRendering: "pixelated",
+        filter: `drop-shadow(0 0 14px ${glowColor})`,
+      }}
+    />
+  );
+}
+
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -276,56 +301,22 @@ export default function Home() {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0" style={{ minWidth: '140px' }}
+            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '160px' }}
           >
-            <style>{`
-              @keyframes sprite-walk-blue {
-                0%   { object-position: 0px 0; }
-                25%  { object-position: -95px 0; }
-                50%  { object-position: -190px 0; }
-                75%  { object-position: -95px 0; }
-                100% { object-position: 0px 0; }
-              }
-              @keyframes sprite-walk-red {
-                0%   { object-position: 0px 0; }
-                25%  { object-position: -95px 0; }
-                50%  { object-position: -190px 0; }
-                75%  { object-position: -95px 0; }
-                100% { object-position: 0px 0; }
-              }
-              .sprite-blue {
-                width: 95px; height: 88px;
-                object-fit: none;
-                object-position: 0 0;
-                animation: sprite-walk-blue 0.6s steps(1) infinite;
-                image-rendering: pixelated;
-                transform: scale(2.2);
-                transform-origin: center bottom;
-                filter: drop-shadow(0 0 12px #00f5ff);
-                margin-bottom: 48px;
-              }
-              .sprite-red {
-                width: 95px; height: 88px;
-                object-fit: none;
-                object-position: 0 0;
-                animation: sprite-walk-red 0.6s steps(1) infinite;
-                animation-delay: 0.15s;
-                image-rendering: pixelated;
-                transform: scale(2.2);
-                transform-origin: center bottom;
-                filter: drop-shadow(0 0 12px #ff2d55);
-                margin-bottom: 48px;
-              }
-            `}</style>
-            <img
-              src="/manus-storage/sms-hockey-celebrate_ac19a1d1.png"
-              className="sprite-blue"
-              alt="Player 1"
+            <SpritePlayer
+              frames={[
+                "/manus-storage/sprite-frame-0_8f1fb131.png",
+                "/manus-storage/sprite-frame-1_a8fe2524.png",
+                "/manus-storage/sprite-frame-2_428c5192.png",
+                "/manus-storage/sprite-frame-3_c64528d9.png",
+              ]}
+              glowColor="#00f5ff"
+              delay={0}
             />
-            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#00f5ff", textShadow: "0 0 6px #00f5ff" }}>PLAYER 1</div>
-            <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 0.8, repeat: Infinity }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#00f5ff88" }}>PRET !</div>
-            </motion.div>
+            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff" }}>PLAYER 1</div>
+            <BlinkText>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff88" }}>PRET !</div>
+            </BlinkText>
           </motion.div>
 
           {/* Centre : titre + tagline + boutons */}
@@ -377,17 +368,22 @@ export default function Home() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0" style={{ minWidth: '140px' }}
+            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '160px' }}
           >
-            <img
-              src="/manus-storage/sms-hockey-celebrate-red_86d6ea81.png"
-              className="sprite-red"
-              alt="Player 2"
+            <SpritePlayer
+              frames={[
+                "/manus-storage/sprite-frame-red-0_ecd86681.png",
+                "/manus-storage/sprite-frame-red-1_49dd3b27.png",
+                "/manus-storage/sprite-frame-red-2_57c6b0ee.png",
+                "/manus-storage/sprite-frame-red-3_ab6f98e3.png",
+              ]}
+              glowColor="#ff2d55"
+              delay={2}
             />
-            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#ff2d55", textShadow: "0 0 6px #ff2d55" }}>PLAYER 2</div>
-            <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ff2d5588" }}>PRET !</div>
-            </motion.div>
+            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", textShadow: "0 0 8px #ff2d55" }}>PLAYER 2</div>
+            <BlinkText>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ff2d5588" }}>PRET !</div>
+            </BlinkText>
           </motion.div>
         </div>
 
