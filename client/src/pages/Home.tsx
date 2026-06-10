@@ -231,10 +231,10 @@ export default function Home() {
           BH<span style={{ color: "#ff2d55" }}>▶</span>BXL
         </div>
         <div className="hidden md:flex gap-8">
-          {["COMMENT", "SESSIONS", "CALENDRIER", "HALL OF FAME", "FAQ"].map((item) => (
+          {["LE JEU", "SESSIONS", "CALENDRIER", "HALL OF FAME", "FAQ"].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase().replace(/ /g, "")}`}
+              href={`#${item === "LE JEU" ? "lejeu" : item.toLowerCase().replace(/ /g, "")}`}
               style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textDecoration: "none", letterSpacing: "0.1em" }}
               className="hover:text-yellow-300 transition-colors"
             >
@@ -371,7 +371,7 @@ export default function Home() {
                 ▶ S'INSCRIRE
               </button>
             </a>
-            <a href="#comment">
+            <a href="#lejeu">
               <button
                 style={{
                   fontFamily: "'Press Start 2P', cursive",
@@ -386,7 +386,7 @@ export default function Home() {
                 }}
                 className="hover:bg-cyan-950 active:scale-95 transition-all"
               >
-                ? COMMENT CA MARCHE
+                ? C'EST QUOI LE JEU
               </button>
             </a>
           </motion.div>
@@ -458,12 +458,12 @@ export default function Home() {
       </section>
 
       {/* ── C'EST QUOI ── */}
-      <section id="comment" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, #0a0a0f 0%, #0d0a1f 50%, #0a0a0f 100%)" }}>
+      <section id="lejeu" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, #0a0a0f 0%, #0d0a1f 50%, #0a0a0f 100%)" }}>
         {/* Motif losanges pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.04) 1px, transparent 1px)", backgroundSize: "32px 32px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // NIVEAU 0 - TUTORIEL
+            // NIVEAU 0 - LE JEU
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
             C'EST QUOI<br />LE BUBBLE HOCKEY ?
