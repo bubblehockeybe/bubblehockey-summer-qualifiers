@@ -65,27 +65,37 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 }
 
 const timelineSteps = [
-  { num: "01", label: "MI-JUIN", badge: "INSERT COIN", title: "LANCEMENT", desc: "Le nouveau format est annoncé. Sessions découverte ouvertes à tous. Aucune expérience requise.", color: "#00f5ff" },
-  { num: "02", label: "FIN JUIN - JUILLET", badge: "LEVEL 1", title: "DECOUVERTE", desc: "Soirées d'initiation au Brussels Pinball Museum. Règles en 2 minutes, coaching autorisé, débutants bienvenus.", color: "#ff2d55" },
-  { num: "03", label: "JUILLET - AOUT", badge: "LEVEL 2", title: "QUALIFICATIONS", desc: "Chaque soirée, des matchs comptent pour le leaderboard estival. Gagne des points, grimpe au classement.", color: "#ffd700" },
-  { num: "04", label: "FIN AOUT", badge: "LAST CHANCE", title: "REPECHAGE", desc: "Soirée spéciale pour les équipes qui n'ont pas encore leur ticket. Les dernières places s'envolent ici.", color: "#ff2d55" },
-  { num: "05", label: "DEBUT SEPTEMBRE", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "Top 8 ou Top 16. Playoffs, trophée pixel, ambiance de feu. Qui sera champion de Bruxelles ?", color: "#ffd700" },
+  { num: "01", label: "5 JUILLET 2026", badge: "INSERT COIN", title: "LANCEMENT", desc: "Premiere soiree. Entrainement gratuit, puis premiers matchs de qualification. Tous les dimanches soir a partir de maintenant.", color: "#00f5ff" },
+  { num: "02", label: "JUILLET - AOUT", badge: "LEVEL UP", title: "QUALIFICATIONS", desc: "Chaque dimanche soir, meme format : entrainement gratuit puis matchs payants. 15 EUR la 1re fois, 10 EUR ensuite.", color: "#ff2d55" },
+  { num: "03", label: "30 AOUT 2026", badge: "LAST CHANCE", title: "DERNIERE CHANCE", desc: "Dernier dimanche de qualification avant la finale. Les places restantes se jouent ici.", color: "#ffd700" },
+  { num: "04", label: "DEBUT SEPTEMBRE", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "16 equipes, 4 pools, playoffs. Le champion de Bruxelles sera couronné.", color: "#ffd700" },
+];
+
+const sessionDates = [
+  { date: "05/07", label: "DIM 5 JUILLET" },
+  { date: "12/07", label: "DIM 12 JUILLET" },
+  { date: "19/07", label: "DIM 19 JUILLET" },
+  { date: "26/07", label: "DIM 26 JUILLET" },
+  { date: "02/08", label: "DIM 2 AOUT" },
+  { date: "09/08", label: "DIM 9 AOUT" },
+  { date: "16/08", label: "DIM 16 AOUT" },
+  { date: "23/08", label: "DIM 23 AOUT" },
+  { date: "30/08", label: "DIM 30 AOUT" },
 ];
 
 const sessionSteps = [
-  { icon: "🎮", time: "5-10 MIN", title: "ACCUEIL", desc: "Présentation, équipes, mise à l'aise." },
-  { icon: "⚡", time: "5 MIN", title: "DEMO EXPRESS", desc: "Contrôles et règles en une partie." },
-  { icon: "🏒", time: "15-20 MIN", title: "ENTRAINEMENT", desc: "Coaching autorisé, essais libres." },
-  { icon: "🏆", time: "30-45 MIN", title: "MATCHS QUALIF", desc: "2 à 4 matchs par équipe, scores notés." },
-  { icon: "📸", time: "5-10 MIN", title: "CLOTURE", desc: "Classement du soir, photos, invitation à revenir." },
+  { icon: "🎮", time: "5-10 MIN", title: "ACCUEIL", desc: "Présentation, règles expliquées en 2 minutes. Tout le monde est le bienvenu.", free: true },
+  { icon: "🏒", time: "15-20 MIN", title: "ENTRAINEMENT", desc: "Parties libres, coaching sur place. Revenez autant de fois que vous voulez.", free: true },
+  { icon: "🏆", time: "30-45 MIN", title: "MATCHS QUALIF", desc: "2 à 4 matchs comptant pour le classement. 15 EUR (1re tentative) ou 10 EUR (suivantes).", free: false },
+  { icon: "📊", time: "5-10 MIN", title: "CLASSEMENT", desc: "Scores du soir annoncés. Les qualifiés pour la finale sont notifiés.", free: false },
 ];
 
 const faqItems = [
-  { q: "ON NE CONNAIT PAS LE JEU. ON PEUT VENIR ?", a: "C'est exactement pour ça qu'on a créé ces sessions. Le jeu s'apprend en quelques minutes, le staff est là, et vous jouerez plusieurs matchs dès la première soirée." },
-  { q: "ON DOIT ETRE DEUX POUR S'INSCRIRE ?", a: "Oui, le bubble hockey se joue en équipe de deux. Si vous venez seul, on peut vous trouver un partenaire sur place selon les disponibilités." },
-  { q: "COMBIEN CA COUTE ?", a: "15 € par équipe, crédits d'entraînement inclus. Inscription en ligne ou directement sur place." },
-  { q: "COMMENT SAIT-ON SI ON EST QUALIFIE ?", a: "Le leaderboard estival est mis à jour après chaque soirée. Les équipes qualifiées sont annoncées sur le site. Une soirée Last Chance fin août donne une dernière chance." },
-  { q: "OU CA SE PASSE ?", a: "Au Brussels Pinball Museum. L'adresse et les horaires des sessions sont publiés sur cette page et sur les réseaux sociaux." },
+  { q: "ON NE CONNAIT PAS LE JEU. ON PEUT VENIR ?", a: "Oui, et c'est fait pour ca. L'entrainement du debut de soiree est gratuit et ouvert a tous. Vous apprenez les regles en 2 minutes, vous jouez des parties libres avec du coaching, et vous decidez ensuite si vous voulez tenter votre qualification." },
+  { q: "C'EST GRATUIT OU PAYANT ?", a: "L'accueil et l'entrainement sont 100% gratuits. Vous pouvez revenir autant de dimanches que vous voulez sans payer. Les matchs de qualification coutent 15 EUR pour votre premiere tentative, puis 10 EUR pour chaque tentative suivante." },
+  { q: "ON DOIT ETRE DEUX POUR VENIR ?", a: "Pour les matchs de qualification, oui : le bubble hockey se joue en equipe de deux. Pour l'entrainement gratuit, vous pouvez venir seul. On peut aussi vous trouver un partenaire sur place selon les disponibilites." },
+  { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026 au Brussels Pinball Museum. La grande finale aura lieu debut septembre, date exacte a confirmer." },
+  { q: "COMMENT ON SE QUALIFIE ?", a: "En gagnant vos matchs du soir, ou en accumulant des points au classement general. 16 equipes seront qualifiees pour la finale. Une soiree Last Chance le 30 aout donne une derniere chance aux equipes pas encore qualifiees." },
 ];
 
 export default function Home() {
@@ -295,8 +305,8 @@ export default function Home() {
           className="relative z-10 mt-16 grid grid-cols-3 gap-4 w-full max-w-2xl px-4"
         >
           {[
-            { label: "PRIX / EQUIPE", value: "15", suffix: "€" },
-            { label: "JOUEURS / EQUIPE", value: "2", suffix: "" },
+            { label: "1RE TENTATIVE", value: "15", suffix: "€" },
+            { label: "TENTATIVES SUIV.", value: "10", suffix: "€" },
             { label: "GRANDE FINALE", value: "SEPT", suffix: "" },
           ].map((stat, i) => (
             <div
@@ -415,9 +425,19 @@ export default function Home() {
             // DEROULEMENT D'UNE SOIREE
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "3rem", lineHeight: 1.6 }}>
-            UNE SESSION = 60 A 90 MIN.
+            UNE SOIREE, DEUX PHASES.
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="mb-6 flex flex-wrap gap-4 items-center">
+            <div className="flex items-center gap-2">
+              <span style={{ background: "#00f5ff", color: "#0a0a0f", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>GRATUIT</span>
+              <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>Accueil + entrainement - revenez autant de fois que vous voulez</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span style={{ background: "#ff2d55", color: "#fff", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>PAYANT</span>
+              <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>Matchs de qualification - 15 EUR (1re fois) / 10 EUR (suivantes)</span>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {sessionSteps.map((item, i) => (
               <motion.div
                 key={i}
@@ -426,16 +446,65 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <PixelBorder color="#00f5ff">
-                  <div className="p-4 text-center" style={{ background: "#00f5ff08" }}>
+                <PixelBorder color={item.free ? "#00f5ff" : "#ff2d55"}>
+                  <div className="p-4 text-center" style={{ background: item.free ? "#00f5ff08" : "#ff2d5508" }}>
                     <div style={{ fontSize: "2rem", marginBottom: "8px" }}>{item.icon}</div>
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", padding: "3px 8px", marginBottom: "8px", display: "inline-block", background: item.free ? "#00f5ff" : "#ff2d55", color: item.free ? "#0a0a0f" : "#fff" }}>
+                      {item.free ? "GRATUIT" : "PAYANT"}
+                    </div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", marginBottom: "6px" }}>{item.time}</div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", marginBottom: "8px", textShadow: "0 0 6px #00f5ff" }}>{item.title}</div>
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: item.free ? "#00f5ff" : "#ff2d55", marginBottom: "8px", textShadow: `0 0 6px ${item.free ? "#00f5ff" : "#ff2d55"}` }}>{item.title}</div>
                     <p style={{ fontSize: "0.6rem", color: "#808090", lineHeight: 1.8 }}>{item.desc}</p>
                   </div>
                 </PixelBorder>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CALENDRIER DATES ── */}
+      <section id="calendrier-dates" className="py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
+            // SELECT STAGE
+          </div>
+          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
+            TOUS LES DIMANCHES SOIR
+          </h2>
+          <p style={{ fontSize: "0.7rem", color: "#a0a0c0", marginBottom: "2rem", lineHeight: 2 }}>
+            Du 5 juillet au 30 aout 2026 au Brussels Pinball Museum.
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+            {sessionDates.map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+              >
+                <div
+                  className="text-center py-4 px-2"
+                  style={{
+                    border: s.date === "30/08" ? "2px solid #ff2d55" : "2px solid #00f5ff33",
+                    background: s.date === "30/08" ? "#ff2d5511" : "#00f5ff08",
+                    boxShadow: s.date === "30/08" ? "0 0 8px #ff2d5555" : "none",
+                  }}
+                >
+                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2vw, 1.3rem)", color: s.date === "30/08" ? "#ff2d55" : "#ffd700", textShadow: `0 0 8px ${s.date === "30/08" ? "#ff2d55" : "#ffd700"}` }}>
+                    {s.date.split("/")[0]}
+                  </div>
+                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: s.date === "30/08" ? "#ff2d55" : "#606080", marginTop: "4px", letterSpacing: "0.05em" }}>
+                    {s.date === "30/08" ? "LAST CHANCE" : s.label.split(" ").slice(2).join(" ")}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3 items-center">
+            <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>GRANDE FINALE</span>
+            <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>Debut septembre 2026 - date exacte annoncee prochainement</span>
           </div>
         </div>
       </section>
@@ -602,7 +671,7 @@ export default function Home() {
             INSCRIS TON EQUIPE.
           </h2>
           <p style={{ fontSize: "0.7rem", color: "#808090", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            15 € par équipe de deux. Crédits d'entraînement inclus.<br />
+            Entrainement gratuit chaque dimanche soir. 15 EUR pour votre 1re tentative de qualification, 10 EUR ensuite.<br />
             Inscription en ligne ou sur place au Brussels Pinball Museum.
           </p>
 
