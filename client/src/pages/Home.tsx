@@ -263,197 +263,181 @@ export default function Home() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden">
-        {/* Image hero en fond avec mix-blend */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${HERO_IMG})`, opacity: 0.18, mixBlendMode: "screen" }}
-        />
-        {/* Dégradé radial profond */}
+      <section className="relative flex flex-col items-center justify-center pt-20 pb-8 overflow-hidden" style={{ minHeight: "auto" }}>
+        {/* Fond hero */}
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 90% 70% at 50% 40%, #0d0d2f 0%, #0a0a0f 75%)" }} />
-        {/* Lignes horizontales de lueur arcade */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(0,245,255,0.025) 60px, rgba(0,245,255,0.025) 61px)",
-        }} />
-        {/* Bandes de couleur verticales tres subtiles */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: "repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,45,85,0.015) 80px, rgba(255,45,85,0.015) 81px)",
-        }} />
+        <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(0,245,255,0.02) 60px, rgba(0,245,255,0.02) 61px)" }} />
 
-        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div
-              style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ffd700", letterSpacing: "0.2em", marginBottom: "1.5rem", textShadow: "0 0 8px #ffd700" }}
-            >
-              ★ BRUSSELS PINBALL MUSEUM · ETE 2026 ★
-            </div>
-          </motion.div>
+        {/* Layout principal : sprites gauche + texte centre + sprites droite */}
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
 
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            style={{
-              fontFamily: "'Press Start 2P', cursive",
-              fontSize: "clamp(1.4rem, 5vw, 3.5rem)",
-              lineHeight: 1.4,
-              color: "#00f5ff",
-              textShadow: "0 0 20px #00f5ff, 0 0 40px #00f5ff55",
-              marginBottom: "0.5rem",
-            }}
-          >
-            BUBBLE HOCKEY
-          </motion.h1>
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            style={{
-              fontFamily: "'Press Start 2P', cursive",
-              fontSize: "clamp(1.4rem, 5vw, 3.5rem)",
-              lineHeight: 1.4,
-              color: "#ff2d55",
-              textShadow: "0 0 20px #ff2d55, 0 0 40px #ff2d5555",
-              marginBottom: "0.5rem",
-            }}
-          >
-            SUMMER
-          </motion.h1>
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+          {/* Sprite gauche : joueur bleu pixel art */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            style={{
-              fontFamily: "'Press Start 2P', cursive",
-              fontSize: "clamp(1.4rem, 5vw, 3.5rem)",
-              lineHeight: 1.4,
-              color: "#ffd700",
-              textShadow: "0 0 20px #ffd700, 0 0 40px #ffd70055",
-              marginBottom: "2rem",
-            }}
+            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0"
           >
-            QUALIFIERS
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#a0a0c0", lineHeight: 2, maxWidth: "600px", margin: "0 auto 2.5rem" }}
-          >
-            Tout l'été, viens découvrir le bubble hockey au Brussels Pinball Museum.
-            Entraîne-toi, qualifie ton équipe, et tente ta chance lors de la{" "}
-            <span style={{ color: "#ffd700" }}>grande finale début septembre</span>.
-            Débutants bienvenus.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="flex flex-wrap gap-4 justify-center"
-          >
-            <a href="#inscription">
-              <button
-                style={{
-                  fontFamily: "'Press Start 2P', cursive",
-                  fontSize: "0.6rem",
-                  background: "#ff2d55",
-                  color: "#fff",
-                  border: "3px solid #ff2d55",
-                  padding: "14px 24px",
-                  cursor: "pointer",
-                  boxShadow: "0 0 16px #ff2d55, 4px 4px 0 #8b0000",
-                  letterSpacing: "0.05em",
-                }}
-                className="hover:brightness-110 active:scale-95 transition-all"
-              >
-                ▶ S'INSCRIRE
-              </button>
-            </a>
-            <a href="#lejeu">
-              <button
-                style={{
-                  fontFamily: "'Press Start 2P', cursive",
-                  fontSize: "0.6rem",
-                  background: "transparent",
-                  color: "#00f5ff",
-                  border: "3px solid #00f5ff",
-                  padding: "14px 24px",
-                  cursor: "pointer",
-                  boxShadow: "0 0 16px #00f5ff55, 4px 4px 0 #003344",
-                  letterSpacing: "0.05em",
-                }}
-                className="hover:bg-cyan-950 active:scale-95 transition-all"
-              >
-                ? C'EST QUOI LE JEU
-              </button>
-            </a>
+            <svg width="80" height="120" viewBox="0 0 16 24" style={{ imageRendering: "pixelated" }} xmlns="http://www.w3.org/2000/svg">
+              {/* Casque */}
+              <rect x="5" y="0" width="6" height="1" fill="#00f5ff" />
+              <rect x="4" y="1" width="8" height="1" fill="#00f5ff" />
+              <rect x="3" y="2" width="10" height="3" fill="#00f5ff" />
+              <rect x="4" y="5" width="8" height="1" fill="#0088aa" />
+              {/* Visage */}
+              <rect x="4" y="6" width="8" height="4" fill="#ffcc99" />
+              <rect x="5" y="7" width="2" height="1" fill="#333" />
+              <rect x="9" y="7" width="2" height="1" fill="#333" />
+              <rect x="6" y="9" width="4" height="1" fill="#cc6644" />
+              {/* Corps maillot */}
+              <rect x="3" y="10" width="10" height="7" fill="#0044cc" />
+              <rect x="5" y="11" width="6" height="1" fill="#00f5ff" />
+              <rect x="5" y="13" width="6" height="1" fill="#00f5ff" />
+              {/* Bras */}
+              <rect x="1" y="10" width="2" height="5" fill="#0044cc" />
+              <rect x="13" y="10" width="2" height="5" fill="#0044cc" />
+              <rect x="0" y="14" width="2" height="2" fill="#ffcc99" />
+              <rect x="14" y="14" width="2" height="2" fill="#ffcc99" />
+              {/* Crosse */}
+              <rect x="14" y="15" width="1" height="4" fill="#8B4513" />
+              <rect x="13" y="18" width="3" height="1" fill="#8B4513" />
+              {/* Jambes */}
+              <rect x="4" y="17" width="3" height="4" fill="#001a66" />
+              <rect x="9" y="17" width="3" height="4" fill="#001a66" />
+              {/* Patins */}
+              <rect x="3" y="21" width="4" height="2" fill="#888" />
+              <rect x="9" y="21" width="4" height="2" fill="#888" />
+              <rect x="3" y="23" width="4" height="1" fill="#00f5ff" />
+              <rect x="9" y="23" width="4" height="1" fill="#00f5ff" />
+            </svg>
+            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#00f5ff", textShadow: "0 0 6px #00f5ff" }}>PLAYER 1</div>
+            <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#00f5ff88" }}>PRET</div>
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="mt-12"
-          >
+          {/* Centre : titre + tagline + boutons */}
+          <div className="flex-1 text-center">
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: "#ffd700", letterSpacing: "0.2em", marginBottom: "1rem", textShadow: "0 0 8px #ffd700" }}>
+                ★ BRUSSELS PINBALL MUSEUM · ETE 2026 ★
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.8rem)", lineHeight: 1.35, color: "#00f5ff", textShadow: "0 0 20px #00f5ff, 0 0 40px #00f5ff55" }}>BUBBLE HOCKEY</div>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.8rem)", lineHeight: 1.35, color: "#ff2d55", textShadow: "0 0 20px #ff2d55" }}>SUMMER</div>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.8rem)", lineHeight: 1.35, color: "#ffd700", textShadow: "0 0 20px #ffd700", marginBottom: "1.2rem" }}>QUALIFIERS</div>
+            </motion.div>
+
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+              style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#a0a0c0", lineHeight: 1.9, maxWidth: "500px", margin: "0 auto 1.5rem" }}
+            >
+              Chaque dimanche soir au Brussels Pinball Museum.
+              Entrainement gratuit, puis qualifications.{" "}
+              <span style={{ color: "#ffd700" }}>Grande finale debut septembre.</span>
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
+              className="flex flex-wrap gap-3 justify-center mb-4"
+            >
+              <a href="#inscription">
+                <button style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", background: "#ff2d55", color: "#fff", border: "3px solid #ff2d55", padding: "12px 20px", cursor: "pointer", boxShadow: "0 0 14px #ff2d55, 4px 4px 0 #8b0000", letterSpacing: "0.05em" }}
+                  className="hover:brightness-110 active:scale-95 transition-all">
+                  ▶ S'INSCRIRE
+                </button>
+              </a>
+              <a href="#lejeu">
+                <button style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", background: "transparent", color: "#00f5ff", border: "3px solid #00f5ff", padding: "12px 20px", cursor: "pointer", boxShadow: "0 0 14px #00f5ff44, 4px 4px 0 #003344", letterSpacing: "0.05em" }}
+                  className="hover:bg-cyan-950 active:scale-95 transition-all">
+                  ? C'EST QUOI LE JEU
+                </button>
+              </a>
+            </motion.div>
+
             <BlinkText>
-              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ffd700" }}>
-                ▼ INSERT COIN TO CONTINUE ▼
-              </span>
+              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700" }}>▼ INSERT COIN TO CONTINUE ▼</span>
             </BlinkText>
+          </div>
+
+          {/* Sprite droite : joueur rouge pixel art */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0"
+          >
+            <svg width="80" height="120" viewBox="0 0 16 24" style={{ imageRendering: "pixelated", transform: "scaleX(-1)" }} xmlns="http://www.w3.org/2000/svg">
+              {/* Casque */}
+              <rect x="5" y="0" width="6" height="1" fill="#ff2d55" />
+              <rect x="4" y="1" width="8" height="1" fill="#ff2d55" />
+              <rect x="3" y="2" width="10" height="3" fill="#ff2d55" />
+              <rect x="4" y="5" width="8" height="1" fill="#aa0022" />
+              {/* Visage */}
+              <rect x="4" y="6" width="8" height="4" fill="#ffcc99" />
+              <rect x="5" y="7" width="2" height="1" fill="#333" />
+              <rect x="9" y="7" width="2" height="1" fill="#333" />
+              <rect x="6" y="9" width="4" height="1" fill="#cc6644" />
+              {/* Corps maillot */}
+              <rect x="3" y="10" width="10" height="7" fill="#cc0022" />
+              <rect x="5" y="11" width="6" height="1" fill="#ff2d55" />
+              <rect x="5" y="13" width="6" height="1" fill="#ff2d55" />
+              {/* Bras */}
+              <rect x="1" y="10" width="2" height="5" fill="#cc0022" />
+              <rect x="13" y="10" width="2" height="5" fill="#cc0022" />
+              <rect x="0" y="14" width="2" height="2" fill="#ffcc99" />
+              <rect x="14" y="14" width="2" height="2" fill="#ffcc99" />
+              {/* Crosse */}
+              <rect x="1" y="15" width="1" height="4" fill="#8B4513" />
+              <rect x="0" y="18" width="3" height="1" fill="#8B4513" />
+              {/* Jambes */}
+              <rect x="4" y="17" width="3" height="4" fill="#660011" />
+              <rect x="9" y="17" width="3" height="4" fill="#660011" />
+              {/* Patins */}
+              <rect x="3" y="21" width="4" height="2" fill="#888" />
+              <rect x="9" y="21" width="4" height="2" fill="#888" />
+              <rect x="3" y="23" width="4" height="1" fill="#ff2d55" />
+              <rect x="9" y="23" width="4" height="1" fill="#ff2d55" />
+            </svg>
+            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#ff2d55", textShadow: "0 0 6px #ff2d55" }}>PLAYER 2</div>
+            <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ff2d5588" }}>PRET</div>
+            </motion.div>
           </motion.div>
         </div>
 
-        {/* Compteur de places finale */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85 }}
-          className="relative z-10 mt-10 w-full max-w-2xl px-4"
+        {/* Barre inferieure : compteur + stats */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
+          className="relative z-10 mt-6 w-full max-w-3xl px-4"
         >
-          <div style={{ border: "2px solid #ffd700", background: "#ffd70008", padding: "12px 20px", boxShadow: "0 0 12px #ffd70055" }}>
-            <div className="flex items-center justify-between flex-wrap gap-4">
+          <div style={{ border: "2px solid #ffd700", background: "#ffd70008", padding: "10px 16px", boxShadow: "0 0 12px #ffd70055" }}>
+            <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", letterSpacing: "0.15em", marginBottom: "6px" }}>PLACES FINALE DISPONIBLES</div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.5rem)", color: placesRestantes <= 4 ? "#ff2d55" : "#ffd700", textShadow: `0 0 10px ${placesRestantes <= 4 ? "#ff2d55" : "#ffd700"}` }}>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.38rem", color: "#ffd700", letterSpacing: "0.12em", marginBottom: "4px" }}>PLACES FINALE</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.3rem)", color: placesRestantes <= 4 ? "#ff2d55" : "#ffd700", textShadow: `0 0 10px ${placesRestantes <= 4 ? "#ff2d55" : "#ffd700"}` }}>
                   {placesRestantes} / {PLACES_TOTALES}
                 </div>
               </div>
-              <div className="flex gap-1 flex-wrap">
+              <div className="flex gap-1 flex-wrap justify-end">
                 {Array.from({ length: PLACES_TOTALES }).map((_, i) => (
-                  <div key={i} style={{ width: "14px", height: "14px", background: i < PLACES_PRISES ? "#303040" : "#ffd700", boxShadow: i < PLACES_PRISES ? "none" : "0 0 4px #ffd700" }} />
+                  <div key={i} style={{ width: "12px", height: "12px", background: i < PLACES_PRISES ? "#303040" : "#ffd700", boxShadow: i < PLACES_PRISES ? "none" : "0 0 4px #ffd700" }} />
                 ))}
               </div>
             </div>
           </div>
-        </motion.div>
-
-        {/* Stats arcade */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-          className="relative z-10 mt-6 grid grid-cols-3 gap-4 w-full max-w-2xl px-4"
-        >
-          {[
-            { label: "1RE TENTATIVE", value: "15", suffix: "€" },
-            { label: "TENTATIVES SUIV.", value: "10", suffix: "€" },
-            { label: "GRANDE FINALE", value: "SEPT", suffix: "" },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="text-center py-4 px-2"
-              style={{ border: "2px solid #00f5ff33", background: "#00f5ff08" }}
-            >
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 10px #ffd700" }}>
-                {stat.value}{stat.suffix}
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-3 mt-3">
+            {[
+              { label: "1RE TENTATIVE", value: "15€" },
+              { label: "TENTATIVES SUIV.", value: "10€" },
+              { label: "GRANDE FINALE", value: "SEPT" },
+            ].map((stat, i) => (
+              <div key={i} className="text-center py-3" style={{ border: "2px solid #00f5ff22", background: "#00f5ff06" }}>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#ffd700", textShadow: "0 0 8px #ffd700" }}>{stat.value}</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#606080", marginTop: "4px" }}>{stat.label}</div>
               </div>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#606080", marginTop: "6px", letterSpacing: "0.1em" }}>
-                {stat.label}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </motion.div>
       </section>
 
