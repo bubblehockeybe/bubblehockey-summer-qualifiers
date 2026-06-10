@@ -95,7 +95,7 @@ const faqItems = [
   { q: "C'EST GRATUIT OU PAYANT ?", a: "L'accueil et l'entrainement sont 100% gratuits. Vous pouvez revenir autant de dimanches que vous voulez sans payer. Les matchs de qualification coutent 15 EUR pour votre premiere tentative, puis 10 EUR pour chaque tentative suivante." },
   { q: "ON DOIT ETRE DEUX POUR VENIR ?", a: "Pour les matchs de qualification, oui : le bubble hockey se joue en equipe de deux. Pour l'entrainement gratuit, vous pouvez venir seul. On peut aussi vous trouver un partenaire sur place selon les disponibilites." },
   { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026, a partir de 19h00. Au Brussels Pinball Museum, 1501 chaussee de Wavre, 1160 Auderghem. La grande finale aura lieu debut septembre, date exacte a confirmer." },
-  { q: "COMMENT ON SE QUALIFIE ?", a: "En gagnant vos matchs du soir, ou en accumulant des points au classement general. 16 equipes seront qualifiees pour la finale. Une soiree Last Chance le 30 aout donne une derniere chance aux equipes pas encore qualifiees." },
+  { q: "COMMENT ON SE QUALIFIE ?", a: "Chaque dimanche, les equipes presentes s'affrontent en matchs BO3 (premier a 2 victoires). Les 2 meilleures equipes de la soiree decrochent leur ticket finale. Si vous n'etes pas qualifie, revenez le dimanche suivant pour 10 EUR. 16 equipes en tout seront qualifiees pour la grande finale." },
 ];
 
 export default function Home() {
@@ -535,17 +535,20 @@ export default function Home() {
       <section className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #ff2d5522", borderBottom: "2px solid #ff2d5522" }}>
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // SYSTEME DE QUALIFICATION
+            // FORMAT DE QUALIFICATION
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
-            4 FACONS DE DECROCHER<br />SON TICKET FINALE.
+            CHAQUE SOIR,<br />2 EQUIPES SE QUALIFIENT.
           </h2>
+          <p style={{ fontSize: "0.7rem", color: "#a0a0c0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
+            Les equipes presentes ce soir-la s'affrontent entre elles. Le format depend du nombre d'equipes inscrites. Chaque match se joue en BO3 (premier a 2 victoires). Les 2 meilleures equipes de la soiree decrochent leur ticket pour la grande finale. Les autres peuvent revenir un autre dimanche pour 10 EUR.
+          </p>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
             {[
-              { icon: "🏆", title: "TICKET DU SOIR", desc: "L'équipe gagnante de chaque session obtient une place directe en finale.", color: "#ffd700" },
-              { icon: "📊", title: "LEADERBOARD ESTIVAL", desc: "Les meilleures équipes non encore qualifiées sont repêchées via le classement général.", color: "#00f5ff" },
-              { icon: "⭐", title: "WILD CARDS BPM", desc: "Le musée attribue 1 ou 2 places à des équipes particulièrement engagées.", color: "#ff2d55" },
-              { icon: "⚡", title: "LAST CHANCE QUALIFIER", desc: "Soirée spéciale fin août. Les dernières places. Pas de deuxième chance après ça.", color: "#ffd700" },
+              { icon: "🏆", title: "2 QUALIFIES PAR SOIREE", desc: "Chaque dimanche, les 2 meilleures equipes de la soiree decrochent leur ticket finale. Directement, sans leaderboard.", color: "#ffd700" },
+              { icon: "🔄", title: "RETENTER SA CHANCE", desc: "Pas qualifie ce soir ? Revenez le dimanche suivant pour 10 EUR. Autant de fois que vous voulez jusqu'au 30 aout.", color: "#00f5ff" },
+              { icon: "⚡", title: "LAST CHANCE - 30 AOUT", desc: "Dernier dimanche de qualification. Les places restantes pour la finale se jouent ce soir-la.", color: "#ff2d55" },
+              { icon: "🏖️", title: "GRANDE FINALE", desc: "16 equipes qualifiees, 4 pools, matchs en BO3. Le champion de Bruxelles est couronné debut septembre.", color: "#ffd700" },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -607,10 +610,10 @@ export default function Home() {
               </h2>
               <div className="space-y-4">
                 {[
-                  { num: "01", title: "POOLS", desc: "4 groupes de 4 équipes. 3 matchs chacune. Les 2 meilleures passent." },
-                  { num: "02", title: "TOP 8 - PLAYOFFS", desc: "Elimination directe en BO3. Quarts, demis, finale." },
-                  { num: "03", title: "FINALE BO5", desc: "La grande finale en 5 matchs. Tension maximale." },
-                  { num: "04", title: "DUEL FINAL 1V1", desc: "En cas d'égalité, les deux joueurs s'affrontent individuellement." },
+                  { num: "01", title: "POOLS", desc: "4 groupes de 4 equipes. Chaque match en BO3. Les 2 meilleures de chaque pool passent." },
+                  { num: "02", title: "QUARTS DE FINALE", desc: "8 equipes, elimination directe en BO3." },
+                  { num: "03", title: "DEMI-FINALES", desc: "4 equipes, elimination directe en BO3." },
+                  { num: "04", title: "GRANDE FINALE", desc: "Les 2 finalistes s'affrontent en BO3. Le champion de Bruxelles est couronné." },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4 items-start">
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1.2rem", color: "#ff2d55", textShadow: "0 0 10px #ff2d55", minWidth: "40px" }}>
