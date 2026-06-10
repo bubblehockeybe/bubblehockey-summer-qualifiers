@@ -34,6 +34,74 @@ function PixelBorder({ children, color = "#00f5ff", className = "" }: { children
   );
 }
 
+// Fond avec grille isometrique et etoiles pixel
+function PixelBackground() {
+  return (
+    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
+      {/* Grille perspective */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: `
+          linear-gradient(rgba(0,245,255,0.07) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,245,255,0.07) 1px, transparent 1px)
+        `,
+        backgroundSize: "40px 40px",
+        maskImage: "radial-gradient(ellipse 80% 60% at 50% 100%, black 30%, transparent 100%)",
+      }} />
+      {/* Vignette radiale */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(ellipse 120% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.7) 100%)",
+      }} />
+      {/* Bande horizontale de lueur en bas */}
+      <div style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: "200px",
+        background: "linear-gradient(to top, rgba(0,245,255,0.06), transparent)",
+      }} />
+    </div>
+  );
+}
+
+// Particules pixel flottantes
+function PixelParticles() {
+  const particles = Array.from({ length: 28 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: [4, 6, 8][Math.floor(Math.random() * 3)],
+    color: ["#00f5ff", "#ff2d55", "#ffd700", "#00ff88"][Math.floor(Math.random() * 4)],
+    duration: 3 + Math.random() * 5,
+    delay: Math.random() * 4,
+  }));
+  return (
+    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 1 }}>
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          style={{
+            position: "absolute",
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            background: p.color,
+            boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
+            imageRendering: "pixelated",
+          }}
+          animate={{ y: [-10, 10, -10], opacity: [0.2, 0.8, 0.2] }}
+          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
+        />
+      ))}
+    </div>
+  );
+}
+
 // Texte qui clignote style arcade
 function BlinkText({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const [visible, setVisible] = useState(true);
@@ -127,11 +195,26 @@ export default function Home() {
         fontFamily: "'Space Mono', monospace",
       }}
     >
-      {/* Scan lines overlay */}
+      {/* Fond pixel avec grille et particules */}
+      <PixelBackground />
+      <PixelParticles />
+
+      {/* Scan lines overlay plus prononcees */}
       <div
         className="pointer-events-none fixed inset-0 z-50"
         style={{
-          background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+          background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.13) 3px, rgba(0,0,0,0.13) 4px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+      {/* Bruit CRT leger */}
+      <div
+        className="pointer-events-none fixed inset-0"
+        style={{
+          zIndex: 49,
+          opacity: 0.03,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundSize: "256px 256px",
         }}
       />
 
@@ -181,11 +264,21 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden">
+        {/* Image hero en fond avec mix-blend */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{ backgroundImage: `url(${HERO_IMG})` }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${HERO_IMG})`, opacity: 0.18, mixBlendMode: "screen" }}
         />
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, #0a0a2f 0%, #0a0a0f 70%)" }} />
+        {/* Dégradé radial profond */}
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 90% 70% at 50% 40%, #0d0d2f 0%, #0a0a0f 75%)" }} />
+        {/* Lignes horizontales de lueur arcade */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(0,245,255,0.025) 60px, rgba(0,245,255,0.025) 61px)",
+        }} />
+        {/* Bandes de couleur verticales tres subtiles */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: "repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,45,85,0.015) 80px, rgba(255,45,85,0.015) 81px)",
+        }} />
 
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -365,7 +458,9 @@ export default function Home() {
       </section>
 
       {/* ── C'EST QUOI ── */}
-      <section id="comment" className="py-20 px-4">
+      <section id="comment" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, #0a0a0f 0%, #0d0a1f 50%, #0a0a0f 100%)" }}>
+        {/* Motif losanges pixel */}
+        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.04) 1px, transparent 1px)", backgroundSize: "32px 32px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
             // NIVEAU 0 - TUTORIEL
@@ -413,7 +508,9 @@ export default function Home() {
       </section>
 
       {/* ── TIMELINE ── */}
-      <section id="calendrier" className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #00f5ff22", borderBottom: "2px solid #00f5ff22" }}>
+      <section id="calendrier" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, #0a0a0f 0%, #0a1020 40%, #100a0a 100%)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
+        {/* Grille rouge subtile */}
+        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,45,85,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,85,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
             // SELECTION DE NIVEAU
@@ -458,7 +555,9 @@ export default function Home() {
       </section>
 
       {/* ── FORMAT SESSIONS ── */}
-      <section id="sessions" className="py-20 px-4">
+      <section id="sessions" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, #0a0a0f 0%, #0a1a0a 50%, #0a0a0f 100%)" }}>
+        {/* Motif croix pixel vert */}
+        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,255,136,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
             // DEROULEMENT D'UNE SOIREE
@@ -726,7 +825,9 @@ export default function Home() {
       </section>
 
       {/* ── INSCRIPTION ── */}
-      <section id="inscription" className="py-20 px-4">
+      <section id="inscription" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, #0a0a0f 0%, #1a0a0f 60%, #0a0a0f 100%)" }}>
+        {/* Grille jaune subtile */}
+        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px)", backgroundSize: "36px 36px", zIndex: 0 }} />
         <div className="max-w-2xl mx-auto text-center">
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
             // PLAYER REGISTRATION
