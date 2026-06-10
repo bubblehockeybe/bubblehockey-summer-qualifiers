@@ -271,48 +271,54 @@ export default function Home() {
         {/* Layout principal : sprites gauche + texte centre + sprites droite */}
         <div className="relative z-10 w-full max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
 
-          {/* Sprite gauche : joueur bleu pixel art */}
+          {/* Sprite gauche : joueur bleu festif SMS */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0"
+            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0"
           >
-            <svg width="80" height="120" viewBox="0 0 16 24" style={{ imageRendering: "pixelated" }} xmlns="http://www.w3.org/2000/svg">
-              {/* Casque */}
-              <rect x="5" y="0" width="6" height="1" fill="#00f5ff" />
-              <rect x="4" y="1" width="8" height="1" fill="#00f5ff" />
-              <rect x="3" y="2" width="10" height="3" fill="#00f5ff" />
-              <rect x="4" y="5" width="8" height="1" fill="#0088aa" />
-              {/* Visage */}
-              <rect x="4" y="6" width="8" height="4" fill="#ffcc99" />
-              <rect x="5" y="7" width="2" height="1" fill="#333" />
-              <rect x="9" y="7" width="2" height="1" fill="#333" />
-              <rect x="6" y="9" width="4" height="1" fill="#cc6644" />
-              {/* Corps maillot */}
-              <rect x="3" y="10" width="10" height="7" fill="#0044cc" />
-              <rect x="5" y="11" width="6" height="1" fill="#00f5ff" />
-              <rect x="5" y="13" width="6" height="1" fill="#00f5ff" />
-              {/* Bras */}
-              <rect x="1" y="10" width="2" height="5" fill="#0044cc" />
-              <rect x="13" y="10" width="2" height="5" fill="#0044cc" />
-              <rect x="0" y="14" width="2" height="2" fill="#ffcc99" />
-              <rect x="14" y="14" width="2" height="2" fill="#ffcc99" />
-              {/* Crosse */}
-              <rect x="14" y="15" width="1" height="4" fill="#8B4513" />
-              <rect x="13" y="18" width="3" height="1" fill="#8B4513" />
-              {/* Jambes */}
-              <rect x="4" y="17" width="3" height="4" fill="#001a66" />
-              <rect x="9" y="17" width="3" height="4" fill="#001a66" />
-              {/* Patins */}
-              <rect x="3" y="21" width="4" height="2" fill="#888" />
-              <rect x="9" y="21" width="4" height="2" fill="#888" />
-              <rect x="3" y="23" width="4" height="1" fill="#00f5ff" />
-              <rect x="9" y="23" width="4" height="1" fill="#00f5ff" />
-            </svg>
+            <style>{`
+              @keyframes sprite-walk-blue {
+                0%   { object-position: 0px 0; }
+                25%  { object-position: -95px 0; }
+                50%  { object-position: -190px 0; }
+                75%  { object-position: -95px 0; }
+                100% { object-position: 0px 0; }
+              }
+              @keyframes sprite-walk-red {
+                0%   { object-position: 0px 0; }
+                25%  { object-position: -95px 0; }
+                50%  { object-position: -190px 0; }
+                75%  { object-position: -95px 0; }
+                100% { object-position: 0px 0; }
+              }
+              .sprite-blue {
+                width: 95px; height: 88px;
+                object-fit: none;
+                object-position: 0 0;
+                animation: sprite-walk-blue 0.6s steps(1) infinite;
+                image-rendering: pixelated;
+                filter: drop-shadow(0 0 8px #00f5ff88);
+              }
+              .sprite-red {
+                width: 95px; height: 88px;
+                object-fit: none;
+                object-position: 0 0;
+                animation: sprite-walk-red 0.6s steps(1) infinite;
+                animation-delay: 0.15s;
+                image-rendering: pixelated;
+                filter: drop-shadow(0 0 8px #ff2d5588);
+              }
+            `}</style>
+            <img
+              src="/manus-storage/sms-hockey-celebrate_ac19a1d1.png"
+              className="sprite-blue"
+              alt="Player 1"
+            />
             <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#00f5ff", textShadow: "0 0 6px #00f5ff" }}>PLAYER 1</div>
-            <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#00f5ff88" }}>PRET</div>
+            <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 0.8, repeat: Infinity }}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#00f5ff88" }}>PRET !</div>
             </motion.div>
           </motion.div>
 
@@ -360,48 +366,21 @@ export default function Home() {
             </BlinkText>
           </div>
 
-          {/* Sprite droite : joueur rouge pixel art */}
+          {/* Sprite droite : joueur rouge festif SMS */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0"
+            className="hidden lg:flex flex-col items-center gap-2 flex-shrink-0"
           >
-            <svg width="80" height="120" viewBox="0 0 16 24" style={{ imageRendering: "pixelated", transform: "scaleX(-1)" }} xmlns="http://www.w3.org/2000/svg">
-              {/* Casque */}
-              <rect x="5" y="0" width="6" height="1" fill="#ff2d55" />
-              <rect x="4" y="1" width="8" height="1" fill="#ff2d55" />
-              <rect x="3" y="2" width="10" height="3" fill="#ff2d55" />
-              <rect x="4" y="5" width="8" height="1" fill="#aa0022" />
-              {/* Visage */}
-              <rect x="4" y="6" width="8" height="4" fill="#ffcc99" />
-              <rect x="5" y="7" width="2" height="1" fill="#333" />
-              <rect x="9" y="7" width="2" height="1" fill="#333" />
-              <rect x="6" y="9" width="4" height="1" fill="#cc6644" />
-              {/* Corps maillot */}
-              <rect x="3" y="10" width="10" height="7" fill="#cc0022" />
-              <rect x="5" y="11" width="6" height="1" fill="#ff2d55" />
-              <rect x="5" y="13" width="6" height="1" fill="#ff2d55" />
-              {/* Bras */}
-              <rect x="1" y="10" width="2" height="5" fill="#cc0022" />
-              <rect x="13" y="10" width="2" height="5" fill="#cc0022" />
-              <rect x="0" y="14" width="2" height="2" fill="#ffcc99" />
-              <rect x="14" y="14" width="2" height="2" fill="#ffcc99" />
-              {/* Crosse */}
-              <rect x="1" y="15" width="1" height="4" fill="#8B4513" />
-              <rect x="0" y="18" width="3" height="1" fill="#8B4513" />
-              {/* Jambes */}
-              <rect x="4" y="17" width="3" height="4" fill="#660011" />
-              <rect x="9" y="17" width="3" height="4" fill="#660011" />
-              {/* Patins */}
-              <rect x="3" y="21" width="4" height="2" fill="#888" />
-              <rect x="9" y="21" width="4" height="2" fill="#888" />
-              <rect x="3" y="23" width="4" height="1" fill="#ff2d55" />
-              <rect x="9" y="23" width="4" height="1" fill="#ff2d55" />
-            </svg>
+            <img
+              src="/manus-storage/sms-hockey-celebrate-red_86d6ea81.png"
+              className="sprite-red"
+              alt="Player 2"
+            />
             <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#ff2d55", textShadow: "0 0 6px #ff2d55" }}>PLAYER 2</div>
-            <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ff2d5588" }}>PRET</div>
+            <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ff2d5588" }}>PRET !</div>
             </motion.div>
           </motion.div>
         </div>
