@@ -95,13 +95,28 @@ const faqItems = [
   { q: "C'EST GRATUIT OU PAYANT ?", a: "L'accueil et l'entrainement sont 100% gratuits. Vous pouvez revenir autant de dimanches que vous voulez sans payer. Les matchs de qualification coutent 15 EUR pour votre premiere tentative, puis 10 EUR pour chaque tentative suivante." },
   { q: "ON DOIT ETRE DEUX POUR VENIR ?", a: "Pour les matchs de qualification, oui : le bubble hockey se joue en equipe de deux. Pour l'entrainement gratuit, vous pouvez venir seul. On peut aussi vous trouver un partenaire sur place selon les disponibilites." },
   { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026, a partir de 19h00. Au Brussels Pinball Museum, 1501 chaussee de Wavre, 1160 Auderghem. La grande finale aura lieu debut septembre, date exacte a confirmer." },
-  { q: "COMMENT ON SE QUALIFIE ?", a: "Chaque dimanche, les equipes presentes s'affrontent en matchs BO3 (premier a 2 victoires). Les 2 meilleures equipes de la soiree decrochent leur ticket finale. Si vous n'etes pas qualifie, revenez le dimanche suivant pour 10 EUR. 16 equipes en tout seront qualifiees pour la grande finale." },
+  { q: "COMMENT ON SE QUALIFIE ?", a: "Chaque dimanche, les equipes presentes s'affrontent en matchs BO3 (premier a 2 victoires). En general, les 2 meilleures equipes de la soiree decrochent leur ticket finale. Exception : si seulement 2 equipes sont presentes, seule la gagnante est qualifiee. Si vous n'etes pas qualifie, revenez le dimanche suivant pour 10 EUR. 16 equipes en tout seront qualifiees pour la grande finale." },
 ];
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [inscribed, setInscribed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [teamName, setTeamName] = useState("");
+  const [playerEmail, setPlayerEmail] = useState("");
+  const [sessionType, setSessionType] = useState("qualification");
+
+  const PLACES_TOTALES = 16;
+  const PLACES_PRISES = 0; // Mettre a jour apres chaque soiree de qualification
+  const placesRestantes = PLACES_TOTALES - PLACES_PRISES;
+
+  const handleSubmit = () => {
+    if (!teamName.trim() || !playerEmail.trim()) return;
+    const subject = encodeURIComponent(`Inscription Bubble Hockey - ${teamName}`);
+    const body = encodeURIComponent(
+      `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nType : ${sessionType === 'qualification' ? 'Session de qualification (15 EUR)' : 'Session decouverte (gratuit)'}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.`
+    );
+    window.location.href = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
+  };
 
   return (
     <div
@@ -297,12 +312,36 @@ export default function Home() {
           </motion.div>
         </div>
 
+        {/* Compteur de places finale */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85 }}
+          className="relative z-10 mt-10 w-full max-w-2xl px-4"
+        >
+          <div style={{ border: "2px solid #ffd700", background: "#ffd70008", padding: "12px 20px", boxShadow: "0 0 12px #ffd70055" }}>
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", letterSpacing: "0.15em", marginBottom: "6px" }}>PLACES FINALE DISPONIBLES</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.5rem)", color: placesRestantes <= 4 ? "#ff2d55" : "#ffd700", textShadow: `0 0 10px ${placesRestantes <= 4 ? "#ff2d55" : "#ffd700"}` }}>
+                  {placesRestantes} / {PLACES_TOTALES}
+                </div>
+              </div>
+              <div className="flex gap-1 flex-wrap">
+                {Array.from({ length: PLACES_TOTALES }).map((_, i) => (
+                  <div key={i} style={{ width: "14px", height: "14px", background: i < PLACES_PRISES ? "#303040" : "#ffd700", boxShadow: i < PLACES_PRISES ? "none" : "0 0 4px #ffd700" }} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Stats arcade */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="relative z-10 mt-16 grid grid-cols-3 gap-4 w-full max-w-2xl px-4"
+          className="relative z-10 mt-6 grid grid-cols-3 gap-4 w-full max-w-2xl px-4"
         >
           {[
             { label: "1RE TENTATIVE", value: "15", suffix: "€" },
@@ -541,7 +580,7 @@ export default function Home() {
             CHAQUE SOIR,<br />2 EQUIPES SE QUALIFIENT.
           </h2>
           <p style={{ fontSize: "0.7rem", color: "#a0a0c0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            Les equipes presentes ce soir-la s'affrontent entre elles. Le format depend du nombre d'equipes inscrites. Chaque match se joue en BO3 (premier a 2 victoires). Les 2 meilleures equipes de la soiree decrochent leur ticket pour la grande finale. Les autres peuvent revenir un autre dimanche pour 10 EUR.
+            Les equipes presentes ce soir-la s'affrontent entre elles en matchs BO3 (premier a 2 victoires). Les 2 meilleures equipes decrochent leur ticket finale. Exception : si seulement 2 equipes sont presentes, seule la gagnante est qualifiee. Les autres peuvent revenir le dimanche suivant pour 10 EUR.
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
             {[
@@ -700,8 +739,7 @@ export default function Home() {
             Inscription en ligne ou sur place au Brussels Pinball Museum.
           </p>
 
-          {!inscribed ? (
-            <PixelBorder color="#ff2d55">
+          <PixelBorder color="#ff2d55">
               <div className="p-8 text-left" style={{ background: "#ff2d5508" }}>
                 <div className="grid sm:grid-cols-2 gap-5 mb-5">
                   <div>
@@ -710,6 +748,8 @@ export default function Home() {
                     </label>
                     <input
                       type="text"
+                      value={teamName}
+                      onChange={(e) => setTeamName(e.target.value)}
                       placeholder="Ex: Les Pucherons"
                       style={{
                         width: "100%",
@@ -732,6 +772,8 @@ export default function Home() {
                     </label>
                     <input
                       type="email"
+                      value={playerEmail}
+                      onChange={(e) => setPlayerEmail(e.target.value)}
                       placeholder="votre@email.com"
                       style={{
                         width: "100%",
@@ -754,6 +796,8 @@ export default function Home() {
                     TYPE D'INSCRIPTION
                   </label>
                   <select
+                    value={sessionType}
+                    onChange={(e) => setSessionType(e.target.value)}
                     style={{
                       width: "100%",
                       background: "#00000080",
@@ -765,13 +809,12 @@ export default function Home() {
                       outline: "none",
                     }}
                   >
-                    <option value="session" style={{ background: "#0a0a1f" }}>SESSION DECOUVERTE</option>
-                    <option value="qualification" style={{ background: "#0a0a1f" }}>SESSION DE QUALIFICATION</option>
-                    <option value="finale" style={{ background: "#0a0a1f" }}>GRANDE FINALE (SUR INVITATION)</option>
+                    <option value="qualification" style={{ background: "#0a0a1f" }}>SESSION DE QUALIFICATION (15 EUR)</option>
+                    <option value="decouverte" style={{ background: "#0a0a1f" }}>SESSION DECOUVERTE (GRATUIT)</option>
                   </select>
                 </div>
                 <button
-                  onClick={() => setInscribed(true)}
+                  onClick={handleSubmit}
                   style={{
                     width: "100%",
                     fontFamily: "'Press Start 2P', cursive",
@@ -790,29 +833,6 @@ export default function Home() {
                 </button>
               </div>
             </PixelBorder>
-          ) : (
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }}>
-              <PixelBorder color="#ffd700">
-                <div className="p-10 text-center" style={{ background: "#ffd70008" }}>
-                  <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏆</div>
-                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "1rem" }}>
-                    INSCRIPTION RECUE !
-                  </div>
-                  <p style={{ fontSize: "0.65rem", color: "#a0a0c0", lineHeight: 2.2 }}>
-                    On revient vers vous rapidement avec les détails de votre session.<br />
-                    A tres vite au Brussels Pinball Museum !
-                  </p>
-                  <div className="mt-4">
-                    <BlinkText>
-                      <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ffd700" }}>
-                        ★ PLAYER 1 READY ★
-                      </span>
-                    </BlinkText>
-                  </div>
-                </div>
-              </PixelBorder>
-            </motion.div>
-          )}
         </div>
       </section>
 
