@@ -305,10 +305,10 @@ export default function Home() {
           >
             <SpritePlayer
               frames={[
-                "/manus-storage/sprite-frame-0_8f1fb131.png",
-                "/manus-storage/sprite-frame-1_a8fe2524.png",
-                "/manus-storage/sprite-frame-2_428c5192.png",
-                "/manus-storage/sprite-frame-3_c64528d9.png",
+                "/manus-storage/sprite-frame-0-nobg_84c701b3.png",
+                "/manus-storage/sprite-frame-1-nobg_44843886.png",
+                "/manus-storage/sprite-frame-2-nobg_e285a319.png",
+                "/manus-storage/sprite-frame-3-nobg_b6e5e73e.png",
               ]}
               glowColor="#00f5ff"
               delay={0}
@@ -372,10 +372,10 @@ export default function Home() {
           >
             <SpritePlayer
               frames={[
-                "/manus-storage/sprite-frame-red-0_ecd86681.png",
-                "/manus-storage/sprite-frame-red-1_49dd3b27.png",
-                "/manus-storage/sprite-frame-red-2_57c6b0ee.png",
-                "/manus-storage/sprite-frame-red-3_ab6f98e3.png",
+                "/manus-storage/sprite-frame-red-0-nobg_262ecca8.png",
+                "/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png",
+                "/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png",
+                "/manus-storage/sprite-frame-red-3-nobg_4310a28d.png",
               ]}
               glowColor="#ff2d55"
               delay={2}
