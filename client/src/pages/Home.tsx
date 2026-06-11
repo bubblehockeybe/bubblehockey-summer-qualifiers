@@ -133,8 +133,8 @@ function SpritePlayer({ frames, glowColor, delay }: { frames: string[]; glowColo
       src={frames[frameIdx]}
       alt="sprite"
       style={{
-        width: 188,
-        height: 176,
+        width: 110,
+        height: 103,
         imageRendering: "pixelated",
         filter: `drop-shadow(0 0 14px ${glowColor})`,
       }}
@@ -301,7 +301,7 @@ export default function Home() {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '100px' }}
+            className="flex items-center flex-shrink-0" style={{ minWidth: '80px' }}
           >
             <SpritePlayer
               frames={[
@@ -313,17 +313,13 @@ export default function Home() {
               glowColor="#00f5ff"
               delay={0}
             />
-            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff" }}>PLAYER 1</div>
-            <BlinkText>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff88" }}>PRET !</div>
-            </BlinkText>
           </motion.div>
 
           {/* Centre : titre + tagline + boutons */}
           <div className="flex-1 text-center">
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: "#ffd700", letterSpacing: "0.2em", marginBottom: "1rem", textShadow: "0 0 8px #ffd700" }}>
-                ★ BRUSSELS PINBALL MUSEUM · ETE 2026 ★
+                ★ HOSTED BY BRUSSELS PINBALL MUSEUM ★
               </div>
             </motion.div>
 
@@ -368,7 +364,7 @@ export default function Home() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '100px' }}
+            className="flex items-center flex-shrink-0" style={{ minWidth: '80px' }}
           >
             <SpritePlayer
               frames={[
@@ -380,10 +376,6 @@ export default function Home() {
               glowColor="#ff2d55"
               delay={2}
             />
-            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", textShadow: "0 0 8px #ff2d55" }}>PLAYER 2</div>
-            <BlinkText>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ff2d5588" }}>PRET !</div>
-            </BlinkText>
           </motion.div>
         </div>
 
