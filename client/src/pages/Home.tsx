@@ -38,31 +38,21 @@ function PixelBorder({ children, color = "#00f5ff", className = "" }: { children
 function PixelBackground() {
   return (
     <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
-      {/* Grille perspective */}
+      {/* Pattern hockey tuilé */}
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: `
-          linear-gradient(rgba(0,245,255,0.07) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0,245,255,0.07) 1px, transparent 1px)
-        `,
-        backgroundSize: "40px 40px",
-        maskImage: "radial-gradient(ellipse 80% 60% at 50% 100%, black 30%, transparent 100%)",
+        backgroundImage: `url('/manus-storage/hockey-bg-pattern_82e6293d.png')`,
+        backgroundRepeat: "repeat",
+        backgroundSize: "320px 160px",
+        opacity: 0.55,
+        imageRendering: "pixelated",
       }} />
-      {/* Vignette radiale */}
+      {/* Vignette radiale pour assombrir les bords */}
       <div style={{
         position: "absolute",
         inset: 0,
-        background: "radial-gradient(ellipse 120% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.7) 100%)",
-      }} />
-      {/* Bande horizontale de lueur en bas */}
-      <div style={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: "200px",
-        background: "linear-gradient(to top, rgba(0,245,255,0.06), transparent)",
+        background: "radial-gradient(ellipse 110% 90% at 50% 50%, transparent 30%, rgba(10,8,28,0.75) 100%)",
       }} />
     </div>
   );
@@ -220,9 +210,8 @@ export default function Home() {
         fontFamily: "'Space Mono', monospace",
       }}
     >
-      {/* Fond pixel avec grille et particules */}
+      {/* Fond pattern hockey tuilé */}
       <PixelBackground />
-      <PixelParticles />
 
       {/* Scan lines overlay plus prononcees */}
       <div
@@ -288,45 +277,68 @@ export default function Home() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative flex flex-col items-center justify-center pt-20 pb-8 overflow-hidden" style={{ minHeight: "auto" }}>
-        {/* Fond hero */}
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 90% 70% at 50% 40%, #0d0d2f 0%, #0a0a0f 75%)" }} />
-        <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(0,245,255,0.02) 60px, rgba(0,245,255,0.02) 61px)" }} />
+      <section className="relative flex flex-col items-center justify-center pt-20 pb-6 overflow-hidden" style={{ minHeight: "auto" }}>
+        {/* Assombrissement central du hero pour lisibilité */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,8,28,0.55) 0%, rgba(10,8,28,0.3) 50%, rgba(10,8,28,0.6) 100%)" }} />
 
         {/* Layout principal : sprites gauche + texte centre + sprites droite */}
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 flex items-end justify-between gap-2">
 
           {/* Sprite gauche : joueur bleu festif SMS */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex items-center flex-shrink-0" style={{ minWidth: '80px' }}
+            className="flex items-end gap-1 flex-shrink-0 pb-2"
           >
-            <SpritePlayer
-              frames={[
-                "/manus-storage/sprite-frame-0-nobg_84c701b3.png",
+            <SpritePlayer frames={["/manus-storage/sprite-frame-0-nobg_84c701b3.png",
                 "/manus-storage/sprite-frame-1-nobg_44843886.png",
                 "/manus-storage/sprite-frame-2-nobg_e285a319.png",
                 "/manus-storage/sprite-frame-3-nobg_b6e5e73e.png",
               ]}
-              glowColor="#00f5ff"
-              delay={0}
-            />
+              glowColor="#00f5ff" delay={0} />
+            <SpritePlayer frames={["/manus-storage/sprite-frame-1-nobg_44843886.png","/manus-storage/sprite-frame-2-nobg_e285a319.png","/manus-storage/sprite-frame-3-nobg_b6e5e73e.png","/manus-storage/sprite-frame-0-nobg_84c701b3.png"]} glowColor="#00f5ff" delay={3} />
+            <SpritePlayer frames={["/manus-storage/sprite-frame-2-nobg_e285a319.png","/manus-storage/sprite-frame-3-nobg_b6e5e73e.png","/manus-storage/sprite-frame-0-nobg_84c701b3.png","/manus-storage/sprite-frame-1-nobg_44843886.png"]} glowColor="#00f5ff" delay={6} />
           </motion.div>
 
           {/* Centre : titre + tagline + boutons */}
           <div className="flex-1 text-center">
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: "#ffd700", letterSpacing: "0.2em", marginBottom: "1rem", textShadow: "0 0 8px #ffd700" }}>
-                ★ HOSTED BY BRUSSELS PINBALL MUSEUM ★
-              </div>
-            </motion.div>
-
             <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.8rem)", lineHeight: 1.35, color: "#00f5ff", textShadow: "0 0 20px #00f5ff, 0 0 40px #00f5ff55" }}>BUBBLE HOCKEY</div>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.8rem)", lineHeight: 1.35, color: "#ff2d55", textShadow: "0 0 20px #ff2d55" }}>SUMMER</div>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.8rem)", lineHeight: 1.35, color: "#ffd700", textShadow: "0 0 20px #ffd700", marginBottom: "1.2rem" }}>QUALIFIERS</div>
+              {/* Titre style glitch blanc avec ombre rouge+bleue comme l'image de référence */}
+              <div style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "clamp(1.4rem, 5vw, 3.4rem)",
+                lineHeight: 1.2,
+                color: "#ffffff",
+                textShadow: "-3px 0 #ff2d55, 3px 0 #00f5ff, 0 0 20px rgba(255,255,255,0.3)",
+                marginBottom: "0.2rem",
+                letterSpacing: "0.05em",
+              }}>BUBBLE HOCKEY</div>
+              <div style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "clamp(1.4rem, 5vw, 3.4rem)",
+                lineHeight: 1.2,
+                color: "#ffffff",
+                textShadow: "-3px 0 #ff2d55, 3px 0 #00f5ff, 0 0 20px rgba(255,255,255,0.3)",
+                marginBottom: "0.5rem",
+                letterSpacing: "0.05em",
+              }}>SUMMER QUALIFIERS</div>
+              {/* Sous-titre jaune vif style SUMMER ON ICE */}
+              <div style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "clamp(0.8rem, 2.5vw, 1.6rem)",
+                color: "#ffd700",
+                textShadow: "0 0 16px #ffd700, 0 0 30px #ff8800",
+                letterSpacing: "0.12em",
+                marginBottom: "0.3rem",
+              }}>BRUSSELS 2026</div>
+              <div style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "clamp(0.45rem, 1.2vw, 0.7rem)",
+                color: "#cc44ff",
+                letterSpacing: "0.35em",
+                marginBottom: "1.2rem",
+              }}>HOSTED BY BRUSSELS PINBALL MUSEUM</div>
             </motion.div>
 
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
@@ -364,18 +376,16 @@ export default function Home() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex items-center flex-shrink-0" style={{ minWidth: '80px' }}
+            className="flex items-end gap-1 flex-shrink-0 pb-2"
           >
-            <SpritePlayer
-              frames={[
-                "/manus-storage/sprite-frame-red-0-nobg_262ecca8.png",
+            <SpritePlayer frames={["/manus-storage/sprite-frame-red-0-nobg_262ecca8.png",
                 "/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png",
                 "/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png",
                 "/manus-storage/sprite-frame-red-3-nobg_4310a28d.png",
               ]}
-              glowColor="#ff2d55"
-              delay={2}
-            />
+              glowColor="#ff2d55" delay={2} />
+            <SpritePlayer frames={["/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png","/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png","/manus-storage/sprite-frame-red-3-nobg_4310a28d.png","/manus-storage/sprite-frame-red-0-nobg_262ecca8.png"]} glowColor="#ff2d55" delay={5} />
+            <SpritePlayer frames={["/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png","/manus-storage/sprite-frame-red-3-nobg_4310a28d.png","/manus-storage/sprite-frame-red-0-nobg_262ecca8.png","/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png"]} glowColor="#ff2d55" delay={8} />
           </motion.div>
         </div>
 
@@ -431,7 +441,7 @@ export default function Home() {
                 Le bubble hockey, c'est un hockey sur table sous dôme de plexiglas. Deux joueurs par équipe, des figurines articulées, un palet et beaucoup d'adrénaline.
               </p>
               <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#a0a0c0", marginBottom: "2rem" }}>
-                Le Brussels Pinball Museum possède l'une des rares machines de Bruxelles. Le jeu est simple à comprendre, difficile à maîtriser — exactement ce qu'il faut pour un tournoi estival.
+                Le Brussels Pinball Museum possede l'une des rares machines de bubble hockey en Belgique. Le jeu est simple a comprendre, difficile a maitriser : exactement ce qu'il faut pour un tournoi estival.
               </p>
               <div className="flex flex-wrap gap-3">
                 {["EQUIPES DE 2", "DEBUTANTS OK", "15€ / EQUIPE", "COACHING INCLUS"].map((tag) => (
