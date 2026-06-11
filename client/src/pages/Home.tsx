@@ -241,9 +241,11 @@ export default function Home() {
           boxShadow: "0 0 12px #00f5ff55",
         }}
       >
-        <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.65rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff" }}>
-          BH<span style={{ color: "#ff2d55" }}>▶</span>BXL
-        </div>
+        <img
+          src="/manus-storage/bpm-logo-transparent_92393c41.png"
+          alt="Brussels Pinball Museum"
+          style={{ height: "36px", width: "auto", filter: "invert(1) brightness(1.1)", imageRendering: "auto" }}
+        />
         <div className="hidden md:flex gap-8">
           {["LE JEU", "SESSIONS", "CALENDRIER", "HALL OF FAME", "FAQ"].map((item) => (
             <a
