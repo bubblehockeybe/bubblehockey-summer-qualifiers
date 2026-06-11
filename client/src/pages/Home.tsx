@@ -301,7 +301,7 @@ export default function Home() {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '160px' }}
+            className="flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '100px' }}
           >
             <SpritePlayer
               frames={[
@@ -368,7 +368,7 @@ export default function Home() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="hidden lg:flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '160px' }}
+            className="flex flex-col items-center gap-3 flex-shrink-0" style={{ minWidth: '100px' }}
           >
             <SpritePlayer
               frames={[
