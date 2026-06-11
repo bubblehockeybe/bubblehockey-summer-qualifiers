@@ -278,26 +278,12 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <section className="relative flex flex-col items-center justify-center pt-20 pb-6 overflow-hidden" style={{ minHeight: "auto" }}>
-        {/* Assombrissement central du hero pour lisibilité */}
+        {/* Assombrissement central du hero pour lisibilite */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,8,28,0.55) 0%, rgba(10,8,28,0.3) 50%, rgba(10,8,28,0.6) 100%)" }} />
 
-        {/* Layout principal : sprites gauche + texte centre + sprites droite */}
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 flex items-end justify-between gap-2">
-
-          {/* Sprite gauche : joueur bleu festif SMS */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex items-end gap-1 flex-shrink-0 pb-2"
-          >
-            <SpritePlayer frames={["/manus-storage/sprite-bh-blue-f0-3x_30762f77.png","/manus-storage/sprite-bh-blue-f1-3x_d7c9b33d.png"]} glowColor="#00f5ff" delay={0} />
-            <SpritePlayer frames={["/manus-storage/sprite-bh-blue-f1-3x_d7c9b33d.png","/manus-storage/sprite-bh-blue-f0-3x_30762f77.png"]} glowColor="#00f5ff" delay={3} />
-            <SpritePlayer frames={["/manus-storage/sprite-bh-blue-f0-3x_30762f77.png","/manus-storage/sprite-bh-blue-f1-3x_d7c9b33d.png"]} glowColor="#00f5ff" delay={6} />
-          </motion.div>
-
-          {/* Centre : titre + tagline + boutons */}
-          <div className="flex-1 text-center">
+        {/* Layout principal : texte centre pleine largeur */}
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center">
+          <div>
             <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }}>
               {/* Titre style glitch blanc avec ombre rouge+bleue comme l'image de référence */}
               <div style={{
@@ -365,18 +351,6 @@ export default function Home() {
               <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700" }}>▼ INSERT COIN TO CONTINUE ▼</span>
             </BlinkText>
           </div>
-
-          {/* Sprite droite : joueur rouge festif SMS */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex items-end gap-1 flex-shrink-0 pb-2"
-          >
-            <SpritePlayer frames={["/manus-storage/sprite-bh-red-f0-3x_7ebf572e.png","/manus-storage/sprite-bh-red-f1-3x_8cd64c33.png"]} glowColor="#ff2d55" delay={2} />
-            <SpritePlayer frames={["/manus-storage/sprite-bh-red-f1-3x_8cd64c33.png","/manus-storage/sprite-bh-red-f0-3x_7ebf572e.png"]} glowColor="#ff2d55" delay={5} />
-            <SpritePlayer frames={["/manus-storage/sprite-bh-red-f0-3x_7ebf572e.png","/manus-storage/sprite-bh-red-f1-3x_8cd64c33.png"]} glowColor="#ff2d55" delay={8} />
-          </motion.div>
         </div>
 
         {/* Barre inferieure : compteur + stats */}
