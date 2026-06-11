@@ -291,14 +291,9 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex items-end gap-1 flex-shrink-0 pb-2"
           >
-            <SpritePlayer frames={["/manus-storage/sprite-frame-0-nobg_84c701b3.png",
-                "/manus-storage/sprite-frame-1-nobg_44843886.png",
-                "/manus-storage/sprite-frame-2-nobg_e285a319.png",
-                "/manus-storage/sprite-frame-3-nobg_b6e5e73e.png",
-              ]}
-              glowColor="#00f5ff" delay={0} />
-            <SpritePlayer frames={["/manus-storage/sprite-frame-1-nobg_44843886.png","/manus-storage/sprite-frame-2-nobg_e285a319.png","/manus-storage/sprite-frame-3-nobg_b6e5e73e.png","/manus-storage/sprite-frame-0-nobg_84c701b3.png"]} glowColor="#00f5ff" delay={3} />
-            <SpritePlayer frames={["/manus-storage/sprite-frame-2-nobg_e285a319.png","/manus-storage/sprite-frame-3-nobg_b6e5e73e.png","/manus-storage/sprite-frame-0-nobg_84c701b3.png","/manus-storage/sprite-frame-1-nobg_44843886.png"]} glowColor="#00f5ff" delay={6} />
+            <SpritePlayer frames={["/manus-storage/sprite-bh-blue-f0-3x_30762f77.png","/manus-storage/sprite-bh-blue-f1-3x_d7c9b33d.png"]} glowColor="#00f5ff" delay={0} />
+            <SpritePlayer frames={["/manus-storage/sprite-bh-blue-f1-3x_d7c9b33d.png","/manus-storage/sprite-bh-blue-f0-3x_30762f77.png"]} glowColor="#00f5ff" delay={3} />
+            <SpritePlayer frames={["/manus-storage/sprite-bh-blue-f0-3x_30762f77.png","/manus-storage/sprite-bh-blue-f1-3x_d7c9b33d.png"]} glowColor="#00f5ff" delay={6} />
           </motion.div>
 
           {/* Centre : titre + tagline + boutons */}
@@ -378,14 +373,9 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex items-end gap-1 flex-shrink-0 pb-2"
           >
-            <SpritePlayer frames={["/manus-storage/sprite-frame-red-0-nobg_262ecca8.png",
-                "/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png",
-                "/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png",
-                "/manus-storage/sprite-frame-red-3-nobg_4310a28d.png",
-              ]}
-              glowColor="#ff2d55" delay={2} />
-            <SpritePlayer frames={["/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png","/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png","/manus-storage/sprite-frame-red-3-nobg_4310a28d.png","/manus-storage/sprite-frame-red-0-nobg_262ecca8.png"]} glowColor="#ff2d55" delay={5} />
-            <SpritePlayer frames={["/manus-storage/sprite-frame-red-2-nobg_45db5f7c.png","/manus-storage/sprite-frame-red-3-nobg_4310a28d.png","/manus-storage/sprite-frame-red-0-nobg_262ecca8.png","/manus-storage/sprite-frame-red-1-nobg_9a4f82d5.png"]} glowColor="#ff2d55" delay={8} />
+            <SpritePlayer frames={["/manus-storage/sprite-bh-red-f0-3x_7ebf572e.png","/manus-storage/sprite-bh-red-f1-3x_8cd64c33.png"]} glowColor="#ff2d55" delay={2} />
+            <SpritePlayer frames={["/manus-storage/sprite-bh-red-f1-3x_8cd64c33.png","/manus-storage/sprite-bh-red-f0-3x_7ebf572e.png"]} glowColor="#ff2d55" delay={5} />
+            <SpritePlayer frames={["/manus-storage/sprite-bh-red-f0-3x_7ebf572e.png","/manus-storage/sprite-bh-red-f1-3x_8cd64c33.png"]} glowColor="#ff2d55" delay={8} />
           </motion.div>
         </div>
 
