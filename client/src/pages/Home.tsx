@@ -254,8 +254,9 @@ export default function Home() {
   const handleSubmit = () => {
     if (!teamName.trim() || !playerEmail.trim()) return;
     const subject = encodeURIComponent(`Inscription Bubble Hockey - ${teamName}`);
+    const typeLabel = sessionType === 'qualification' ? 'Session de qualification (15 EUR - paiement sur place)' : 'Session decouverte (gratuit - entrainement)';
     const body = encodeURIComponent(
-      `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nType : ${sessionType === 'qualification' ? 'Session de qualification (15 EUR)' : 'Session decouverte (gratuit)'}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.`
+      `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nType : ${typeLabel}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.\n\nNote : le paiement se fait sur place. La place est confirmee apres reglement.`
     );
     window.location.href = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
   };
@@ -301,9 +302,9 @@ export default function Home() {
         }}
       >
         <img
-          src="/manus-storage/bpm-logo-transparent_92393c41.png"
+          src="/manus-storage/logo-bpm-transparent_9782de99.png"
           alt="Brussels Pinball Museum"
-          style={{ height: "36px", width: "auto", filter: "invert(1) brightness(1.1)", imageRendering: "auto" }}
+          style={{ height: "40px", width: "auto", imageRendering: "auto", filter: "brightness(1.1)" }}
         />
         <div className="hidden md:flex gap-8">
           {["LE JEU", "SESSIONS", "CALENDRIER", "HALL OF FAME", "FAQ"].map((item) => (
@@ -926,8 +927,8 @@ export default function Home() {
             INSCRIS TON EQUIPE.
           </h2>
           <p style={{ fontSize: "0.7rem", color: "#808090", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            Entrainement gratuit chaque dimanche soir. 15 EUR pour votre 1re tentative de qualification, 10 EUR ensuite.<br />
-            Inscription en ligne ou sur place au Brussels Pinball Museum.
+            Inscription en ligne ci-dessous. Paiement sur place le soir de votre session.<br />
+            Votre place est confirmee apres reglement : 15 EUR pour la 1re qualification, 10 EUR ensuite. Entrainement gratuit.
           </p>
 
           <PixelBorder color="#ff2d55">
@@ -1020,8 +1021,11 @@ export default function Home() {
                   }}
                   className="hover:brightness-110 active:scale-95 transition-all"
                 >
-                  ▶ ENVOYER MA DEMANDE
+                  ▶ S'INSCRIRE EN LIGNE
                 </button>
+                <p style={{ fontSize: "0.55rem", color: "#606080", textAlign: "center", marginTop: "12px", lineHeight: 1.8 }}>
+                  Paiement sur place le soir de la session. Votre place est reservee apres reglement.
+                </p>
               </div>
             </PixelBorder>
         </div>
