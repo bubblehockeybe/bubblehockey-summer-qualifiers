@@ -409,9 +409,7 @@ export default function Home() {
               </a>
             </motion.div>
 
-            <BlinkText>
-              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700" }}>▼ INSERT COIN TO CONTINUE ▼</span>
-            </BlinkText>
+
           </div>
         </div>
 
@@ -455,9 +453,7 @@ export default function Home() {
         {/* Motif losanges pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.04) 1px, transparent 1px)", backgroundSize: "32px 32px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // NIVEAU 0 - LE JEU
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
             C'EST QUOI<br />LE BUBBLE HOCKEY ?
           </h2>
@@ -505,9 +501,7 @@ export default function Home() {
         {/* Grille rouge subtile */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,45,85,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,85,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // SELECTION DE NIVEAU
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "3rem", lineHeight: 1.6 }}>
             UN ETE POUR APPRENDRE.<br />12-13 SEPT POUR GAGNER.
           </h2>
@@ -552,9 +546,7 @@ export default function Home() {
         {/* Motif croix pixel vert */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,255,136,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // DEROULEMENT D'UNE SOIREE
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "3rem", lineHeight: 1.6 }}>
             UNE SOIREE, DEUX PHASES.
           </h2>
@@ -597,9 +589,7 @@ export default function Home() {
       {/* ── CALENDRIER DATES ── */}
       <section id="calendrier-dates" className="py-16 px-4">
         <div className="max-w-5xl mx-auto">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // SELECT STAGE
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
             TOUS LES DIMANCHES SOIR
           </h2>
@@ -696,9 +686,7 @@ export default function Home() {
       {/* ── QUALIFICATION ── */}
       <section className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #ff2d5522", borderBottom: "2px solid #ff2d5522" }}>
         <div className="max-w-5xl mx-auto">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // FORMAT DE QUALIFICATION
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
             CHAQUE SOIR,<br />2 EQUIPES SE QUALIFIENT.
           </h2>
@@ -764,9 +752,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-                // FINAL BOSS
-              </div>
+
               <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "2.5rem", lineHeight: 1.6 }}>
                 LA GRANDE FINALE<br />12 ET 13 SEPTEMBRE.
               </h2>
@@ -810,9 +796,7 @@ export default function Home() {
         {/* Motif etoiles pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,215,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // QUALIFIES POUR LA FINALE
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 3vw, 2rem)", color: "#ffd700", textShadow: "0 0 20px #ffd700, 0 0 40px #ffd70055", marginBottom: "0.5rem" }}>
             HALL OF FAME
           </h2>
@@ -875,9 +859,7 @@ export default function Home() {
 
       <section id="faq" className="py-20 px-4" style={{ background: "#0d0d1a", borderTop: "2px solid #00f5ff22" }}>
         <div className="max-w-3xl mx-auto">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // AIDE & QUESTIONS
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
             TOUT CE QUE VOUS<br />VOULEZ SAVOIR.
           </h2>
@@ -920,9 +902,7 @@ export default function Home() {
         {/* Grille jaune subtile */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px)", backgroundSize: "36px 36px", zIndex: 0 }} />
         <div className="max-w-2xl mx-auto text-center">
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1rem" }}>
-            // PLAYER REGISTRATION
-          </div>
+
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.6 }}>
             INSCRIS TON EQUIPE.
           </h2>
@@ -1055,11 +1035,9 @@ export default function Home() {
           bubblehockey.be
         </a>
         <div className="mt-6">
-          <BlinkText>
-            <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#303050" }}>
-              © 2026 GAME OVER? NO - INSERT COIN.
-            </span>
-          </BlinkText>
+          <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#303050" }}>
+            © 2026 BUBBLE HOCKEY SUMMER QUALIFIERS
+          </span>
         </div>
       </footer>
     </div>
