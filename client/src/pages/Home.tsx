@@ -5,7 +5,7 @@
  * Bordures pixel, scan lines, effets néon, compteurs animés
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 
 const HERO_IMG =
@@ -155,16 +155,47 @@ const timelineSteps = [
 ];
 
 const sessionDates = [
-  { date: "05/07", label: "DIM 5 JUILLET" },
-  { date: "12/07", label: "DIM 12 JUILLET" },
-  { date: "19/07", label: "DIM 19 JUILLET" },
-  { date: "26/07", label: "DIM 26 JUILLET" },
-  { date: "02/08", label: "DIM 2 AOUT" },
-  { date: "09/08", label: "DIM 9 AOUT" },
-  { date: "16/08", label: "DIM 16 AOUT" },
-  { date: "23/08", label: "DIM 23 AOUT" },
-  { date: "30/08", label: "DIM 30 AOUT" },
+  { date: "05/07", label: "DIM 5 JUILLET", key: "d0507" },
+  { date: "12/07", label: "DIM 12 JUILLET", key: "d1207" },
+  { date: "19/07", label: "DIM 19 JUILLET", key: "d1907" },
+  { date: "26/07", label: "DIM 26 JUILLET", key: "d2607" },
+  { date: "02/08", label: "DIM 2 AOUT", key: "d0208" },
+  { date: "09/08", label: "DIM 9 AOUT", key: "d0908" },
+  { date: "16/08", label: "DIM 16 AOUT", key: "d1608" },
+  { date: "23/08", label: "DIM 23 AOUT", key: "d2308" },
+  { date: "30/08", label: "DIM 30 AOUT", key: "d3008" },
 ];
+
+// Heatmap helpers
+const HEAT_STORAGE_KEY = "bh_heat_votes";
+const HEAT_VOTED_KEY = "bh_heat_voted";
+
+function getHeatColor(count: number, max: number): string {
+  if (count === 0 || max === 0) return "transparent";
+  const ratio = count / max;
+  if (ratio < 0.25) return "rgba(0,245,255,0.08)";
+  if (ratio < 0.5) return "rgba(0,245,255,0.18)";
+  if (ratio < 0.75) return "rgba(255,165,0,0.22)";
+  return "rgba(255,45,85,0.30)";
+}
+
+function getHeatBorder(count: number, max: number): string {
+  if (count === 0 || max === 0) return "#00f5ff33";
+  const ratio = count / max;
+  if (ratio < 0.25) return "#00f5ff66";
+  if (ratio < 0.5) return "#00f5ffaa";
+  if (ratio < 0.75) return "#ffa500cc";
+  return "#ff2d55";
+}
+
+function getHeatGlow(count: number, max: number): string {
+  if (count === 0 || max === 0) return "none";
+  const ratio = count / max;
+  if (ratio < 0.25) return "0 0 6px #00f5ff44";
+  if (ratio < 0.5) return "0 0 10px #00f5ff88";
+  if (ratio < 0.75) return "0 0 14px #ffa500aa";
+  return "0 0 18px #ff2d55cc";
+}
 
 const sessionSteps = [
   { icon: "🎮", time: "5-10 MIN", title: "ACCUEIL", desc: "Présentation, règles expliquées en 2 minutes. Tout le monde est le bienvenu.", free: true },
@@ -187,6 +218,34 @@ export default function Home() {
   const [teamName, setTeamName] = useState("");
   const [playerEmail, setPlayerEmail] = useState("");
   const [sessionType, setSessionType] = useState("qualification");
+
+  // Heatmap : votes par date (localStorage)
+  const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
+    try {
+      const stored = localStorage.getItem(HEAT_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch { return {}; }
+  });
+  const [heatVoted, setHeatVoted] = useState<Record<string, boolean>>(() => {
+    try {
+      const stored = localStorage.getItem(HEAT_VOTED_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch { return {}; }
+  });
+
+  const handleHeatVote = useCallback((key: string) => {
+    if (heatVoted[key]) return;
+    const newVotes = { ...heatVotes, [key]: (heatVotes[key] || 0) + 1 };
+    const newVoted = { ...heatVoted, [key]: true };
+    setHeatVotes(newVotes);
+    setHeatVoted(newVoted);
+    try {
+      localStorage.setItem(HEAT_STORAGE_KEY, JSON.stringify(newVotes));
+      localStorage.setItem(HEAT_VOTED_KEY, JSON.stringify(newVoted));
+    } catch {}
+  }, [heatVotes, heatVoted]);
+
+  const maxHeat = Math.max(1, ...Object.values(heatVotes));
 
   const PLACES_TOTALES = 16;
   const PLACES_PRISES = 0; // Mettre a jour apres chaque soiree de qualification
@@ -569,31 +628,62 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-            {sessionDates.map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <div
-                  className="text-center py-4 px-2"
-                  style={{
-                    border: s.date === "30/08" ? "2px solid #ff2d55" : "2px solid #00f5ff33",
-                    background: s.date === "30/08" ? "#ff2d5511" : "#00f5ff08",
-                    boxShadow: s.date === "30/08" ? "0 0 8px #ff2d5555" : "none",
-                  }}
+            {sessionDates.map((s, i) => {
+              const count = heatVotes[s.key] || 0;
+              const voted = heatVoted[s.key] || false;
+              const isLastChance = s.date === "30/08";
+              const borderColor = isLastChance ? "#ff2d55" : getHeatBorder(count, maxHeat);
+              const bgColor = isLastChance ? "#ff2d5511" : getHeatColor(count, maxHeat);
+              const glowColor = isLastChance ? "0 0 8px #ff2d5555" : getHeatGlow(count, maxHeat);
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
                 >
-                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2vw, 1.3rem)", color: s.date === "30/08" ? "#ff2d55" : "#ffd700", textShadow: `0 0 8px ${s.date === "30/08" ? "#ff2d55" : "#ffd700"}` }}>
-                    {s.date.split("/")[0]}
+                  <div
+                    className="text-center py-3 px-2 flex flex-col gap-2"
+                    style={{
+                      border: `2px solid ${borderColor}`,
+                      background: bgColor,
+                      boxShadow: glowColor,
+                      transition: "all 0.4s ease",
+                    }}
+                  >
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2vw, 1.3rem)", color: isLastChance ? "#ff2d55" : "#ffd700", textShadow: `0 0 8px ${isLastChance ? "#ff2d55" : "#ffd700"}` }}>
+                      {s.date.split("/")[0]}
+                    </div>
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: isLastChance ? "#ff2d55" : "#606080", letterSpacing: "0.05em" }}>
+                      {isLastChance ? "LAST CHANCE" : s.label.split(" ").slice(2).join(" ")}
+                    </div>
+                    {count > 0 && (
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: isLastChance ? "#ff2d55" : "#00f5ff" }}>
+                        {count} {count === 1 ? "EQUIPE" : "EQUIPES"}
+                      </div>
+                    )}
+                    <button
+                      onClick={() => handleHeatVote(s.key)}
+                      disabled={voted}
+                      style={{
+                        fontFamily: "'Press Start 2P', cursive",
+                        fontSize: "0.3rem",
+                        padding: "4px 6px",
+                        border: voted ? "1px solid #404060" : `1px solid ${isLastChance ? "#ff2d55" : "#00f5ff"}`,
+                        background: voted ? "#ffffff0a" : isLastChance ? "#ff2d5511" : "#00f5ff11",
+                        color: voted ? "#404060" : isLastChance ? "#ff2d55" : "#00f5ff",
+                        cursor: voted ? "default" : "pointer",
+                        transition: "all 0.2s",
+                        letterSpacing: "0.05em",
+                      }}
+                    >
+                      {voted ? "OK !" : "PARTICIPE"}
+                    </button>
                   </div>
-                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: s.date === "30/08" ? "#ff2d55" : "#606080", marginTop: "4px", letterSpacing: "0.05em" }}>
-                    {s.date === "30/08" ? "LAST CHANCE" : s.label.split(" ").slice(2).join(" ")}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
           <div className="mt-6 flex flex-wrap gap-3 items-center">
             <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>GRANDE FINALE</span>
