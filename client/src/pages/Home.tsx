@@ -593,6 +593,9 @@ export default function Home() {
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
             TOUS LES DIMANCHES SOIR
           </h2>
+          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1.5rem", marginTop: "-1.5rem" }}>
+            JUILLET &amp; AOÛT 2026
+          </div>
           <div className="flex flex-wrap gap-6 mb-8">
             <div className="flex items-start gap-3">
               <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9201;</span>
