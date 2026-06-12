@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const HERO_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/hero-8bit-arcade-NcEBc79PKd4aoiweZCR8tU.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/superchexx-pixel-7DMT6LC8CjQaDRCVQVxNYn.webp";
 const TROPHY_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/pixel-trophy-8bit-PXBreF3SdxXKf2sKpDiC4Z.webp";
 
