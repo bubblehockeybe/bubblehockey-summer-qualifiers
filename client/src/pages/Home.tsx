@@ -151,7 +151,7 @@ const timelineSteps = [
   { num: "01", label: "5 JUILLET 2026", badge: "INSERT COIN", title: "LANCEMENT", desc: "Premiere soiree. Entrainement gratuit, puis premiers matchs de qualification. Tous les dimanches soir a partir de maintenant.", color: "#00f5ff" },
   { num: "02", label: "JUILLET - AOUT", badge: "LEVEL UP", title: "QUALIFICATIONS", desc: "Chaque dimanche soir, meme format : entrainement gratuit puis matchs payants. 15 EUR la 1re fois, 10 EUR ensuite.", color: "#ff2d55" },
   { num: "03", label: "30 AOUT 2026", badge: "LAST CHANCE", title: "DERNIERE CHANCE", desc: "Dernier dimanche de qualification avant la finale. Les places restantes se jouent ici.", color: "#ffd700" },
-  { num: "04", label: "DEBUT SEPTEMBRE", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "16 equipes, 4 pools, playoffs. Le champion de Bruxelles sera couronné.", color: "#ffd700" },
+  { num: "04", label: "12-13 SEPT 2026", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "16 equipes, 4 pools, playoffs. Le champion de Bruxelles sera couronné.", color: "#ffd700" },
 ];
 
 const sessionDates = [
@@ -177,7 +177,7 @@ const faqItems = [
   { q: "ON NE CONNAIT PAS LE JEU. ON PEUT VENIR ?", a: "Oui, et c'est fait pour ca. L'entrainement du debut de soiree est gratuit et ouvert a tous. Vous apprenez les regles en 2 minutes, vous jouez des parties libres avec du coaching, et vous decidez ensuite si vous voulez tenter votre qualification." },
   { q: "C'EST GRATUIT OU PAYANT ?", a: "L'accueil et l'entrainement sont 100% gratuits. Vous pouvez revenir autant de dimanches que vous voulez sans payer. Les matchs de qualification coutent 15 EUR pour votre premiere tentative, puis 10 EUR pour chaque tentative suivante." },
   { q: "ON DOIT ETRE DEUX POUR VENIR ?", a: "Pour les matchs de qualification, oui : le bubble hockey se joue en equipe de deux. Pour l'entrainement gratuit, vous pouvez venir seul. On peut aussi vous trouver un partenaire sur place selon les disponibilites." },
-  { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026, a partir de 19h00. Au Brussels Pinball Museum, 1501 chaussee de Wavre, 1160 Auderghem. La grande finale aura lieu debut septembre, date exacte a confirmer." },
+  { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026, a partir de 19h00. Au Brussels Pinball Museum, 1501 chaussee de Wavre, 1160 Auderghem. La grande finale aura lieu les 12 et 13 septembre 2026." },
   { q: "COMMENT ON SE QUALIFIE ?", a: "Chaque dimanche, les equipes presentes s'affrontent en matchs BO3 (premier a 2 victoires). En general, les 2 meilleures equipes de la soiree decrochent leur ticket finale. Exception : si seulement 2 equipes sont presentes, seule la gagnante est qualifiee. Si vous n'etes pas qualifie, revenez le dimanche suivant pour 10 EUR. 16 equipes en tout seront qualifiees pour la grande finale." },
 ];
 
@@ -329,7 +329,7 @@ export default function Home() {
             >
               Chaque dimanche soir au Brussels Pinball Museum.
               Entrainement gratuit, puis qualifications.{" "}
-              <span style={{ color: "#ffd700" }}>Grande finale debut septembre.</span>
+              <span style={{ color: "#ffd700" }}>Grande finale les 12 et 13 septembre 2026.</span>
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
@@ -379,7 +379,7 @@ export default function Home() {
             {[
               { label: "1RE TENTATIVE", value: "15€" },
               { label: "TENTATIVES SUIV.", value: "10€" },
-              { label: "GRANDE FINALE", value: "SEPT" },
+              { label: "GRANDE FINALE", value: "12-13/09" },
             ].map((stat, i) => (
               <div key={i} className="text-center py-3" style={{ border: "2px solid #00f5ff22", background: "#00f5ff06" }}>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#ffd700", textShadow: "0 0 8px #ffd700" }}>{stat.value}</div>
@@ -449,7 +449,7 @@ export default function Home() {
             // SELECTION DE NIVEAU
           </div>
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "3rem", lineHeight: 1.6 }}>
-            UN ETE POUR APPRENDRE.<br />SEPTEMBRE POUR GAGNER.
+            UN ETE POUR APPRENDRE.<br />12-13 SEPT POUR GAGNER.
           </h2>
           <div className="space-y-6">
             {timelineSteps.map((step, i) => (
@@ -597,7 +597,7 @@ export default function Home() {
           </div>
           <div className="mt-6 flex flex-wrap gap-3 items-center">
             <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>GRANDE FINALE</span>
-            <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>Debut septembre 2026 - date exacte annoncee prochainement</span>
+            <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>12 et 13 septembre 2026</span>
           </div>
         </div>
       </section>
@@ -619,7 +619,7 @@ export default function Home() {
               { icon: "🏆", title: "2 QUALIFIES PAR SOIREE", desc: "Chaque dimanche, les 2 meilleures equipes de la soiree decrochent leur ticket finale. Directement, sans leaderboard.", color: "#ffd700" },
               { icon: "🔄", title: "RETENTER SA CHANCE", desc: "Pas qualifie ce soir ? Revenez le dimanche suivant pour 10 EUR. Autant de fois que vous voulez jusqu'au 30 aout.", color: "#00f5ff" },
               { icon: "⚡", title: "LAST CHANCE - 30 AOUT", desc: "Dernier dimanche de qualification. Les places restantes pour la finale se jouent ce soir-la.", color: "#ff2d55" },
-              { icon: "🏖️", title: "GRANDE FINALE", desc: "16 equipes qualifiees, 4 pools, matchs en BO3. Le champion de Bruxelles est couronné debut septembre.", color: "#ffd700" },
+              { icon: "🏖️", title: "GRANDE FINALE", desc: "16 equipes qualifiees, 4 pools, matchs en BO3. Le champion de Bruxelles est couronné les 12 et 13 septembre.", color: "#ffd700" },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -677,7 +677,7 @@ export default function Home() {
                 // FINAL BOSS
               </div>
               <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-                LA GRANDE FINALE<br />DEBUT SEPTEMBRE.
+                LA GRANDE FINALE<br />12 ET 13 SEPTEMBRE.
               </h2>
               <div className="space-y-4">
                 {[
@@ -726,7 +726,7 @@ export default function Home() {
             HALL OF FAME
           </h2>
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.8rem", color: "#888", marginBottom: "3rem" }}>
-            Les equipes qui ont decroché leur ticket pour la grande finale de septembre.
+            Les equipes qui ont decroché leur ticket pour la grande finale des 12 et 13 septembre 2026.
           </p>
 
           {/* Etat vide - aucun qualifie pour l'instant */}
