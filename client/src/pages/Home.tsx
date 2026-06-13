@@ -776,7 +776,7 @@ export default function Home() {
       </section>
 
       {/* ── QUALIFICATION ── */}
-      <section className="py-20 px-4" style={{ background: "rgba(13,13,26,0.96)", borderTop: "2px solid #ff2d5522", borderBottom: "2px solid #ff2d5522" }}>
+      <section className="py-20 px-4" style={{ background: "rgba(8,8,18,0.99)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
         <div className="max-w-5xl mx-auto">
 
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
