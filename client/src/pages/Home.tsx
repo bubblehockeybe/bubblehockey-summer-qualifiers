@@ -219,6 +219,7 @@ export default function Home() {
   const [playerEmail, setPlayerEmail] = useState("");
   const [sessionType, setSessionType] = useState("qualification");
   const [sessionDate, setSessionDate] = useState("");
+  const [rulesAccepted, setRulesAccepted] = useState(false);
 
   // Heatmap : votes par date (localStorage)
   const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
@@ -253,7 +254,7 @@ export default function Home() {
   const placesRestantes = PLACES_TOTALES - PLACES_PRISES;
 
   const handleSubmit = () => {
-    if (!teamName.trim() || !playerEmail.trim()) return;
+    if (!teamName.trim() || !playerEmail.trim() || !rulesAccepted) return;
     const subject = encodeURIComponent(`Inscription Bubble Hockey - ${teamName}`);
     const typeLabel = sessionType === 'qualification' ? 'Session de qualification (15 EUR - paiement sur place)' : 'Session decouverte (gratuit - entrainement)';
     const dateLabel = sessionDate || 'Non precisee';
@@ -1022,21 +1023,69 @@ export default function Home() {
                     <option value="decouverte" style={{ background: "#0a0a1f" }}>SESSION DECOUVERTE (GRATUIT)</option>
                   </select>
                 </div>
+                {/* Case à cocher règles */}
+                <div
+                  className="mb-5"
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "12px",
+                    background: rulesAccepted ? "#00f5ff08" : "#ff2d5508",
+                    border: `2px solid ${rulesAccepted ? "#00f5ff44" : "#ff2d5544"}`,
+                    padding: "12px 14px",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                  onClick={() => setRulesAccepted(!rulesAccepted)}
+                >
+                  <div
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      minWidth: "18px",
+                      border: `2px solid ${rulesAccepted ? "#00f5ff" : "#ff2d55"}`,
+                      background: rulesAccepted ? "#00f5ff" : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: "2px",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {rulesAccepted && (
+                      <span style={{ color: "#0a0a0f", fontSize: "12px", fontWeight: "bold", lineHeight: 1 }}>✓</span>
+                    )}
+                  </div>
+                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.6rem", color: rulesAccepted ? "#a0a0c0" : "#808090", lineHeight: 1.8 }}>
+                    J'ai lu et j'accepte les{" "}
+                    <a
+                      href="#faq"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ color: "#00f5ff", textDecoration: "underline" }}
+                    >
+                      règles du tournoi
+                    </a>
+                    {" "}avant de m'inscrire.
+                  </span>
+                </div>
+
                 <button
                   onClick={handleSubmit}
+                  disabled={!rulesAccepted}
                   style={{
                     width: "100%",
                     fontFamily: "'Press Start 2P', cursive",
                     fontSize: "0.6rem",
-                    background: "#ff2d55",
-                    color: "#fff",
-                    border: "3px solid #ff2d55",
+                    background: rulesAccepted ? "#ff2d55" : "#3a1a22",
+                    color: rulesAccepted ? "#fff" : "#604050",
+                    border: `3px solid ${rulesAccepted ? "#ff2d55" : "#3a1a22"}`,
                     padding: "14px",
-                    cursor: "pointer",
-                    boxShadow: "0 0 16px #ff2d55, 4px 4px 0 #8b0000",
+                    cursor: rulesAccepted ? "pointer" : "not-allowed",
+                    boxShadow: rulesAccepted ? "0 0 16px #ff2d55, 4px 4px 0 #8b0000" : "none",
                     letterSpacing: "0.05em",
+                    transition: "all 0.2s",
                   }}
-                  className="hover:brightness-110 active:scale-95 transition-all"
+                  className="active:scale-95 transition-all"
                 >
                   ▶ S'INSCRIRE EN LIGNE
                 </button>
