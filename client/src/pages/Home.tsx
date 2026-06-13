@@ -474,7 +474,7 @@ export default function Home() {
             </motion.div>
 
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-              style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#a0a0c0", lineHeight: 1.9, maxWidth: "500px", margin: "0 auto 1.5rem" }}
+              style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 1.9, maxWidth: "500px", margin: "0 auto 1.5rem" }}
             >
               Chaque dimanche soir au Brussels Pinball Museum.
               Entrainement gratuit, puis qualifications.{" "}
@@ -530,7 +530,7 @@ export default function Home() {
             ].map((stat, i) => (
               <div key={i} className="text-center py-3" style={{ border: "2px solid #00f5ff22", background: "#00f5ff06" }}>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#ffd700", textShadow: "0 0 8px #ffd700" }}>{stat.value}</div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#606080", marginTop: "4px" }}>{stat.label}</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#9090b0", marginTop: "4px" }}>{stat.label}</div>
               </div>
             ))}
           </div>
@@ -548,10 +548,10 @@ export default function Home() {
           </h2>
           <div className="grid md:grid-cols-2 gap-10 items-start">
             <div>
-              <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#a0a0c0", marginBottom: "1.5rem" }}>
+              <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#d0d0e0", marginBottom: "1.5rem" }}>
                 Le bubble hockey, c'est un hockey sur table sous dôme de plexiglas. Deux joueurs par équipe, des figurines articulées, un palet et beaucoup d'adrénaline.
               </p>
-              <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#a0a0c0", marginBottom: "2rem" }}>
+              <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#d0d0e0", marginBottom: "2rem" }}>
                 Le Brussels Pinball Museum possede l'une des rares machines de bubble hockey en Belgique. Le jeu est simple a comprendre, difficile a maitriser : exactement ce qu'il faut pour un tournoi estival.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -614,13 +614,13 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#606080", marginBottom: "4px", letterSpacing: "0.1em" }}>
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#9090b0", marginBottom: "4px", letterSpacing: "0.1em" }}>
                         {step.label}
                       </div>
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.75rem", color: step.color, marginBottom: "8px", textShadow: `0 0 8px ${step.color}` }}>
                         {step.title}
                       </div>
-                      <p style={{ fontSize: "0.7rem", color: "#a0a0c0", lineHeight: 2 }}>{step.desc}</p>
+                      <p style={{ fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 2 }}>{step.desc}</p>
                     </div>
                   </div>
                 </PixelBorder>
@@ -642,11 +642,11 @@ export default function Home() {
           <div className="mb-6 flex flex-wrap gap-4 items-center">
             <div className="flex items-center gap-2">
               <span style={{ background: "#00f5ff", color: "#0a0a0f", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>GRATUIT</span>
-              <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>Accueil + entrainement - revenez autant de fois que vous voulez</span>
+              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>Accueil + entrainement - revenez autant de fois que vous voulez</span>
             </div>
             <div className="flex items-center gap-2">
               <span style={{ background: "#ff2d55", color: "#fff", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>PAYANT</span>
-              <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>Matchs de qualification - 15 EUR (1re fois) / 10 EUR (suivantes)</span>
+              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>Matchs de qualification - 15 EUR (1re fois) / 10 EUR (suivantes)</span>
             </div>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -666,7 +666,7 @@ export default function Home() {
                     </div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", marginBottom: "6px" }}>{item.time}</div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: item.free ? "#00f5ff" : "#ff2d55", marginBottom: "8px", textShadow: `0 0 6px ${item.free ? "#00f5ff" : "#ff2d55"}` }}>{item.title}</div>
-                    <p style={{ fontSize: "0.6rem", color: "#808090", lineHeight: 1.8 }}>{item.desc}</p>
+                    <p style={{ fontSize: "0.6rem", color: "#c0c0d0", lineHeight: 1.8 }}>{item.desc}</p>
                   </div>
                 </PixelBorder>
               </motion.div>
@@ -690,7 +690,7 @@ export default function Home() {
               <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9201;</span>
               <div>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>HEURE</div>
-                <div style={{ fontSize: "0.7rem", color: "#a0a0c0" }}>A partir de 19h00</div>
+                <div style={{ fontSize: "0.7rem", color: "#d0d0e0" }}>A partir de 19h00</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -705,7 +705,7 @@ export default function Home() {
                   className="hover:underline"
                 >
                   Brussels Pinball Museum<br />
-                  <span style={{ color: "#a0a0c0" }}>1501 chaussee de Wavre, 1160 Auderghem</span>
+                  <span style={{ color: "#d0d0e0" }}>1501 chaussee de Wavre, 1160 Auderghem</span>
                 </a>
               </div>
             </div>
@@ -770,7 +770,7 @@ export default function Home() {
           </div>
           <div className="mt-6 flex flex-wrap gap-3 items-center">
             <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>GRANDE FINALE</span>
-            <span style={{ fontSize: "0.65rem", color: "#a0a0c0" }}>12 et 13 septembre 2026</span>
+            <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>12 et 13 septembre 2026</span>
           </div>
         </div>
       </section>
@@ -782,7 +782,7 @@ export default function Home() {
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
             CHAQUE SOIR,<br />2 EQUIPES SE QUALIFIENT.
           </h2>
-          <p style={{ fontSize: "0.7rem", color: "#a0a0c0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
+          <p style={{ fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
             Les equipes presentes ce soir-la s'affrontent entre elles en matchs BO3 (premier a 2 victoires). Les 2 meilleures equipes decrochent leur ticket finale. Exception : si seulement 2 equipes sont presentes, seule la gagnante est qualifiee. Les autres peuvent revenir le dimanche suivant pour 10 EUR.
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
@@ -806,7 +806,7 @@ export default function Home() {
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: item.color, marginBottom: "8px", textShadow: `0 0 8px ${item.color}` }}>
                         {item.title}
                       </div>
-                      <p style={{ fontSize: "0.65rem", color: "#a0a0c0", lineHeight: 2 }}>{item.desc}</p>
+                      <p style={{ fontSize: "0.65rem", color: "#d0d0e0", lineHeight: 2 }}>{item.desc}</p>
                     </div>
                   </div>
                 </PixelBorder>
@@ -824,10 +824,10 @@ export default function Home() {
                 {[
                   { label: "VICTOIRE", pts: "3 PTS", color: "#ffd700" },
                   { label: "EGALITE", pts: "1 PT", color: "#00f5ff" },
-                  { label: "DEFAITE", pts: "0 PT", color: "#606080" },
+                  { label: "DEFAITE", pts: "0 PT", color: "#9090b0" },
                 ].map((r) => (
                   <div key={r.label} className="flex items-center gap-3">
-                    <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#a0a0c0" }}>{r.label}</span>
+                    <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#d0d0e0" }}>{r.label}</span>
                     <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: r.color, textShadow: `0 0 8px ${r.color}`, background: `${r.color}22`, padding: "4px 10px", border: `2px solid ${r.color}` }}>
                       {r.pts}
                     </span>
@@ -840,7 +840,7 @@ export default function Home() {
       </section>
 
       {/* ── FORMAT FINALE ── */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" style={{ background: "rgba(8,8,18,0.99)", borderTop: "2px solid #ffd70022" }}>
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -861,7 +861,7 @@ export default function Home() {
                     </div>
                     <div>
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: "#00f5ff", marginBottom: "4px" }}>{item.title}</div>
-                      <p style={{ fontSize: "0.65rem", color: "#808090", lineHeight: 2 }}>{item.desc}</p>
+                      <p style={{ fontSize: "0.65rem", color: "#c0c0d0", lineHeight: 2 }}>{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -943,7 +943,7 @@ export default function Home() {
                   {team ? (
                     <>
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700", textShadow: "0 0 6px #ffd700", lineHeight: 1.6, wordBreak: "break-word" }}>{team.name}</div>
-                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.5rem", color: "#606080", marginTop: "4px" }}>{team.date}</div>
+                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.5rem", color: "#9090b0", marginTop: "4px" }}>{team.date}</div>
                     </>
                   ) : (
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#2a2a3a" }}>???</div>
@@ -986,7 +986,7 @@ export default function Home() {
                       </div>
                       <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.55rem", color: "#404060", whiteSpace: "nowrap" }}>{n.date}</span>
                     </div>
-                    <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#a0a0c0", lineHeight: 2, whiteSpace: "pre-wrap" }}>{n.body}</p>
+                    <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#d0d0e0", lineHeight: 2, whiteSpace: "pre-wrap" }}>{n.body}</p>
                   </div>
                 </motion.div>
               ))}
@@ -1024,7 +1024,7 @@ export default function Home() {
                     </span>
                   </button>
                   {openFaq === i && (
-                    <div className="px-5 pb-5" style={{ fontSize: "0.65rem", color: "#a0a0c0", lineHeight: 2.2, borderTop: "1px solid #ffd70033", paddingTop: "12px" }}>
+                    <div className="px-5 pb-5" style={{ fontSize: "0.65rem", color: "#d0d0e0", lineHeight: 2.2, borderTop: "1px solid #ffd70033", paddingTop: "12px" }}>
                       {item.a}
                     </div>
                   )}
@@ -1044,7 +1044,7 @@ export default function Home() {
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.6 }}>
             INSCRIS TON EQUIPE.
           </h2>
-          <p style={{ fontSize: "0.7rem", color: "#808090", lineHeight: 2.2, marginBottom: "2.5rem" }}>
+          <p style={{ fontSize: "0.7rem", color: "#c0c0d0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
             Inscription en ligne ci-dessous. Paiement sur place le soir de votre session.<br />
             Votre place est confirmee apres reglement : 15 EUR pour la 1re qualification, 10 EUR ensuite. Entrainement gratuit.
           </p>
@@ -1221,7 +1221,7 @@ export default function Home() {
                 >
                   ▶ S'INSCRIRE EN LIGNE
                 </button>
-                <p style={{ fontSize: "0.55rem", color: "#606080", textAlign: "center", marginTop: "12px", lineHeight: 1.8 }}>
+                <p style={{ fontSize: "0.55rem", color: "#9090b0", textAlign: "center", marginTop: "12px", lineHeight: 1.8 }}>
                   Paiement sur place le soir de la session. Votre place est reservee apres reglement.
                 </p>
               </div>
@@ -1247,7 +1247,7 @@ export default function Home() {
           href="https://bubblehockey.be"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#606080" }}
+          style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#9090b0" }}
           className="hover:text-cyan-400 transition-colors"
         >
           bubblehockey.be
