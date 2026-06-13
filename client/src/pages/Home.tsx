@@ -13,7 +13,7 @@ const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
 const NEWS_KEY = "bh_news";
 
 const HERO_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/superchexx-pixel-v5-R5XxknNrFEABU2QuNQtBMD.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/superchexx-pixel-v6-PAd3MAUiGLCGHDwg9nwih3.webp";
 const TROPHY_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/pixel-trophy-8bit-PXBreF3SdxXKf2sKpDiC4Z.webp";
 
@@ -280,7 +280,10 @@ export default function Home() {
     const body = encodeURIComponent(
       `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nDate souhaitee : ${dateLabel}\nType : ${typeLabel}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.\n\nNote : le paiement se fait sur place. La place est confirmee apres reglement.`
     );
-    window.location.href = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
+    window.open(mailtoLink, '_blank');
+    // Fallback si window.open est bloqué
+    setTimeout(() => { window.location.href = mailtoLink; }, 300);
   };
 
   return (
