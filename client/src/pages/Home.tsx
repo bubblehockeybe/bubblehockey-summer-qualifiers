@@ -218,6 +218,7 @@ export default function Home() {
   const [teamName, setTeamName] = useState("");
   const [playerEmail, setPlayerEmail] = useState("");
   const [sessionType, setSessionType] = useState("qualification");
+  const [sessionDate, setSessionDate] = useState("");
 
   // Heatmap : votes par date (localStorage)
   const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
@@ -255,8 +256,9 @@ export default function Home() {
     if (!teamName.trim() || !playerEmail.trim()) return;
     const subject = encodeURIComponent(`Inscription Bubble Hockey - ${teamName}`);
     const typeLabel = sessionType === 'qualification' ? 'Session de qualification (15 EUR - paiement sur place)' : 'Session decouverte (gratuit - entrainement)';
+    const dateLabel = sessionDate || 'Non precisee';
     const body = encodeURIComponent(
-      `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nType : ${typeLabel}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.\n\nNote : le paiement se fait sur place. La place est confirmee apres reglement.`
+      `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nDate souhaitee : ${dateLabel}\nType : ${typeLabel}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.\n\nNote : le paiement se fait sur place. La place est confirmee apres reglement.`
     );
     window.location.href = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
   };
@@ -965,6 +967,38 @@ export default function Home() {
                       onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
                     />
                   </div>
+                </div>
+                <div className="mb-5">
+                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
+                    DATE SOUHAITEE
+                  </label>
+                  <select
+                    value={sessionDate}
+                    onChange={(e) => setSessionDate(e.target.value)}
+                    style={{
+                      width: "100%",
+                      background: "#00000080",
+                      border: "2px solid #00f5ff44",
+                      color: sessionDate ? "#e0e0e0" : "#606080",
+                      padding: "10px 12px",
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: "0.7rem",
+                      outline: "none",
+                    }}
+                    onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
+                    onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
+                  >
+                    <option value="" style={{ background: "#0a0a1f" }}>-- CHOISIR UNE DATE --</option>
+                    <option value="Dimanche 5 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 5 JUILLET</option>
+                    <option value="Dimanche 12 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 12 JUILLET</option>
+                    <option value="Dimanche 19 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 19 JUILLET</option>
+                    <option value="Dimanche 26 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 26 JUILLET</option>
+                    <option value="Dimanche 2 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 2 AOÛT</option>
+                    <option value="Dimanche 9 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 9 AOÛT</option>
+                    <option value="Dimanche 16 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 16 AOÛT</option>
+                    <option value="Dimanche 23 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 23 AOÛT</option>
+                    <option value="Dimanche 30 aout (derniere chance)" style={{ background: "#0a0a1f" }}>DIMANCHE 30 AOÛT — DERNIERE CHANCE</option>
+                  </select>
                 </div>
                 <div className="mb-6">
                   <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
