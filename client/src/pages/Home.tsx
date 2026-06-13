@@ -343,29 +343,89 @@ export default function Home() {
               }}
               className="hover:text-yellow-300 transition-colors"
             >
-              {item === "NEWS" ? "★ NEWS" : item}
+              {item === "NEWS" ? "\u2605 NEWS" : item}
             </a>
           ))}
         </div>
-        <a href="#inscription">
+
+        {/* Bouton S'inscrire (desktop) + burger (mobile) */}
+        <div className="flex items-center gap-3">
+          <a href="#inscription" className="hidden md:block">
+            <button
+              style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "0.5rem",
+                background: "#ff2d55",
+                color: "#fff",
+                border: "2px solid #ff2d55",
+                padding: "8px 14px",
+                cursor: "pointer",
+                boxShadow: "0 0 10px #ff2d55",
+                letterSpacing: "0.05em",
+              }}
+              className="hover:bg-red-400 transition-colors active:scale-95"
+            >
+              S'INSCRIRE
+            </button>
+          </a>
+          {/* Burger button mobile */}
           <button
+            className="md:hidden flex flex-col justify-center items-center gap-1.5 p-2"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Menu"
+            style={{ background: "transparent", border: "none", cursor: "pointer" }}
+          >
+            <span style={{ display: "block", width: 22, height: 2, background: menuOpen ? "#ffd700" : "#00f5ff", transition: "all 0.2s", transform: menuOpen ? "rotate(45deg) translate(3px, 3px)" : "none" }} />
+            <span style={{ display: "block", width: 22, height: 2, background: menuOpen ? "#ffd700" : "#00f5ff", transition: "all 0.2s", opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ display: "block", width: 22, height: 2, background: menuOpen ? "#ffd700" : "#00f5ff", transition: "all 0.2s", transform: menuOpen ? "rotate(-45deg) translate(3px, -3px)" : "none" }} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Menu mobile deroulant */}
+      {menuOpen && (
+        <div
+          className="fixed top-[58px] left-0 right-0 z-40 md:hidden flex flex-col"
+          style={{ background: "#0a0a0f", borderBottom: "2px solid #00f5ff", boxShadow: "0 8px 24px #00f5ff22" }}
+        >
+          {["LE JEU", "SESSIONS", "CALENDRIER", ...(newsItems.length > 0 ? ["NEWS"] : []), "HALL OF FAME", "FAQ"].map((item) => (
+            <a
+              key={item}
+              href={`#${item === "LE JEU" ? "lejeu" : item.toLowerCase().replace(/ /g, "")}`}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "0.55rem",
+                color: item === "NEWS" ? "#ffd700" : "#00f5ff",
+                textDecoration: "none",
+                letterSpacing: "0.1em",
+                padding: "14px 20px",
+                borderBottom: "1px solid #00f5ff11",
+                display: "block",
+              }}
+            >
+              {item === "NEWS" ? "\u2605 NEWS" : item}
+            </a>
+          ))}
+          <a
+            href="#inscription"
+            onClick={() => setMenuOpen(false)}
             style={{
               fontFamily: "'Press Start 2P', cursive",
-              fontSize: "0.5rem",
+              fontSize: "0.55rem",
               background: "#ff2d55",
               color: "#fff",
-              border: "2px solid #ff2d55",
-              padding: "8px 14px",
-              cursor: "pointer",
-              boxShadow: "0 0 10px #ff2d55",
-              letterSpacing: "0.05em",
+              textDecoration: "none",
+              letterSpacing: "0.1em",
+              padding: "14px 20px",
+              display: "block",
+              textAlign: "center",
             }}
-            className="hover:bg-red-400 transition-colors active:scale-95"
           >
-            S'INSCRIRE
-          </button>
-        </a>
-      </nav>
+            ▶ S'INSCRIRE
+          </a>
+        </div>
+      )}
 
       {/* ── HERO ── */}
       <section className="relative flex flex-col items-center justify-center pt-20 pb-6 overflow-hidden" style={{ minHeight: "auto" }}>
