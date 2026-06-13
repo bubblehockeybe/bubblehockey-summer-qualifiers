@@ -538,7 +538,7 @@ export default function Home() {
       </section>
 
       {/* ── C'EST QUOI ── */}
-      <section id="lejeu" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.88) 0%, rgba(13,10,31,0.88) 50%, rgba(10,10,15,0.88) 100%)" }}>
+      <section id="lejeu" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(13,10,31,0.96) 50%, rgba(10,10,15,0.96) 100%)" }}>
         {/* Motif losanges pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.04) 1px, transparent 1px)", backgroundSize: "32px 32px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
@@ -586,7 +586,7 @@ export default function Home() {
       </section>
 
       {/* ── TIMELINE ── */}
-      <section id="calendrier" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.88) 0%, rgba(10,16,32,0.88) 40%, rgba(16,10,10,0.88) 100%)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
+      <section id="calendrier" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(10,16,32,0.96) 40%, rgba(16,10,10,0.96) 100%)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
         {/* Grille rouge subtile */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,45,85,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,85,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
@@ -631,7 +631,7 @@ export default function Home() {
       </section>
 
       {/* ── FORMAT SESSIONS ── */}
-      <section id="sessions" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.88) 0%, rgba(10,26,10,0.88) 50%, rgba(10,10,15,0.88) 100%)" }}>
+      <section id="sessions" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(10,26,10,0.96) 50%, rgba(10,10,15,0.96) 100%)" }}>
         {/* Motif croix pixel vert */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,255,136,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
@@ -776,7 +776,7 @@ export default function Home() {
       </section>
 
       {/* ── QUALIFICATION ── */}
-      <section className="py-20 px-4" style={{ background: "rgba(13,13,26,0.88)", borderTop: "2px solid #ff2d5522", borderBottom: "2px solid #ff2d5522" }}>
+      <section className="py-20 px-4" style={{ background: "rgba(13,13,26,0.96)", borderTop: "2px solid #ff2d5522", borderBottom: "2px solid #ff2d5522" }}>
         <div className="max-w-5xl mx-auto">
 
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
@@ -884,7 +884,7 @@ export default function Home() {
       </section>
 
       {/* ── HALL OF FAME ── */}
-      <section id="halloffame" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.88) 0%, rgba(26,15,0,0.88) 50%, rgba(10,10,15,0.88) 100%)", borderTop: "2px solid #ffd70033", borderBottom: "2px solid #ffd70033" }}>
+      <section id="halloffame" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(26,15,0,0.96) 50%, rgba(10,10,15,0.96) 100%)", borderTop: "2px solid #ffd70033", borderBottom: "2px solid #ffd70033" }}>
         {/* Motif etoiles pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,215,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
@@ -963,7 +963,7 @@ export default function Home() {
 
       {/* ── NEWS ── */}
       {newsItems.length > 0 && (
-        <section id="news" className="py-16 px-4" style={{ background: "rgba(10,10,20,0.88)", borderTop: "2px solid #00f5ff33", borderBottom: "2px solid #00f5ff22" }}>
+        <section id="news" className="py-16 px-4" style={{ background: "rgba(10,10,20,0.96)", borderTop: "2px solid #00f5ff33", borderBottom: "2px solid #00f5ff22" }}>
           <div className="max-w-3xl mx-auto">
             <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2rem", lineHeight: 1.6 }}>
               NEWS
@@ -995,7 +995,7 @@ export default function Home() {
         </section>
       )}
 
-      <section id="faq" className="py-20 px-4" style={{ background: "rgba(13,13,26,0.88)", borderTop: "2px solid #00f5ff22" }}>
+      <section id="faq" className="py-20 px-4" style={{ background: "rgba(13,13,26,0.96)", borderTop: "2px solid #00f5ff22" }}>
         <div className="max-w-3xl mx-auto">
 
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
@@ -1036,7 +1036,7 @@ export default function Home() {
       </section>
 
       {/* ── INSCRIPTION ── */}
-      <section id="inscription" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.88) 0%, rgba(26,10,15,0.88) 60%, rgba(10,10,15,0.88) 100%)" }}>
+      <section id="inscription" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(26,10,15,0.96) 60%, rgba(10,10,15,0.96) 100%)" }}>
         {/* Grille jaune subtile */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px)", backgroundSize: "36px 36px", zIndex: 0 }} />
         <div className="max-w-2xl mx-auto text-center">
