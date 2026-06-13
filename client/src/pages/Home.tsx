@@ -45,7 +45,7 @@ function PixelBackground() {
         backgroundImage: `url('/manus-storage/stars-bg-large_32012ab9.jpg')`,
         backgroundRepeat: "repeat",
         backgroundSize: "2400px 2400px",
-        opacity: 1,
+        opacity: 0.35,
       }} />
     </div>
   );
