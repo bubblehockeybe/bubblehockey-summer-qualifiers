@@ -13,7 +13,7 @@ const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
 const NEWS_KEY = "bh_news";
 
 const HERO_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/superchexx-pixel-v7-fhRufbtSxhWftCMM2hJ5yd.webp";
+  "/manus-storage/superchexx-v6-fixed3_c8f38b03.png";
 const TROPHY_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/pixel-trophy-8bit-PXBreF3SdxXKf2sKpDiC4Z.webp";
 
