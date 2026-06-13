@@ -7,6 +7,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import type { QualifiedTeam, NewsItem } from "./Admin";
+
+const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
+const NEWS_KEY = "bh_news";
 
 const HERO_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/superchexx-pixel-v4-N3Ms8RxkpRaHtbhbXgTwFZ.webp";
@@ -214,6 +218,28 @@ export default function Home() {
   const [sessionDate, setSessionDate] = useState("");
   const [rulesAccepted, setRulesAccepted] = useState(false);
 
+  // Equipes qualifiees depuis admin
+  const [qualifiedTeams, setQualifiedTeams] = useState<QualifiedTeam[]>(() => {
+    try { return JSON.parse(localStorage.getItem(QUALIFIED_TEAMS_KEY) || "[]"); } catch { return []; }
+  });
+
+  // News depuis admin
+  const [newsItems, setNewsItems] = useState<NewsItem[]>(() => {
+    try { return JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"); } catch { return []; }
+  });
+
+  // Ecouter les changements localStorage (mise a jour depuis onglet admin)
+  useEffect(() => {
+    const handler = () => {
+      try {
+        setQualifiedTeams(JSON.parse(localStorage.getItem(QUALIFIED_TEAMS_KEY) || "[]"));
+        setNewsItems(JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"));
+      } catch {}
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
   // Heatmap : votes par date (localStorage)
   const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
     try {
@@ -243,7 +269,7 @@ export default function Home() {
   const maxHeat = Math.max(1, ...Object.values(heatVotes));
 
   const PLACES_TOTALES = 16;
-  const PLACES_PRISES = 0; // Mettre a jour apres chaque soiree de qualification
+  const PLACES_PRISES = qualifiedTeams.length;
   const placesRestantes = PLACES_TOTALES - PLACES_PRISES;
 
   const handleSubmit = () => {
@@ -803,58 +829,104 @@ export default function Home() {
             Les equipes qui ont decroché leur ticket pour la grande finale des 12 et 13 septembre 2026.
           </p>
 
-          {/* Etat vide - aucun qualifie pour l'instant */}
-          <div style={{ border: "2px solid #ffd70033", background: "#ffd70008", padding: "3rem 2rem", textAlign: "center" }}>
-            {/* Trophee pixel */}
-            <div style={{ fontSize: "3rem", marginBottom: "1.5rem", filter: "grayscale(0.3)" }}>🏆</div>
-            <BlinkText>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: "#ffd700", letterSpacing: "0.15em", textShadow: "0 0 10px #ffd700" }}>
-                AUCUN QUALIFIE POUR L'INSTANT
+          {/* Etat vide */}
+          {qualifiedTeams.length === 0 && (
+            <div style={{ border: "2px solid #ffd70033", background: "#ffd70008", padding: "3rem 2rem", textAlign: "center", marginBottom: "2rem" }}>
+              <div style={{ fontSize: "3rem", marginBottom: "1.5rem", filter: "grayscale(0.3)" }}>🏆</div>
+              <BlinkText>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: "#ffd700", letterSpacing: "0.15em", textShadow: "0 0 10px #ffd700" }}>
+                  AUCUN QUALIFIE POUR L'INSTANT
+                </div>
+              </BlinkText>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "1.5rem" }}>
+                La premiere soiree de qualification a lieu le dimanche 5 juillet 2026.
               </div>
-            </BlinkText>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "1.5rem" }}>
-              La premiere soiree de qualification a lieu le dimanche 5 juillet 2026.
+              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "0.5rem" }}>
+                2 equipes se qualifieront chaque dimanche soir.
+              </div>
             </div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "0.5rem" }}>
-              2 equipes se qualifieront chaque dimanche soir.
-            </div>
-          </div>
+          )}
 
           {/* Grille des 16 slots */}
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
-            {Array.from({ length: 16 }).map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.04 }}
-                style={{
-                  border: "2px solid #ffd70022",
-                  background: "#ffd70006",
-                  padding: "12px 8px",
-                  textAlign: "center",
-                  position: "relative",
-                }}
-              >
-                {/* Coins pixel */}
-                <div style={{ position: "absolute", top: -2, left: -2, width: 6, height: 6, background: "#ffd70033" }} />
-                <div style={{ position: "absolute", top: -2, right: -2, width: 6, height: 6, background: "#ffd70033" }} />
-                <div style={{ position: "absolute", bottom: -2, left: -2, width: 6, height: 6, background: "#ffd70033" }} />
-                <div style={{ position: "absolute", bottom: -2, right: -2, width: 6, height: 6, background: "#ffd70033" }} />
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#ffd70044", marginBottom: "6px" }}>SLOT {String(i + 1).padStart(2, "0")}</div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#333" }}>???</div>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {Array.from({ length: 16 }).map((_, i) => {
+              const team = qualifiedTeams.find((t) => t.slot === i + 1);
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04 }}
+                  style={{
+                    border: team ? "2px solid #ffd700" : "2px solid #ffd70022",
+                    background: team ? "#ffd70014" : "#ffd70006",
+                    padding: "12px 8px",
+                    textAlign: "center",
+                    position: "relative",
+                    boxShadow: team ? "0 0 8px #ffd70055" : "none",
+                    transition: "all 0.3s",
+                  }}
+                >
+                  <div style={{ position: "absolute", top: -2, left: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
+                  <div style={{ position: "absolute", top: -2, right: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
+                  <div style={{ position: "absolute", bottom: -2, left: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
+                  <div style={{ position: "absolute", bottom: -2, right: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
+                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: team ? "#ffd70099" : "#ffd70044", marginBottom: "6px" }}>SLOT {String(i + 1).padStart(2, "0")}</div>
+                  {team ? (
+                    <>
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700", textShadow: "0 0 6px #ffd700", lineHeight: 1.6, wordBreak: "break-word" }}>{team.name}</div>
+                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.5rem", color: "#606080", marginTop: "4px" }}>{team.date}</div>
+                    </>
+                  ) : (
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#2a2a3a" }}>???</div>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
 
           <div className="mt-6 text-center">
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#444" }}>
-              0 / 16 places attribuees · Prochaine session : 5 juillet 2026
+              {qualifiedTeams.length} / 16 places attribuees{qualifiedTeams.length < 16 ? " · Prochaine session : 5 juillet 2026" : " · TABLEAU COMPLET !"}
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── NEWS ── */}
+      {newsItems.length > 0 && (
+        <section id="news" className="py-16 px-4" style={{ background: "rgba(10,10,20,0.88)", borderTop: "2px solid #00f5ff33", borderBottom: "2px solid #00f5ff22" }}>
+          <div className="max-w-3xl mx-auto">
+            <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2rem", lineHeight: 1.6 }}>
+              NEWS
+            </h2>
+            <div className="space-y-4">
+              {[...newsItems].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0)).map((n) => (
+                <motion.div
+                  key={n.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <div style={{ border: `2px solid ${n.pinned ? "#ffd70066" : "#00f5ff33"}`, background: n.pinned ? "#ffd70008" : "#00f5ff06", padding: "16px 20px" }}>
+                    <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {n.pinned && (
+                          <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ffd700", border: "1px solid #ffd700", padding: "2px 6px" }}>EPINGLE</span>
+                        )}
+                        <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: n.pinned ? "#ffd700" : "#00f5ff" }}>{n.title}</span>
+                      </div>
+                      <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.55rem", color: "#404060", whiteSpace: "nowrap" }}>{n.date}</span>
+                    </div>
+                    <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#a0a0c0", lineHeight: 2, whiteSpace: "pre-wrap" }}>{n.body}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section id="faq" className="py-20 px-4" style={{ background: "rgba(13,13,26,0.88)", borderTop: "2px solid #00f5ff22" }}>
         <div className="max-w-3xl mx-auto">
