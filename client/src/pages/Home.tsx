@@ -42,9 +42,9 @@ function PixelBackground() {
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: `url('/manus-storage/stars-bg_b911173b.png')`,
+        backgroundImage: `url('/manus-storage/stars-bg-large_32012ab9.jpg')`,
         backgroundRepeat: "repeat",
-        backgroundSize: "600px 600px",
+        backgroundSize: "2400px 2400px",
         opacity: 1,
       }} />
     </div>
