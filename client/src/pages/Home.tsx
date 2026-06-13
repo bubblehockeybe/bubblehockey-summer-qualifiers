@@ -329,14 +329,21 @@ export default function Home() {
           style={{ height: "40px", width: "auto", imageRendering: "auto", filter: "brightness(1.1)" }}
         />
         <div className="hidden md:flex gap-8">
-          {["LE JEU", "SESSIONS", "CALENDRIER", "HALL OF FAME", "FAQ"].map((item) => (
+          {["LE JEU", "SESSIONS", "CALENDRIER", ...(newsItems.length > 0 ? ["NEWS"] : []), "HALL OF FAME", "FAQ"].map((item) => (
             <a
               key={item}
               href={`#${item === "LE JEU" ? "lejeu" : item.toLowerCase().replace(/ /g, "")}`}
-              style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textDecoration: "none", letterSpacing: "0.1em" }}
+              style={{
+                fontFamily: "'Press Start 2P', cursive",
+                fontSize: "0.5rem",
+                color: item === "NEWS" ? "#ffd700" : "#00f5ff",
+                textDecoration: "none",
+                letterSpacing: "0.1em",
+                ...(item === "NEWS" ? { textShadow: "0 0 8px #ffd70088" } : {}),
+              }}
               className="hover:text-yellow-300 transition-colors"
             >
-              {item}
+              {item === "NEWS" ? "★ NEWS" : item}
             </a>
           ))}
         </div>
