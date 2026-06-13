@@ -676,7 +676,7 @@ export default function Home() {
       </section>
 
       {/* ── CALENDRIER DATES ── */}
-      <section id="calendrier-dates" className="py-16 px-4">
+      <section id="calendrier-dates" className="py-16 px-4" style={{ position: "relative", background: "rgba(8,8,18,0.97)", borderTop: "2px solid #ffd70022", borderBottom: "2px solid #ffd70022" }}>
         <div className="max-w-5xl mx-auto">
 
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
