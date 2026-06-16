@@ -13,7 +13,7 @@ const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
 const NEWS_KEY = "bh_news";
 
 const HERO_IMG =
-  "/manus-storage/superchexx-v6-fixed3_c8f38b03.png";
+  "/manus-storage/superchexx-photo_de614c0e.png";
 const TROPHY_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/pixel-trophy-8bit-PXBreF3SdxXKf2sKpDiC4Z.webp";
 
@@ -581,7 +581,7 @@ export default function Home() {
                 src={HERO_IMG}
                 alt="Bubble hockey pixel art"
                 className="w-full object-cover"
-                style={{ display: "block", imageRendering: "pixelated" }}
+                style={{ display: "block", imageRendering: "auto" }}
               />
             </PixelBorder>
           </div>
