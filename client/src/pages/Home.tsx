@@ -3,14 +3,17 @@
  * Fond noir #0a0a0f, cyan électrique #00f5ff, rouge arcade #ff2d55, jaune score #ffd700
  * Press Start 2P pour titres, Space Mono pour corps
  * Bordures pixel, scan lines, effets néon, compteurs animés
+ * i18n: FR/EN via lib/i18n.ts
  */
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import type { QualifiedTeam, NewsItem } from "./Admin";
+import { type Lang, t } from "@/lib/i18n";
 
 const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
 const NEWS_KEY = "bh_news";
+const LANG_KEY = "bh_lang";
 
 const HERO_IMG =
   "/manus-storage/superchexx-photo_de614c0e.png";
@@ -28,7 +31,6 @@ function PixelBorder({ children, color = "#00f5ff", className = "" }: { children
         imageRendering: "pixelated",
       }}
     >
-      {/* Coins pixel */}
       <div className="absolute -top-1 -left-1 w-3 h-3" style={{ background: color }} />
       <div className="absolute -top-1 -right-1 w-3 h-3" style={{ background: color }} />
       <div className="absolute -bottom-1 -left-1 w-3 h-3" style={{ background: color }} />
@@ -42,7 +44,6 @@ function PixelBorder({ children, color = "#00f5ff", className = "" }: { children
 function PixelBackground() {
   return (
     <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
-      {/* Fond étoilé */}
       <div style={{
         position: "absolute",
         inset: 0,
@@ -93,8 +94,8 @@ function PixelParticles() {
 function BlinkText({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const [visible, setVisible] = useState(true);
   useEffect(() => {
-    const t = setInterval(() => setVisible((v) => !v), 600);
-    return () => clearInterval(t);
+    const ti = setInterval(() => setVisible((v) => !v), 600);
+    return () => clearInterval(ti);
   }, []);
   return (
     <span className={className} style={{ opacity: visible ? 1 : 0, transition: "opacity 0.05s" }}>
@@ -103,65 +104,88 @@ function BlinkText({ children, className = "" }: { children: React.ReactNode; cl
   );
 }
 
-// Compteur animé
-function SpritePlayer({ frames, glowColor, delay }: { frames: string[]; glowColor: string; delay: number }) {
-  const [frameIdx, setFrameIdx] = useState(0);
-  useEffect(() => {
-    const t = setTimeout(() => {
-      const interval = setInterval(() => {
-        setFrameIdx(i => (i + 1) % frames.length);
-      }, 180);
-      return () => clearInterval(interval);
-    }, delay * 100);
-    return () => clearTimeout(t);
-  }, [frames.length, delay]);
-  return (
-    <img
-      src={frames[frameIdx]}
-      alt="sprite"
-      style={{
-        width: 110,
-        height: 103,
-        imageRendering: "pixelated",
-        filter: `drop-shadow(0 0 14px ${glowColor})`,
-      }}
-    />
-  );
-}
-
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     let start = 0;
     const step = Math.ceil(target / 40);
-    const t = setInterval(() => {
+    const ti = setInterval(() => {
       start += step;
-      if (start >= target) { setCount(target); clearInterval(t); }
+      if (start >= target) { setCount(target); clearInterval(ti); }
       else setCount(start);
     }, 40);
-    return () => clearInterval(t);
+    return () => clearInterval(ti);
   }, [target]);
   return <span>{count}{suffix}</span>;
 }
 
-const timelineSteps = [
-  { num: "01", label: "5 JUILLET 2026", badge: "INSERT COIN", title: "LANCEMENT", desc: "Premiere soiree. Entrainement gratuit, puis premiers matchs de qualification. Tous les dimanches soir a partir de maintenant.", color: "#00f5ff" },
-  { num: "02", label: "JUILLET - AOUT", badge: "LEVEL UP", title: "QUALIFICATIONS", desc: "Chaque dimanche soir, meme format : entrainement gratuit puis matchs payants. 15 EUR la 1re fois, 10 EUR ensuite.", color: "#ff2d55" },
-  { num: "03", label: "30 AOUT 2026", badge: "LAST CHANCE", title: "DERNIERE CHANCE", desc: "Dernier dimanche de qualification avant la finale. Les places restantes se jouent ici.", color: "#ffd700" },
-  { num: "04", label: "12-13 SEPT 2026", badge: "FINAL BOSS", title: "GRANDE FINALE", desc: "16 equipes, 4 pools, playoffs. Le champion de Bruxelles sera couronné.", color: "#ffd700" },
-];
+// Sélecteur de langue inline (pour nav desktop)
+function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
+  return (
+    <div className="flex items-center" style={{ gap: "2px" }}>
+      {(["fr", "en"] as Lang[]).map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          style={{
+            fontFamily: "'Press Start 2P', cursive",
+            fontSize: "0.45rem",
+            padding: "5px 8px",
+            background: lang === l ? "#ffd700" : "transparent",
+            color: lang === l ? "#0a0a0f" : "#ffd70088",
+            border: `2px solid ${lang === l ? "#ffd700" : "#ffd70033"}`,
+            cursor: "pointer",
+            letterSpacing: "0.05em",
+            transition: "all 0.15s",
+            lineHeight: 1,
+          }}
+          className="active:scale-95"
+        >
+          {l.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
 
-const sessionDates = [
-  { date: "05/07", label: "DIM 5 JUILLET", key: "d0507" },
-  { date: "12/07", label: "DIM 12 JUILLET", key: "d1207" },
-  { date: "19/07", label: "DIM 19 JUILLET", key: "d1907" },
-  { date: "26/07", label: "DIM 26 JUILLET", key: "d2607" },
-  { date: "02/08", label: "DIM 2 AOUT", key: "d0208" },
-  { date: "09/08", label: "DIM 9 AOUT", key: "d0908" },
-  { date: "16/08", label: "DIM 16 AOUT", key: "d1608" },
-  { date: "23/08", label: "DIM 23 AOUT", key: "d2308" },
-  { date: "30/08", label: "DIM 30 AOUT", key: "d3008" },
-];
+// Sélecteur de langue pour le menu mobile (plus grand)
+function LangSwitcherMobile({ lang, setLang, onClose }: { lang: Lang; setLang: (l: Lang) => void; onClose: () => void }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        padding: "14px 20px",
+        borderBottom: "1px solid #00f5ff11",
+      }}
+    >
+      <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd70066", letterSpacing: "0.1em", marginRight: "4px" }}>
+        LANG:
+      </span>
+      {(["fr", "en"] as Lang[]).map((l) => (
+        <button
+          key={l}
+          onClick={() => { setLang(l); onClose(); }}
+          style={{
+            fontFamily: "'Press Start 2P', cursive",
+            fontSize: "0.55rem",
+            padding: "7px 12px",
+            background: lang === l ? "#ffd700" : "transparent",
+            color: lang === l ? "#0a0a0f" : "#ffd70088",
+            border: `2px solid ${lang === l ? "#ffd700" : "#ffd70033"}`,
+            cursor: "pointer",
+            letterSpacing: "0.05em",
+            transition: "all 0.15s",
+          }}
+          className="active:scale-95"
+        >
+          {l.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 // Heatmap helpers
 const HEAT_STORAGE_KEY = "bh_heat_votes";
@@ -194,22 +218,16 @@ function getHeatGlow(count: number, max: number): string {
   return "0 0 18px #ff2d55cc";
 }
 
-const sessionSteps = [
-  { icon: "🎮", time: "5-10 MIN", title: "ACCUEIL", desc: "Présentation, règles expliquées en 2 minutes. Tout le monde est le bienvenu.", free: true },
-  { icon: "🏒", time: "15-20 MIN", title: "ENTRAINEMENT", desc: "Parties libres, coaching sur place. Revenez autant de fois que vous voulez.", free: true },
-  { icon: "🏆", time: "30-45 MIN", title: "MATCHS QUALIF", desc: "2 à 4 matchs comptant pour le classement. 15 EUR (1re tentative) ou 10 EUR (suivantes).", free: false },
-  { icon: "📊", time: "5-10 MIN", title: "CLASSEMENT", desc: "Scores du soir annoncés. Les qualifiés pour la finale sont notifiés.", free: false },
-];
-
-const faqItems = [
-  { q: "ON NE CONNAIT PAS LE JEU. ON PEUT VENIR ?", a: "Oui, et c'est fait pour ca. L'entrainement du debut de soiree est gratuit et ouvert a tous. Vous apprenez les regles en 2 minutes, vous jouez des parties libres avec du coaching, et vous decidez ensuite si vous voulez tenter votre qualification." },
-  { q: "C'EST GRATUIT OU PAYANT ?", a: "L'accueil et l'entrainement sont 100% gratuits. Vous pouvez revenir autant de dimanches que vous voulez sans payer. Les matchs de qualification coutent 15 EUR pour votre premiere tentative, puis 10 EUR pour chaque tentative suivante." },
-  { q: "ON DOIT ETRE DEUX POUR VENIR ?", a: "Pour les matchs de qualification, oui : le bubble hockey se joue en equipe de deux. Pour l'entrainement gratuit, vous pouvez venir seul. On peut aussi vous trouver un partenaire sur place selon les disponibilites." },
-  { q: "QUAND CA SE PASSE ?", a: "Tous les dimanches soir du 5 juillet au 30 aout 2026, a partir de 19h00. Au Brussels Pinball Museum, 1501 chaussee de Wavre, 1160 Auderghem. La grande finale aura lieu les 12 et 13 septembre 2026." },
-  { q: "COMMENT ON SE QUALIFIE ?", a: "Chaque dimanche, les equipes presentes s'affrontent en matchs BO3 (premier a 2 victoires). En general, les 2 meilleures equipes de la soiree decrochent leur ticket finale. Exception : si seulement 2 equipes sont presentes, seule la gagnante est qualifiee. Si vous n'etes pas qualifie, revenez le dimanche suivant pour 10 EUR. 16 equipes en tout seront qualifiees pour la grande finale." },
-];
-
 export default function Home() {
+  const [lang, setLangState] = useState<Lang>(() => {
+    try { return (localStorage.getItem(LANG_KEY) as Lang) || "fr"; } catch { return "fr"; }
+  });
+
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    try { localStorage.setItem(LANG_KEY, l); } catch {}
+  };
+
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [teamName, setTeamName] = useState("");
@@ -218,17 +236,14 @@ export default function Home() {
   const [sessionDate, setSessionDate] = useState("");
   const [rulesAccepted, setRulesAccepted] = useState(false);
 
-  // Equipes qualifiees depuis admin
   const [qualifiedTeams, setQualifiedTeams] = useState<QualifiedTeam[]>(() => {
     try { return JSON.parse(localStorage.getItem(QUALIFIED_TEAMS_KEY) || "[]"); } catch { return []; }
   });
 
-  // News depuis admin
   const [newsItems, setNewsItems] = useState<NewsItem[]>(() => {
     try { return JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"); } catch { return []; }
   });
 
-  // Ecouter les changements localStorage (mise a jour depuis onglet admin)
   useEffect(() => {
     const handler = () => {
       try {
@@ -240,7 +255,6 @@ export default function Home() {
     return () => window.removeEventListener("storage", handler);
   }, []);
 
-  // Heatmap : votes par date (localStorage)
   const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
     try {
       const stored = localStorage.getItem(HEAT_STORAGE_KEY);
@@ -272,17 +286,60 @@ export default function Home() {
   const PLACES_PRISES = qualifiedTeams.length;
   const placesRestantes = PLACES_TOTALES - PLACES_PRISES;
 
+  // Données dynamiques traduites
+  const timelineSteps = [
+    { num: "01", label: t(lang, "timeline_label1"), badge: t(lang, "timeline_badge1"), title: t(lang, "timeline_title1"), desc: t(lang, "timeline_desc1"), color: "#00f5ff" },
+    { num: "02", label: t(lang, "timeline_label2"), badge: t(lang, "timeline_badge2"), title: t(lang, "timeline_title2"), desc: t(lang, "timeline_desc2"), color: "#ff2d55" },
+    { num: "03", label: t(lang, "timeline_label3"), badge: t(lang, "timeline_badge3"), title: t(lang, "timeline_title3"), desc: t(lang, "timeline_desc3"), color: "#ffd700" },
+    { num: "04", label: t(lang, "timeline_label4"), badge: t(lang, "timeline_badge4"), title: t(lang, "timeline_title4"), desc: t(lang, "timeline_desc4"), color: "#ffd700" },
+  ];
+
+  const sessionDates = [
+    { date: "05/07", label: t(lang, "date_jul5"), key: "d0507" },
+    { date: "12/07", label: t(lang, "date_jul12"), key: "d1207" },
+    { date: "19/07", label: t(lang, "date_jul19"), key: "d1907" },
+    { date: "26/07", label: t(lang, "date_jul26"), key: "d2607" },
+    { date: "02/08", label: t(lang, "date_aug2"), key: "d0208" },
+    { date: "09/08", label: t(lang, "date_aug9"), key: "d0908" },
+    { date: "16/08", label: t(lang, "date_aug16"), key: "d1608" },
+    { date: "23/08", label: t(lang, "date_aug23"), key: "d2308" },
+    { date: "30/08", label: t(lang, "date_aug30"), key: "d3008" },
+  ];
+
+  const sessionSteps = [
+    { icon: "🎮", time: "5-10 MIN", title: t(lang, "session_step1_title"), desc: t(lang, "session_step1_desc"), free: true },
+    { icon: "🏒", time: "15-20 MIN", title: t(lang, "session_step2_title"), desc: t(lang, "session_step2_desc"), free: true },
+    { icon: "🏆", time: "30-45 MIN", title: t(lang, "session_step3_title"), desc: t(lang, "session_step3_desc"), free: false },
+    { icon: "📊", time: "5-10 MIN", title: t(lang, "session_step4_title"), desc: t(lang, "session_step4_desc"), free: false },
+  ];
+
+  const faqItems = [
+    { q: t(lang, "faq_q1"), a: t(lang, "faq_a1") },
+    { q: t(lang, "faq_q2"), a: t(lang, "faq_a2") },
+    { q: t(lang, "faq_q3"), a: t(lang, "faq_a3") },
+    { q: t(lang, "faq_q4"), a: t(lang, "faq_a4") },
+    { q: t(lang, "faq_q5"), a: t(lang, "faq_a5") },
+  ];
+
+  const navItems = [
+    { key: t(lang, "nav_lejeu"), anchor: "lejeu" },
+    { key: t(lang, "nav_sessions"), anchor: "sessions" },
+    { key: t(lang, "nav_calendrier"), anchor: "calendrier" },
+    ...(newsItems.length > 0 ? [{ key: t(lang, "nav_news"), anchor: "news" }] : []),
+    { key: t(lang, "nav_halloffame"), anchor: "halloffame" },
+    { key: t(lang, "nav_faq"), anchor: "faq" },
+  ];
+
   const handleSubmit = () => {
     if (!teamName.trim() || !playerEmail.trim() || !rulesAccepted) return;
-    const subject = encodeURIComponent(`Inscription Bubble Hockey - ${teamName}`);
-    const typeLabel = sessionType === 'qualification' ? 'Session de qualification (15 EUR - paiement sur place)' : 'Session decouverte (gratuit - entrainement)';
-    const dateLabel = sessionDate || 'Non precisee';
+    const subject = encodeURIComponent(`${t(lang, "email_subject")} - ${teamName}`);
+    const typeLabel = sessionType === "qualification" ? t(lang, "email_type_qualif") : t(lang, "email_type_deco");
+    const dateLabel = sessionDate || (lang === "fr" ? "Non precisee" : "Not specified");
     const body = encodeURIComponent(
-      `Nom de l'equipe : ${teamName}\nEmail : ${playerEmail}\nDate souhaitee : ${dateLabel}\nType : ${typeLabel}\n\nNous souhaitons participer aux Bubble Hockey Summer Qualifiers 2026.\n\nNote : le paiement se fait sur place. La place est confirmee apres reglement.`
+      `${t(lang, "email_team")} : ${teamName}\n${t(lang, "email_email")} : ${playerEmail}\n${t(lang, "email_date")} : ${dateLabel}\n${t(lang, "email_type")} : ${typeLabel}\n\n${t(lang, "email_body")}`
     );
     const mailtoLink = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
-    window.open(mailtoLink, '_blank');
-    // Fallback si window.open est bloqué
+    window.open(mailtoLink, "_blank");
     setTimeout(() => { window.location.href = mailtoLink; }, 300);
   };
 
@@ -295,10 +352,9 @@ export default function Home() {
         fontFamily: "'Space Mono', monospace",
       }}
     >
-      {/* Fond pattern hockey tuilé */}
       <PixelBackground />
 
-      {/* Scan lines overlay plus prononcees */}
+      {/* Scan lines overlay */}
       <div
         className="pointer-events-none fixed inset-0 z-50"
         style={{
@@ -306,7 +362,7 @@ export default function Home() {
           mixBlendMode: "multiply",
         }}
       />
-      {/* Bruit CRT leger */}
+      {/* Bruit CRT */}
       <div
         className="pointer-events-none fixed inset-0"
         style={{
@@ -331,28 +387,32 @@ export default function Home() {
           alt="Brussels Pinball Museum"
           style={{ height: "40px", width: "auto", imageRendering: "auto", filter: "brightness(1.1)" }}
         />
-        <div className="hidden md:flex gap-8">
-          {["LE JEU", "SESSIONS", "CALENDRIER", ...(newsItems.length > 0 ? ["NEWS"] : []), "HALL OF FAME", "FAQ"].map((item) => (
+        <div className="hidden md:flex gap-6 items-center">
+          {navItems.map((item) => (
             <a
-              key={item}
-              href={`#${item === "LE JEU" ? "lejeu" : item.toLowerCase().replace(/ /g, "")}`}
+              key={item.key}
+              href={`#${item.anchor}`}
               style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "0.5rem",
-                color: item === "NEWS" ? "#ffd700" : "#00f5ff",
+                color: item.anchor === "news" ? "#ffd700" : "#00f5ff",
                 textDecoration: "none",
                 letterSpacing: "0.1em",
-                ...(item === "NEWS" ? { textShadow: "0 0 8px #ffd70088" } : {}),
+                ...(item.anchor === "news" ? { textShadow: "0 0 8px #ffd70088" } : {}),
               }}
               className="hover:text-yellow-300 transition-colors"
             >
-              {item === "NEWS" ? "\u2605 NEWS" : item}
+              {item.anchor === "news" ? `\u2605 ${item.key}` : item.key}
             </a>
           ))}
         </div>
 
-        {/* Bouton S'inscrire (desktop) + burger (mobile) */}
+        {/* Bouton S'inscrire (desktop) + sélecteur langue + burger (mobile) */}
         <div className="flex items-center gap-3">
+          {/* Sélecteur langue desktop */}
+          <div className="hidden md:flex">
+            <LangSwitcher lang={lang} setLang={setLang} />
+          </div>
           <a href="#inscription" className="hidden md:block">
             <button
               style={{
@@ -368,7 +428,7 @@ export default function Home() {
               }}
               className="hover:bg-red-400 transition-colors active:scale-95"
             >
-              S'INSCRIRE
+              {t(lang, "nav_inscrire")}
             </button>
           </a>
           {/* Burger button mobile */}
@@ -391,15 +451,15 @@ export default function Home() {
           className="fixed top-[58px] left-0 right-0 z-40 md:hidden flex flex-col"
           style={{ background: "#0a0a0f", borderBottom: "2px solid #00f5ff", boxShadow: "0 8px 24px #00f5ff22" }}
         >
-          {["LE JEU", "SESSIONS", "CALENDRIER", ...(newsItems.length > 0 ? ["NEWS"] : []), "HALL OF FAME", "FAQ"].map((item) => (
+          {navItems.map((item) => (
             <a
-              key={item}
-              href={`#${item === "LE JEU" ? "lejeu" : item.toLowerCase().replace(/ /g, "")}`}
+              key={item.key}
+              href={`#${item.anchor}`}
               onClick={() => setMenuOpen(false)}
               style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "0.55rem",
-                color: item === "NEWS" ? "#ffd700" : "#00f5ff",
+                color: item.anchor === "news" ? "#ffd700" : "#00f5ff",
                 textDecoration: "none",
                 letterSpacing: "0.1em",
                 padding: "14px 20px",
@@ -407,9 +467,11 @@ export default function Home() {
                 display: "block",
               }}
             >
-              {item === "NEWS" ? "\u2605 NEWS" : item}
+              {item.anchor === "news" ? `\u2605 ${item.key}` : item.key}
             </a>
           ))}
+          {/* Sélecteur langue dans le burger */}
+          <LangSwitcherMobile lang={lang} setLang={setLang} onClose={() => setMenuOpen(false)} />
           <a
             href="#inscription"
             onClick={() => setMenuOpen(false)}
@@ -425,21 +487,18 @@ export default function Home() {
               textAlign: "center",
             }}
           >
-            ▶ S'INSCRIRE
+            ▶ {t(lang, "nav_inscrire")}
           </a>
         </div>
       )}
 
       {/* ── HERO ── */}
       <section className="relative flex flex-col items-center justify-center pt-20 pb-6 overflow-hidden" style={{ minHeight: "auto" }}>
-        {/* Assombrissement central du hero pour lisibilite */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,8,28,0.55) 0%, rgba(10,8,28,0.3) 50%, rgba(10,8,28,0.6) 100%)" }} />
 
-        {/* Layout principal : texte centre pleine largeur */}
         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center">
           <div>
             <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }}>
-              {/* Titre style glitch blanc avec ombre rouge+bleue comme l'image de référence */}
               <div style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "clamp(1.4rem, 5vw, 3.4rem)",
@@ -448,7 +507,7 @@ export default function Home() {
                 textShadow: "-3px 0 #ff2d55, 3px 0 #00f5ff, 0 0 20px rgba(255,255,255,0.3)",
                 marginBottom: "0.2rem",
                 letterSpacing: "0.05em",
-              }}>BUBBLE HOCKEY</div>
+              }}>{t(lang, "hero_title1")}</div>
               <div style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "clamp(1.4rem, 5vw, 3.4rem)",
@@ -457,8 +516,7 @@ export default function Home() {
                 textShadow: "-3px 0 #ff2d55, 3px 0 #00f5ff, 0 0 20px rgba(255,255,255,0.3)",
                 marginBottom: "0.5rem",
                 letterSpacing: "0.05em",
-              }}>SUMMER QUALIFIERS</div>
-              {/* Sous-titre jaune vif style SUMMER ON ICE */}
+              }}>{t(lang, "hero_title2")}</div>
               <div style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "clamp(0.8rem, 2.5vw, 1.6rem)",
@@ -466,22 +524,22 @@ export default function Home() {
                 textShadow: "0 0 16px #ffd700, 0 0 30px #ff8800",
                 letterSpacing: "0.12em",
                 marginBottom: "0.3rem",
-              }}>BRUSSELS 2026</div>
+              }}>{t(lang, "hero_subtitle")}</div>
               <div style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "clamp(0.45rem, 1.2vw, 0.7rem)",
                 color: "#cc44ff",
                 letterSpacing: "0.35em",
                 marginBottom: "1.2rem",
-              }}>HOSTED BY BRUSSELS PINBALL MUSEUM</div>
+              }}>{t(lang, "hero_hosted")}</div>
             </motion.div>
 
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
               style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 1.9, maxWidth: "500px", margin: "0 auto 1.5rem" }}
             >
-              Chaque dimanche soir au Brussels Pinball Museum.
-              Entrainement gratuit, puis qualifications.{" "}
-              <span style={{ color: "#ffd700" }}>Grande finale les 12 et 13 septembre 2026.</span>
+              {t(lang, "hero_desc1")}{" "}
+              {t(lang, "hero_desc2")}{" "}
+              <span style={{ color: "#ffd700" }}>{t(lang, "hero_finale")}</span>
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
@@ -490,29 +548,27 @@ export default function Home() {
               <a href="#inscription">
                 <button style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", background: "#ff2d55", color: "#fff", border: "3px solid #ff2d55", padding: "12px 20px", cursor: "pointer", boxShadow: "0 0 14px #ff2d55, 4px 4px 0 #8b0000", letterSpacing: "0.05em" }}
                   className="hover:brightness-110 active:scale-95 transition-all">
-                  ▶ S'INSCRIRE
+                  {t(lang, "hero_btn_inscrire")}
                 </button>
               </a>
               <a href="#lejeu">
                 <button style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", background: "transparent", color: "#00f5ff", border: "3px solid #00f5ff", padding: "12px 20px", cursor: "pointer", boxShadow: "0 0 14px #00f5ff44, 4px 4px 0 #003344", letterSpacing: "0.05em" }}
                   className="hover:bg-cyan-950 active:scale-95 transition-all">
-                  ? C'EST QUOI LE JEU
+                  {t(lang, "hero_btn_lejeu")}
                 </button>
               </a>
             </motion.div>
-
-
           </div>
         </div>
 
-        {/* Barre inferieure : compteur + stats */}
+        {/* Barre inférieure : compteur + stats */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
           className="relative z-10 mt-6 w-full max-w-3xl px-4"
         >
           <div style={{ border: "2px solid #ffd700", background: "#ffd70008", padding: "10px 16px", boxShadow: "0 0 12px #ffd70055" }}>
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.38rem", color: "#ffd700", letterSpacing: "0.12em", marginBottom: "4px" }}>PLACES FINALE</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.38rem", color: "#ffd700", letterSpacing: "0.12em", marginBottom: "4px" }}>{t(lang, "hero_places_label")}</div>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.3rem)", color: placesRestantes <= 4 ? "#ff2d55" : "#ffd700", textShadow: `0 0 10px ${placesRestantes <= 4 ? "#ff2d55" : "#ffd700"}` }}>
                   {placesRestantes} / {PLACES_TOTALES}
                 </div>
@@ -527,9 +583,9 @@ export default function Home() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mt-3">
             {[
-              { label: "1RE TENTATIVE", value: "15€" },
-              { label: "TENTATIVES SUIV.", value: "10€" },
-              { label: "GRANDE FINALE", value: "12-13/09" },
+              { label: t(lang, "hero_stat1_label"), value: "15€" },
+              { label: t(lang, "hero_stat2_label"), value: "10€" },
+              { label: t(lang, "hero_stat3_label"), value: "12-13/09" },
             ].map((stat, i) => (
               <div key={i} className="text-center py-3" style={{ border: "2px solid #00f5ff22", background: "#00f5ff06" }}>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#ffd700", textShadow: "0 0 8px #ffd700" }}>{stat.value}</div>
@@ -542,23 +598,21 @@ export default function Home() {
 
       {/* ── C'EST QUOI ── */}
       <section id="lejeu" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(13,10,31,0.96) 50%, rgba(10,10,15,0.96) 100%)" }}>
-        {/* Motif losanges pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.04) 1px, transparent 1px)", backgroundSize: "32px 32px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-            C'EST QUOI<br />LE BUBBLE HOCKEY ?
+            {t(lang, "lejeu_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
           </h2>
           <div className="grid md:grid-cols-2 gap-10 items-start">
             <div>
               <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#d0d0e0", marginBottom: "1.5rem" }}>
-                Le bubble hockey, c'est un hockey sur table sous dôme de plexiglas. Deux joueurs par équipe, des figurines articulées, un palet et beaucoup d'adrénaline.
+                {t(lang, "lejeu_p1")}
               </p>
               <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#d0d0e0", marginBottom: "2rem" }}>
-                Le Brussels Pinball Museum possede l'une des rares machines de bubble hockey en Belgique. Le jeu est simple a comprendre, difficile a maitriser : exactement ce qu'il faut pour un tournoi estival.
+                {t(lang, "lejeu_p2")}
               </p>
               <div className="flex flex-wrap gap-3">
-                {["EQUIPES DE 2", "DEBUTANTS OK", "15€ / EQUIPE", "COACHING INCLUS"].map((tag) => (
+                {([t(lang, "lejeu_tag1"), t(lang, "lejeu_tag2"), t(lang, "lejeu_tag3"), t(lang, "lejeu_tag4")] as string[]).map((tag) => (
                   <span
                     key={tag}
                     style={{
@@ -579,7 +633,7 @@ export default function Home() {
             <PixelBorder color="#ff2d55">
               <img
                 src={HERO_IMG}
-                alt="Bubble hockey pixel art"
+                alt="Bubble hockey"
                 className="w-full object-cover"
                 style={{ display: "block", imageRendering: "auto" }}
               />
@@ -590,12 +644,10 @@ export default function Home() {
 
       {/* ── TIMELINE ── */}
       <section id="calendrier" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(10,16,32,0.96) 40%, rgba(16,10,10,0.96) 100%)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
-        {/* Grille rouge subtile */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,45,85,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,85,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "3rem", lineHeight: 1.6 }}>
-            UN ETE POUR APPRENDRE.<br />12-13 SEPT POUR GAGNER.
+            {t(lang, "timeline_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
           </h2>
           <div className="space-y-6">
             {timelineSteps.map((step, i) => (
@@ -635,21 +687,19 @@ export default function Home() {
 
       {/* ── FORMAT SESSIONS ── */}
       <section id="sessions" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(10,26,10,0.96) 50%, rgba(10,10,15,0.96) 100%)" }}>
-        {/* Motif croix pixel vert */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,255,136,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "3rem", lineHeight: 1.6 }}>
-            UNE SOIREE, DEUX PHASES.
+            {t(lang, "sessions_title")}
           </h2>
           <div className="mb-6 flex flex-wrap gap-4 items-center">
             <div className="flex items-center gap-2">
-              <span style={{ background: "#00f5ff", color: "#0a0a0f", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>GRATUIT</span>
-              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>Accueil + entrainement - revenez autant de fois que vous voulez</span>
+              <span style={{ background: "#00f5ff", color: "#0a0a0f", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>{t(lang, "sessions_gratuit")}</span>
+              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "sessions_gratuit_desc")}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span style={{ background: "#ff2d55", color: "#fff", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>PAYANT</span>
-              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>Matchs de qualification - 15 EUR (1re fois) / 10 EUR (suivantes)</span>
+              <span style={{ background: "#ff2d55", color: "#fff", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>{t(lang, "sessions_payant")}</span>
+              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "sessions_payant_desc")}</span>
             </div>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -665,7 +715,7 @@ export default function Home() {
                   <div className="p-4 text-center" style={{ background: item.free ? "#00f5ff08" : "#ff2d5508" }}>
                     <div style={{ fontSize: "2rem", marginBottom: "8px" }}>{item.icon}</div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", padding: "3px 8px", marginBottom: "8px", display: "inline-block", background: item.free ? "#00f5ff" : "#ff2d55", color: item.free ? "#0a0a0f" : "#fff" }}>
-                      {item.free ? "GRATUIT" : "PAYANT"}
+                      {item.free ? t(lang, "sessions_gratuit") : t(lang, "sessions_payant")}
                     </div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", marginBottom: "6px" }}>{item.time}</div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: item.free ? "#00f5ff" : "#ff2d55", marginBottom: "8px", textShadow: `0 0 6px ${item.free ? "#00f5ff" : "#ff2d55"}` }}>{item.title}</div>
@@ -681,25 +731,24 @@ export default function Home() {
       {/* ── CALENDRIER DATES ── */}
       <section id="calendrier-dates" className="py-16 px-4" style={{ position: "relative", background: "rgba(8,8,18,0.97)", borderTop: "2px solid #ffd70022", borderBottom: "2px solid #ffd70022" }}>
         <div className="max-w-5xl mx-auto">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
-            TOUS LES DIMANCHES SOIR
+            {t(lang, "calendrier_title")}
           </h2>
           <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1.5rem", marginTop: "-1.5rem" }}>
-            JUILLET &amp; AOÛT 2026
+            {t(lang, "calendrier_subtitle")}
           </div>
           <div className="flex flex-wrap gap-6 mb-8">
             <div className="flex items-start gap-3">
               <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9201;</span>
               <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>HEURE</div>
-                <div style={{ fontSize: "0.7rem", color: "#d0d0e0" }}>A partir de 19h00</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>{t(lang, "calendrier_heure_label")}</div>
+                <div style={{ fontSize: "0.7rem", color: "#d0d0e0" }}>{t(lang, "calendrier_heure_val")}</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9679;</span>
+              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ffd700" }}>&#9679;</span>
               <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>LIEU</div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>{t(lang, "calendrier_lieu_label")}</div>
                 <a
                   href="https://maps.google.com/?q=1501+chaussee+de+wavre+1160+Auderghem+Bruxelles"
                   target="_blank"
@@ -742,11 +791,11 @@ export default function Home() {
                       {s.date.split("/")[0]}
                     </div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: isLastChance ? "#ff2d55" : "#606080", letterSpacing: "0.05em" }}>
-                      {isLastChance ? "LAST CHANCE" : s.label.split(" ").slice(2).join(" ")}
+                      {isLastChance ? t(lang, "calendrier_lastchance") : s.label.split(" ").slice(lang === "fr" ? 2 : 1).join(" ")}
                     </div>
                     {count > 0 && (
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: isLastChance ? "#ff2d55" : "#00f5ff" }}>
-                        {count} {count === 1 ? "EQUIPE" : "EQUIPES"}
+                        {count} {count === 1 ? t(lang, "calendrier_equipe") : t(lang, "calendrier_equipes")}
                       </div>
                     )}
                     <button
@@ -764,7 +813,7 @@ export default function Home() {
                         letterSpacing: "0.05em",
                       }}
                     >
-                      {voted ? "OK !" : "PARTICIPE"}
+                      {voted ? t(lang, "calendrier_vote_done") : t(lang, "calendrier_vote_btn")}
                     </button>
                   </div>
                 </motion.div>
@@ -772,8 +821,8 @@ export default function Home() {
             })}
           </div>
           <div className="mt-6 flex flex-wrap gap-3 items-center">
-            <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>GRANDE FINALE</span>
-            <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>12 et 13 septembre 2026</span>
+            <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>{t(lang, "calendrier_finale_badge")}</span>
+            <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "calendrier_finale_date")}</span>
           </div>
         </div>
       </section>
@@ -781,19 +830,18 @@ export default function Home() {
       {/* ── QUALIFICATION ── */}
       <section className="py-20 px-4" style={{ background: "rgba(8,8,18,0.99)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
         <div className="max-w-5xl mx-auto">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
-            CHAQUE SOIR,<br />2 EQUIPES SE QUALIFIENT.
+            {t(lang, "qualif_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
           </h2>
           <p style={{ fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            Les equipes presentes ce soir-la s'affrontent entre elles en matchs BO3 (premier a 2 victoires). Les 2 meilleures equipes decrochent leur ticket finale. Exception : si seulement 2 equipes sont presentes, seule la gagnante est qualifiee. Les autres peuvent revenir le dimanche suivant pour 10 EUR.
+            {t(lang, "qualif_desc")}
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
             {[
-              { icon: "🏆", title: "2 QUALIFIES PAR SOIREE", desc: "Chaque dimanche, les 2 meilleures equipes de la soiree decrochent leur ticket finale. Directement, sans leaderboard.", color: "#ffd700" },
-              { icon: "🔄", title: "RETENTER SA CHANCE", desc: "Pas qualifie ce soir ? Revenez le dimanche suivant pour 10 EUR. Autant de fois que vous voulez jusqu'au 30 aout.", color: "#00f5ff" },
-              { icon: "⚡", title: "LAST CHANCE - 30 AOUT", desc: "Dernier dimanche de qualification. Les places restantes pour la finale se jouent ce soir-la.", color: "#ff2d55" },
-              { icon: "🏖️", title: "GRANDE FINALE", desc: "16 equipes qualifiees, 4 pools, matchs en BO3. Le champion de Bruxelles est couronné les 12 et 13 septembre.", color: "#ffd700" },
+              { icon: "🏆", title: t(lang, "qualif_card1_title"), desc: t(lang, "qualif_card1_desc"), color: "#ffd700" },
+              { icon: "🔄", title: t(lang, "qualif_card2_title"), desc: t(lang, "qualif_card2_desc"), color: "#00f5ff" },
+              { icon: "⚡", title: t(lang, "qualif_card3_title"), desc: t(lang, "qualif_card3_desc"), color: "#ff2d55" },
+              { icon: "🏖️", title: t(lang, "qualif_card4_title"), desc: t(lang, "qualif_card4_desc"), color: "#ffd700" },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -817,17 +865,16 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Barème */}
           <PixelBorder color="#ffd700">
             <div className="p-6" style={{ background: "#ffd70008" }}>
               <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ffd700", marginBottom: "1rem", letterSpacing: "0.15em" }}>
-                ★ BAREME DES POINTS ★
+                {t(lang, "qualif_bareme")}
               </div>
               <div className="flex flex-wrap gap-4">
                 {[
-                  { label: "VICTOIRE", pts: "3 PTS", color: "#ffd700" },
-                  { label: "EGALITE", pts: "1 PT", color: "#00f5ff" },
-                  { label: "DEFAITE", pts: "0 PT", color: "#9090b0" },
+                  { label: t(lang, "qualif_victoire"), pts: "3 PTS", color: "#ffd700" },
+                  { label: t(lang, "qualif_egalite"), pts: "1 PT", color: "#00f5ff" },
+                  { label: t(lang, "qualif_defaite"), pts: "0 PT", color: "#9090b0" },
                 ].map((r) => (
                   <div key={r.label} className="flex items-center gap-3">
                     <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#d0d0e0" }}>{r.label}</span>
@@ -847,16 +894,15 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-
               <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-                LA GRANDE FINALE<br />12 ET 13 SEPTEMBRE.
+                {t(lang, "finale_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
               </h2>
               <div className="space-y-4">
                 {[
-                  { num: "01", title: "POOLS", desc: "4 groupes de 4 equipes. Chaque match en BO3. Les 2 meilleures de chaque pool passent." },
-                  { num: "02", title: "QUARTS DE FINALE", desc: "8 equipes, elimination directe en BO3." },
-                  { num: "03", title: "DEMI-FINALES", desc: "4 equipes, elimination directe en BO3." },
-                  { num: "04", title: "GRANDE FINALE", desc: "Les 2 finalistes s'affrontent en BO3. Le champion de Bruxelles est couronné." },
+                  { num: "01", title: t(lang, "finale_step1_title"), desc: t(lang, "finale_step1_desc") },
+                  { num: "02", title: t(lang, "finale_step2_title"), desc: t(lang, "finale_step2_desc") },
+                  { num: "03", title: t(lang, "finale_step3_title"), desc: t(lang, "finale_step3_desc") },
+                  { num: "04", title: t(lang, "finale_step4_title"), desc: t(lang, "finale_step4_desc") },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4 items-start">
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1.2rem", color: "#ff2d55", textShadow: "0 0 10px #ff2d55", minWidth: "40px" }}>
@@ -872,12 +918,12 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-center gap-6">
               <PixelBorder color="#ffd700">
-                <img src={TROPHY_IMG} alt="Trophée pixel art" className="w-full max-w-xs" style={{ imageRendering: "pixelated" }} />
+                <img src={TROPHY_IMG} alt="Trophy" className="w-full max-w-xs" style={{ imageRendering: "pixelated" }} />
               </PixelBorder>
               <div className="text-center">
                 <BlinkText>
                   <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ffd700", textShadow: "0 0 10px #ffd700" }}>
-                    ★ CHAMPION DE BRUXELLES ★
+                    {t(lang, "finale_champion")}
                   </div>
                 </BlinkText>
               </div>
@@ -888,39 +934,35 @@ export default function Home() {
 
       {/* ── HALL OF FAME ── */}
       <section id="halloffame" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(26,15,0,0.96) 50%, rgba(10,10,15,0.96) 100%)", borderTop: "2px solid #ffd70033", borderBottom: "2px solid #ffd70033" }}>
-        {/* Motif etoiles pixel */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,215,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
         <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 3vw, 2rem)", color: "#ffd700", textShadow: "0 0 20px #ffd700, 0 0 40px #ffd70055", marginBottom: "0.5rem" }}>
-            HALL OF FAME
+            {t(lang, "hof_title")}
           </h2>
           <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.8rem", color: "#888", marginBottom: "3rem" }}>
-            Les equipes qui ont decroché leur ticket pour la grande finale des 12 et 13 septembre 2026.
+            {t(lang, "hof_subtitle")}
           </p>
 
-          {/* Etat vide */}
           {qualifiedTeams.length === 0 && (
             <div style={{ border: "2px solid #ffd70033", background: "#ffd70008", padding: "3rem 2rem", textAlign: "center", marginBottom: "2rem" }}>
               <div style={{ fontSize: "3rem", marginBottom: "1.5rem", filter: "grayscale(0.3)" }}>🏆</div>
               <BlinkText>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: "#ffd700", letterSpacing: "0.15em", textShadow: "0 0 10px #ffd700" }}>
-                  AUCUN QUALIFIE POUR L'INSTANT
+                  {t(lang, "hof_empty")}
                 </div>
               </BlinkText>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "1.5rem" }}>
-                La premiere soiree de qualification a lieu le dimanche 5 juillet 2026.
+                {t(lang, "hof_empty_date")}
               </div>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "0.5rem" }}>
-                2 equipes se qualifieront chaque dimanche soir.
+                {t(lang, "hof_empty_rythme")}
               </div>
             </div>
           )}
 
-          {/* Grille des 16 slots */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {Array.from({ length: 16 }).map((_, i) => {
-              const team = qualifiedTeams.find((t) => t.slot === i + 1);
+              const team = qualifiedTeams.find((t2) => t2.slot === i + 1);
               return (
                 <motion.div
                   key={i}
@@ -942,11 +984,11 @@ export default function Home() {
                   <div style={{ position: "absolute", top: -2, right: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
                   <div style={{ position: "absolute", bottom: -2, left: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
                   <div style={{ position: "absolute", bottom: -2, right: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
-                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: team ? "#ffd70099" : "#ffd70044", marginBottom: "6px" }}>SLOT {String(i + 1).padStart(2, "0")}</div>
+                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: team ? "#ffd70099" : "#ffd70044", marginBottom: "6px" }}>{t(lang, "hof_slot")} {String(i + 1).padStart(2, "0")}</div>
                   {team ? (
                     <>
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700", textShadow: "0 0 6px #ffd700", lineHeight: 1.6, wordBreak: "break-word" }}>{team.name}</div>
-                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.5rem", color: "#9090b0", marginTop: "4px" }}>{team.date}</div>
+                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.5rem", color: "#888", marginTop: "4px" }}>{t(lang, "hof_qualified_on")} {team.date}</div>
                     </>
                   ) : (
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#2a2a3a" }}>???</div>
@@ -958,7 +1000,7 @@ export default function Home() {
 
           <div className="mt-6 text-center">
             <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#444" }}>
-              {qualifiedTeams.length} / 16 places attribuees{qualifiedTeams.length < 16 ? " · Prochaine session : 5 juillet 2026" : " · TABLEAU COMPLET !"}
+              {qualifiedTeams.length} / 16 {t(lang, "hof_places")}{qualifiedTeams.length < 16 ? ` · ${t(lang, "hof_next")}` : ` · ${t(lang, "hof_full")}`}
             </div>
           </div>
         </div>
@@ -969,7 +1011,7 @@ export default function Home() {
         <section id="news" className="py-16 px-4" style={{ background: "rgba(10,10,20,0.96)", borderTop: "2px solid #00f5ff33", borderBottom: "2px solid #00f5ff22" }}>
           <div className="max-w-3xl mx-auto">
             <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2rem", lineHeight: 1.6 }}>
-              NEWS
+              {t(lang, "nav_news")}
             </h2>
             <div className="space-y-4">
               {[...newsItems].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0)).map((n) => (
@@ -983,7 +1025,9 @@ export default function Home() {
                     <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
                       <div className="flex items-center gap-2 flex-wrap">
                         {n.pinned && (
-                          <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ffd700", border: "1px solid #ffd700", padding: "2px 6px" }}>EPINGLE</span>
+                          <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ffd700", border: "1px solid #ffd700", padding: "2px 6px" }}>
+                            {lang === "fr" ? "EPINGLE" : "PINNED"}
+                          </span>
                         )}
                         <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: n.pinned ? "#ffd700" : "#00f5ff" }}>{n.title}</span>
                       </div>
@@ -998,11 +1042,11 @@ export default function Home() {
         </section>
       )}
 
+      {/* ── FAQ ── */}
       <section id="faq" className="py-20 px-4" style={{ background: "rgba(13,13,26,0.96)", borderTop: "2px solid #00f5ff22" }}>
         <div className="max-w-3xl mx-auto">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-            TOUT CE QUE VOUS<br />VOULEZ SAVOIR.
+            {t(lang, "faq_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, i) => (
@@ -1040,109 +1084,27 @@ export default function Home() {
 
       {/* ── INSCRIPTION ── */}
       <section id="inscription" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(26,10,15,0.96) 60%, rgba(10,10,15,0.96) 100%)" }}>
-        {/* Grille jaune subtile */}
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px)", backgroundSize: "36px 36px", zIndex: 0 }} />
         <div className="max-w-2xl mx-auto text-center">
-
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.6 }}>
-            INSCRIS TON EQUIPE.
+            {t(lang, "inscription_title")}
           </h2>
           <p style={{ fontSize: "0.7rem", color: "#c0c0d0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            Inscription en ligne ci-dessous. Paiement sur place le soir de votre session.<br />
-            Votre place est confirmee apres reglement : 15 EUR pour la 1re qualification, 10 EUR ensuite. Entrainement gratuit.
+            {t(lang, "inscription_desc").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
           </p>
 
           <PixelBorder color="#ff2d55">
-              <div className="p-8 text-left" style={{ background: "#ff2d5508" }}>
-                <div className="grid sm:grid-cols-2 gap-5 mb-5">
-                  <div>
-                    <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                      NOM DE L'EQUIPE
-                    </label>
-                    <input
-                      type="text"
-                      value={teamName}
-                      onChange={(e) => setTeamName(e.target.value)}
-                      placeholder="Ex: Les Pucherons"
-                      style={{
-                        width: "100%",
-                        background: "#00000080",
-                        border: "2px solid #00f5ff44",
-                        color: "#e0e0e0",
-                        padding: "10px 12px",
-                        fontFamily: "'Space Mono', monospace",
-                        fontSize: "0.7rem",
-                        outline: "none",
-                        boxSizing: "border-box",
-                      }}
-                      onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
-                      onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                      EMAIL
-                    </label>
-                    <input
-                      type="email"
-                      value={playerEmail}
-                      onChange={(e) => setPlayerEmail(e.target.value)}
-                      placeholder="votre@email.com"
-                      style={{
-                        width: "100%",
-                        background: "#00000080",
-                        border: "2px solid #00f5ff44",
-                        color: "#e0e0e0",
-                        padding: "10px 12px",
-                        fontFamily: "'Space Mono', monospace",
-                        fontSize: "0.7rem",
-                        outline: "none",
-                        boxSizing: "border-box",
-                      }}
-                      onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
-                      onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
-                    />
-                  </div>
-                </div>
-                <div className="mb-5">
+            <div className="p-8 text-left" style={{ background: "#ff2d5508" }}>
+              <div className="grid sm:grid-cols-2 gap-5 mb-5">
+                <div>
                   <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                    DATE SOUHAITEE
+                    {t(lang, "inscription_label_team")}
                   </label>
-                  <select
-                    value={sessionDate}
-                    onChange={(e) => setSessionDate(e.target.value)}
-                    style={{
-                      width: "100%",
-                      background: "#00000080",
-                      border: "2px solid #00f5ff44",
-                      color: sessionDate ? "#e0e0e0" : "#606080",
-                      padding: "10px 12px",
-                      fontFamily: "'Space Mono', monospace",
-                      fontSize: "0.7rem",
-                      outline: "none",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
-                    onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
-                  >
-                    <option value="" style={{ background: "#0a0a1f" }}>-- CHOISIR UNE DATE --</option>
-                    <option value="Dimanche 5 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 5 JUILLET</option>
-                    <option value="Dimanche 12 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 12 JUILLET</option>
-                    <option value="Dimanche 19 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 19 JUILLET</option>
-                    <option value="Dimanche 26 juillet" style={{ background: "#0a0a1f" }}>DIMANCHE 26 JUILLET</option>
-                    <option value="Dimanche 2 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 2 AOÛT</option>
-                    <option value="Dimanche 9 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 9 AOÛT</option>
-                    <option value="Dimanche 16 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 16 AOÛT</option>
-                    <option value="Dimanche 23 aout" style={{ background: "#0a0a1f" }}>DIMANCHE 23 AOÛT</option>
-                    <option value="Dimanche 30 aout (derniere chance)" style={{ background: "#0a0a1f" }}>DIMANCHE 30 AOÛT — DERNIERE CHANCE</option>
-                  </select>
-                </div>
-                <div className="mb-6">
-                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                    TYPE D'INSCRIPTION
-                  </label>
-                  <select
-                    value={sessionType}
-                    onChange={(e) => setSessionType(e.target.value)}
+                  <input
+                    type="text"
+                    value={teamName}
+                    onChange={(e) => setTeamName(e.target.value)}
+                    placeholder={t(lang, "inscription_placeholder_team")}
                     style={{
                       width: "100%",
                       background: "#00000080",
@@ -1152,83 +1114,162 @@ export default function Home() {
                       fontFamily: "'Space Mono', monospace",
                       fontSize: "0.7rem",
                       outline: "none",
+                      boxSizing: "border-box",
                     }}
-                  >
-                    <option value="qualification" style={{ background: "#0a0a1f" }}>SESSION DE QUALIFICATION (15 EUR)</option>
-                    <option value="decouverte" style={{ background: "#0a0a1f" }}>SESSION DECOUVERTE (GRATUIT)</option>
-                  </select>
+                    onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
+                    onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
+                  />
                 </div>
-                {/* Case à cocher règles */}
-                <div
-                  className="mb-5"
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "12px",
-                    background: rulesAccepted ? "#00f5ff08" : "#ff2d5508",
-                    border: `2px solid ${rulesAccepted ? "#00f5ff44" : "#ff2d5544"}`,
-                    padding: "12px 14px",
-                    cursor: "pointer",
-                    transition: "all 0.2s",
-                  }}
-                  onClick={() => setRulesAccepted(!rulesAccepted)}
-                >
-                  <div
+                <div>
+                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
+                    {t(lang, "inscription_label_email")}
+                  </label>
+                  <input
+                    type="email"
+                    value={playerEmail}
+                    onChange={(e) => setPlayerEmail(e.target.value)}
+                    placeholder="votre@email.com"
                     style={{
-                      width: "18px",
-                      height: "18px",
-                      minWidth: "18px",
-                      border: `2px solid ${rulesAccepted ? "#00f5ff" : "#ff2d55"}`,
-                      background: rulesAccepted ? "#00f5ff" : "transparent",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: "2px",
-                      transition: "all 0.15s",
+                      width: "100%",
+                      background: "#00000080",
+                      border: "2px solid #00f5ff44",
+                      color: "#e0e0e0",
+                      padding: "10px 12px",
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: "0.7rem",
+                      outline: "none",
+                      boxSizing: "border-box",
                     }}
-                  >
-                    {rulesAccepted && (
-                      <span style={{ color: "#0a0a0f", fontSize: "12px", fontWeight: "bold", lineHeight: 1 }}>✓</span>
-                    )}
-                  </div>
-                  <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.6rem", color: rulesAccepted ? "#a0a0c0" : "#808090", lineHeight: 1.8 }}>
-                    J'ai lu et j'accepte les{" "}
-                    <a
-                      href="#faq"
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ color: "#00f5ff", textDecoration: "underline" }}
-                    >
-                      règles du tournoi
-                    </a>
-                    {" "}avant de m'inscrire.
-                  </span>
+                    onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
+                    onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
+                  />
                 </div>
-
-                <button
-                  onClick={handleSubmit}
-                  disabled={!rulesAccepted}
+              </div>
+              <div className="mb-5">
+                <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
+                  {t(lang, "inscription_label_date")}
+                </label>
+                <select
+                  value={sessionDate}
+                  onChange={(e) => setSessionDate(e.target.value)}
                   style={{
                     width: "100%",
-                    fontFamily: "'Press Start 2P', cursive",
-                    fontSize: "0.6rem",
-                    background: rulesAccepted ? "#ff2d55" : "#3a1a22",
-                    color: rulesAccepted ? "#fff" : "#604050",
-                    border: `3px solid ${rulesAccepted ? "#ff2d55" : "#3a1a22"}`,
-                    padding: "14px",
-                    cursor: rulesAccepted ? "pointer" : "not-allowed",
-                    boxShadow: rulesAccepted ? "0 0 16px #ff2d55, 4px 4px 0 #8b0000" : "none",
-                    letterSpacing: "0.05em",
-                    transition: "all 0.2s",
+                    background: "#00000080",
+                    border: "2px solid #00f5ff44",
+                    color: sessionDate ? "#e0e0e0" : "#606080",
+                    padding: "10px 12px",
+                    fontFamily: "'Space Mono', monospace",
+                    fontSize: "0.7rem",
+                    outline: "none",
                   }}
-                  className="active:scale-95 transition-all"
+                  onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
+                  onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
                 >
-                  ▶ S'INSCRIRE EN LIGNE
-                </button>
-                <p style={{ fontSize: "0.55rem", color: "#9090b0", textAlign: "center", marginTop: "12px", lineHeight: 1.8 }}>
-                  Paiement sur place le soir de la session. Votre place est reservee apres reglement.
-                </p>
+                  <option value="" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_date_placeholder")}</option>
+                  <option value="Dimanche 5 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul5")}</option>
+                  <option value="Dimanche 12 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul12")}</option>
+                  <option value="Dimanche 19 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul19")}</option>
+                  <option value="Dimanche 26 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul26")}</option>
+                  <option value="Dimanche 2 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug2")}</option>
+                  <option value="Dimanche 9 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug9")}</option>
+                  <option value="Dimanche 16 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug16")}</option>
+                  <option value="Dimanche 23 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug23")}</option>
+                  <option value="Dimanche 30 aout (derniere chance)" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug30_opt")}</option>
+                </select>
               </div>
-            </PixelBorder>
+              <div className="mb-6">
+                <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
+                  {t(lang, "inscription_label_type")}
+                </label>
+                <select
+                  value={sessionType}
+                  onChange={(e) => setSessionType(e.target.value)}
+                  style={{
+                    width: "100%",
+                    background: "#00000080",
+                    border: "2px solid #00f5ff44",
+                    color: "#e0e0e0",
+                    padding: "10px 12px",
+                    fontFamily: "'Space Mono', monospace",
+                    fontSize: "0.7rem",
+                    outline: "none",
+                  }}
+                >
+                  <option value="qualification" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_qualif")}</option>
+                  <option value="decouverte" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_deco")}</option>
+                </select>
+              </div>
+              {/* Case à cocher règles */}
+              <div
+                className="mb-5"
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                  background: rulesAccepted ? "#00f5ff08" : "#ff2d5508",
+                  border: `2px solid ${rulesAccepted ? "#00f5ff44" : "#ff2d5544"}`,
+                  padding: "12px 14px",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onClick={() => setRulesAccepted(!rulesAccepted)}
+              >
+                <div
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    minWidth: "18px",
+                    border: `2px solid ${rulesAccepted ? "#00f5ff" : "#ff2d55"}`,
+                    background: rulesAccepted ? "#00f5ff" : "transparent",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: "2px",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {rulesAccepted && (
+                    <span style={{ color: "#0a0a0f", fontSize: "12px", fontWeight: "bold", lineHeight: 1 }}>✓</span>
+                  )}
+                </div>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.6rem", color: rulesAccepted ? "#a0a0c0" : "#808090", lineHeight: 1.8 }}>
+                  {t(lang, "inscription_rules")}{" "}
+                  <a
+                    href="#faq"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ color: "#00f5ff", textDecoration: "underline" }}
+                  >
+                    {t(lang, "inscription_rules_link")}
+                  </a>
+                  {" "}{t(lang, "inscription_rules_after")}
+                </span>
+              </div>
+
+              <button
+                onClick={handleSubmit}
+                disabled={!rulesAccepted}
+                style={{
+                  width: "100%",
+                  fontFamily: "'Press Start 2P', cursive",
+                  fontSize: "0.6rem",
+                  background: rulesAccepted ? "#ff2d55" : "#3a1a22",
+                  color: rulesAccepted ? "#fff" : "#604050",
+                  border: `3px solid ${rulesAccepted ? "#ff2d55" : "#3a1a22"}`,
+                  padding: "14px",
+                  cursor: rulesAccepted ? "pointer" : "not-allowed",
+                  boxShadow: rulesAccepted ? "0 0 16px #ff2d55, 4px 4px 0 #8b0000" : "none",
+                  letterSpacing: "0.05em",
+                  transition: "all 0.2s",
+                }}
+                className="active:scale-95 transition-all"
+              >
+                {t(lang, "inscription_btn")}
+              </button>
+              <p style={{ fontSize: "0.55rem", color: "#9090b0", textAlign: "center", marginTop: "12px", lineHeight: 1.8 }}>
+                {t(lang, "inscription_note")}
+              </p>
+            </div>
+          </PixelBorder>
         </div>
       </section>
 
@@ -1238,13 +1279,13 @@ export default function Home() {
         style={{ background: "#050508", borderTop: "2px solid #00f5ff33" }}
       >
         <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "0.5rem" }}>
-          BUBBLE HOCKEY SUMMER QUALIFIERS
+          {t(lang, "footer_title")}
         </div>
         <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#404060", marginBottom: "0.5rem" }}>
-          BRUSSELS PINBALL MUSEUM - ETE 2026
+          {t(lang, "footer_sub")}
         </div>
         <div style={{ fontSize: "0.6rem", color: "#404060", marginBottom: "1rem" }}>
-          1501 chaussee de Wavre, 1160 Auderghem &nbsp;|&nbsp; Dimanches a partir de 19h00
+          {t(lang, "footer_addr")} &nbsp;|&nbsp; {t(lang, "footer_hours")}
         </div>
         <a
           href="https://bubblehockey.be"
@@ -1257,7 +1298,7 @@ export default function Home() {
         </a>
         <div className="mt-6">
           <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#303050" }}>
-            © 2026 BUBBLE HOCKEY SUMMER QUALIFIERS
+            {t(lang, "footer_copy")}
           </span>
         </div>
       </footer>
