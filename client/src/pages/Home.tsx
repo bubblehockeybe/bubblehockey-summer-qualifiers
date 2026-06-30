@@ -1131,8 +1131,8 @@ export default function Home() {
               style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,200,255,0.15)", textDecoration: "none" }}
             >
               <div className="flex flex-col items-center text-center gap-5">
-                <div className="rounded-lg overflow-hidden flex items-center justify-center" style={{ width: 140, height: 140, background: "#fff", flexShrink: 0 }}>
-                  <img src="/manus-storage/logo-ice_cf07d5ab.png" alt="ICE - Innovative Concepts in Entertainment" style={{ width: 120, height: 120, objectFit: "contain" }} />
+                <div className="rounded-lg overflow-hidden flex items-center justify-center" style={{ width: 200, height: 160, background: "transparent", flexShrink: 0 }}>
+                  <img src="/manus-storage/superchexx-machine_1ed9c497.png" alt="ICE Super Chexx Pro" style={{ width: 200, height: 160, objectFit: "contain" }} />
                 </div>
                 <div>
                   <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#00c8ff" }}>MACHINE OFFICIELLE</div>
