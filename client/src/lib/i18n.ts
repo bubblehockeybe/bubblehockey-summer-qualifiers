@@ -14,7 +14,17 @@ export const translations = {
     nav_news: "NEWS",
     nav_halloffame: "HALL OF FAME",
     nav_faq: "FAQ",
+    nav_sponsors: "SPONSORS",
     nav_inscrire: "S'INSCRIRE",
+
+    // Section Sponsors
+    sponsors_title: "NOS SPONSORS",
+    sponsors_subtitle: "Merci à ceux qui rendent ce tournoi possible.",
+    sponsors_senne_desc: "Brasserie artisanale bruxelloise, pionnière du mouvement craft en Belgique. Leurs bières bien houblonnées accompagnent les meilleures soirées depuis 2010.",
+    sponsors_ice_desc: "Innovative Concepts in Entertainment — les créateurs de la Super Chexx Pro, la machine de bubble hockey la plus jouée au monde. Sans eux, pas de tournoi.",
+    sponsors_become: "DEVENIR SPONSOR",
+    sponsors_become_desc: "Votre marque associée au premier tournoi de bubble hockey de Bruxelles.",
+    sponsors_contact: "NOUS CONTACTER",
 
     // Hero
     hero_title1: "BUBBLE HOCKEY",
@@ -196,7 +206,17 @@ export const translations = {
     nav_news: "NEWS",
     nav_halloffame: "HALL OF FAME",
     nav_faq: "FAQ",
+    nav_sponsors: "SPONSORS",
     nav_inscrire: "REGISTER",
+
+    // Section Sponsors
+    sponsors_title: "OUR SPONSORS",
+    sponsors_subtitle: "Thanks to those who make this tournament possible.",
+    sponsors_senne_desc: "Brussels craft brewery, pioneer of the craft beer movement in Belgium. Their well-hopped beers have accompanied the best evenings since 2010.",
+    sponsors_ice_desc: "Innovative Concepts in Entertainment — creators of the Super Chexx Pro, the world's most played bubble hockey machine. Without them, no tournament.",
+    sponsors_become: "BECOME A SPONSOR",
+    sponsors_become_desc: "Your brand associated with Brussels' first bubble hockey tournament.",
+    sponsors_contact: "CONTACT US",
 
     // Hero
     hero_title1: "BUBBLE HOCKEY",

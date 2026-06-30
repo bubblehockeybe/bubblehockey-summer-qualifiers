@@ -16,7 +16,7 @@ const NEWS_KEY = "bh_news";
 const LANG_KEY = "bh_lang";
 
 const HERO_IMG =
-  "/manus-storage/superchexx-photo_de614c0e.png";
+  "/superchexx-photo.png";
 const TROPHY_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/pixel-trophy-8bit-PXBreF3SdxXKf2sKpDiC4Z.webp";
 
@@ -47,7 +47,7 @@ function PixelBackground() {
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: `url('/manus-storage/stars-bg-large_32012ab9.jpg')`,
+        backgroundImage: `url('/manus-storage/stars-bg-large_70a7733d.jpg')`,
         backgroundRepeat: "repeat",
         backgroundSize: "2400px 2400px",
         opacity: 0.35,
@@ -328,6 +328,7 @@ export default function Home() {
     ...(newsItems.length > 0 ? [{ key: t(lang, "nav_news"), anchor: "news" }] : []),
     { key: t(lang, "nav_halloffame"), anchor: "halloffame" },
     { key: t(lang, "nav_faq"), anchor: "faq" },
+    { key: t(lang, "nav_sponsors"), anchor: "sponsors" },
   ];
 
   const handleSubmit = () => {
@@ -383,7 +384,7 @@ export default function Home() {
         }}
       >
         <img
-          src="/manus-storage/logo-bpm-transparent_9782de99.png"
+          src="/logo-bpm-transparent.png"
           alt="Brussels Pinball Museum"
           style={{ height: "40px", width: "auto", imageRendering: "auto", filter: "brightness(1.1)" }}
         />
@@ -1083,6 +1084,80 @@ export default function Home() {
       </section>
 
       {/* ── INSCRIPTION ── */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION SPONSORS
+      ═══════════════════════════════════════════════════════════════ */}
+      <section id="sponsors" className="py-20 px-4" style={{
+        position: "relative",
+        background: "linear-gradient(135deg, rgba(8,8,18,0.99) 0%, rgba(10,10,28,0.99) 50%, rgba(8,8,18,0.99) 100%)",
+        borderTop: "2px solid #ffd70033",
+        borderBottom: "2px solid #ffd70033",
+      }}>
+        <div className="max-w-4xl mx-auto">
+          {/* Titre section */}
+          <div className="text-center mb-14">
+            <div className="inline-block px-4 py-1 mb-4 text-xs tracking-widest font-bold" style={{ background: "rgba(255,215,0,0.08)", border: "1px solid #ffd70044", color: "#ffd700", fontFamily: "'Press Start 2P', monospace" }}>
+              ★ PARTENAIRES ★
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-3" style={{ color: "#fff", fontFamily: "'Press Start 2P', monospace", fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}>
+              {t(lang, "sponsors_title")}
+            </h2>
+            <p className="text-sm" style={{ color: "#888", letterSpacing: "0.05em" }}>{t(lang, "sponsors_subtitle")}</p>
+          </div>
+
+          {/* Sponsors principaux */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
+
+            {/* Brasserie de la Senne */}
+            <a href="https://www.brasseriedelasenne.be/" target="_blank" rel="noopener noreferrer"
+              className="group block rounded-lg p-8 transition-all duration-300"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,215,0,0.15)", textDecoration: "none" }}
+            >
+              <div className="flex flex-col items-center text-center gap-5">
+                <div className="rounded-full overflow-hidden flex items-center justify-center" style={{ width: 140, height: 140, background: "#000", flexShrink: 0 }}>
+                  <img src="/manus-storage/logo-senne_cbb8320f.png" alt="Brasserie de la Senne" style={{ width: 130, height: 130, objectFit: "contain" }} />
+                </div>
+                <div>
+                  <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#ffd700" }}>BIÈRE OFFICIELLE</div>
+                  <h3 className="text-xl font-black mb-3" style={{ color: "#fff" }}>Brasserie de la Senne</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#aaa" }}>{t(lang, "sponsors_senne_desc")}</p>
+                </div>
+              </div>
+            </a>
+
+            {/* ICE - Innovative Concepts in Entertainment */}
+            <a href="https://bubblehockey.com/" target="_blank" rel="noopener noreferrer"
+              className="group block rounded-lg p-8 transition-all duration-300"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,200,255,0.15)", textDecoration: "none" }}
+            >
+              <div className="flex flex-col items-center text-center gap-5">
+                <div className="rounded-lg overflow-hidden flex items-center justify-center" style={{ width: 140, height: 140, background: "#fff", flexShrink: 0 }}>
+                  <img src="/manus-storage/logo-ice_cf07d5ab.png" alt="ICE - Innovative Concepts in Entertainment" style={{ width: 120, height: 120, objectFit: "contain" }} />
+                </div>
+                <div>
+                  <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#00c8ff" }}>MACHINE OFFICIELLE</div>
+                  <h3 className="text-xl font-black mb-3" style={{ color: "#fff" }}>ICE — Super Chexx Pro</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#aaa" }}>{t(lang, "sponsors_ice_desc")}</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {/* Devenir sponsor */}
+          <div className="text-center rounded-lg py-10 px-6" style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed rgba(255,255,255,0.1)" }}>
+            <p className="text-xs tracking-widest mb-2" style={{ color: "#666" }}>VOUS AUSSI ?</p>
+            <h3 className="text-2xl font-black mb-3" style={{ color: "#fff", fontFamily: "'Press Start 2P', monospace", fontSize: "clamp(1rem, 3vw, 1.4rem)" }}>{t(lang, "sponsors_become")}</h3>
+            <p className="text-sm mb-6" style={{ color: "#888" }}>{t(lang, "sponsors_become_desc")}</p>
+            <a href="mailto:brusselspinballmuseum@gmail.com?subject=Sponsoring Bubble Hockey Summer Qualifiers 2026"
+              className="inline-block px-8 py-3 font-bold text-sm tracking-widest transition-all duration-200"
+              style={{ background: "transparent", border: "2px solid #ffd700", color: "#ffd700", fontFamily: "'Press Start 2P', monospace", fontSize: "0.65rem" }}
+            >
+              {t(lang, "sponsors_contact")} →
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section id="inscription" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(26,10,15,0.96) 60%, rgba(10,10,15,0.96) 100%)" }}>
         <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px)", backgroundSize: "36px 36px", zIndex: 0 }} />
         <div className="max-w-2xl mx-auto text-center">
