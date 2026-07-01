@@ -704,7 +704,7 @@ export default function Home() {
               <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "sessions_payant_desc")}</span>
             </div>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
             {sessionSteps.map((item, i) => (
               <motion.div
                 key={i}
@@ -712,9 +712,10 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
+                style={{ height: "100%", display: "flex", flexDirection: "column" }}
               >
-                <PixelBorder color={item.free ? "#00f5ff" : "#ff2d55"}>
-                  <div className="p-4 text-center" style={{ background: item.free ? "#00f5ff08" : "#ff2d5508" }}>
+                <PixelBorder color={item.free ? "#00f5ff" : "#ff2d55"} className="flex flex-col flex-1 h-full">
+                  <div className="p-4 text-center" style={{ background: item.free ? "#00f5ff08" : "#ff2d5508", flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
                     <div style={{ fontSize: "2rem", marginBottom: "8px" }}>{item.icon}</div>
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", padding: "3px 8px", marginBottom: "8px", display: "inline-block", background: item.free ? "#00f5ff" : "#ff2d55", color: item.free ? "#0a0a0f" : "#fff" }}>
                       {item.free ? t(lang, "sessions_gratuit") : t(lang, "sessions_payant")}
@@ -1176,7 +1177,7 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#00c8ff" }}>MACHINE OFFICIELLE</div>
-                  <h3 className="text-xl font-black mb-3" style={{ color: "#fff" }}>ICE — Super Chexx Pro</h3>
+                  <h3 className="text-xl font-black mb-3" style={{ color: "#fff" }}>ICE Super Chexx Pro</h3>
                   <p className="text-sm leading-relaxed" style={{ color: "#aaa" }}>{t(lang, "sponsors_ice_desc")}</p>
                 </div>
               </div>
