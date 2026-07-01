@@ -736,7 +736,7 @@ export default function Home() {
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
             {t(lang, "calendrier_title")}
           </h2>
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1.5rem", marginTop: "-1.5rem" }}>
+          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1.5rem", marginTop: "0.5rem" }}>
             {t(lang, "calendrier_subtitle")}
           </div>
           <div className="flex flex-wrap gap-6 mb-8">
@@ -770,12 +770,13 @@ export default function Home() {
               const voted = heatVoted[s.key] || false;
               const isLastChance = s.date === "30/08";
               const isQualifDay = s.isQualif;
-              const borderColor = isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : getHeatBorder(count, maxHeat);
-              const bgColor = isLastChance ? "#ff2d5511" : isQualifDay ? "#ffd70011" : getHeatColor(count, maxHeat);
-              const glowColor = isLastChance ? "0 0 8px #ff2d5555" : isQualifDay ? "0 0 8px #ffd70055" : getHeatGlow(count, maxHeat);
+              // Les deux qualifs sont en jaune
+              const borderColor = isQualifDay ? "#ffd700" : getHeatBorder(count, maxHeat);
+              const bgColor = isQualifDay ? "#ffd70011" : getHeatColor(count, maxHeat);
+              const glowColor = isQualifDay ? "0 0 10px #ffd70066" : getHeatGlow(count, maxHeat);
               const timeLabel = isQualifDay ? (lang === "fr" ? "19h-20h + 20h-21h" : "7-8 PM + 8-9 PM") : (lang === "fr" ? "19h-20h" : "7-8 PM");
               const typeLabel = isQualifDay ? (lang === "fr" ? "ENTRAINEMENT + QUALIF" : "TRAINING + QUALIF") : t(lang, "calendrier_training");
-              const dateColor = isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : "#ffd700";
+              const dateColor = isQualifDay ? "#ffd700" : "#ffd700";
               return (
                 <motion.div
                   key={i}
@@ -821,9 +822,9 @@ export default function Home() {
                         fontFamily: "'Press Start 2P', cursive",
                         fontSize: "0.3rem",
                         padding: "4px 6px",
-                        border: voted ? "1px solid #404060" : `1px solid ${isLastChance ? "#ff2d55" : "#00f5ff"}`,
-                        background: voted ? "#ffffff0a" : isLastChance ? "#ff2d5511" : "#00f5ff11",
-                        color: voted ? "#404060" : isLastChance ? "#ff2d55" : "#00f5ff",
+                        border: voted ? "1px solid #404060" : "1px solid #00f5ff",
+                        background: voted ? "#ffffff0a" : "#00f5ff11",
+                        color: voted ? "#404060" : "#00f5ff",
                         cursor: voted ? "default" : "pointer",
                         transition: "all 0.2s",
                         letterSpacing: "0.05em",
@@ -836,9 +837,33 @@ export default function Home() {
               );
             })}
           </div>
-          <div className="mt-6 flex flex-wrap gap-3 items-center">
-            <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", border: "2px solid #ffd700", padding: "4px 10px", background: "#ffd70011" }}>{t(lang, "calendrier_finale_badge")}</span>
-            <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "calendrier_finale_date")}</span>
+          {/* Carré GRANDE FINALE rouge */}
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <div
+                className="text-center py-3 px-2 flex flex-col gap-2"
+                style={{
+                  border: "2px solid #ff2d55",
+                  background: "#ff2d5511",
+                  boxShadow: "0 0 12px #ff2d5566",
+                }}
+              >
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.5rem, 1.5vw, 0.75rem)", color: "#ff2d55", textShadow: "0 0 8px #ff2d55", lineHeight: 1.4 }}>
+                  {lang === "fr" ? "GRANDE\nFINALE" : "GRAND\nFINAL"}
+                </div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: "#ff2d55", letterSpacing: "0.05em" }}>
+                  {lang === "fr" ? "12-13 SEPT" : "SEPT 12-13"}
+                </div>
+                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.22rem", color: "#ff2d5599", letterSpacing: "0.05em" }}>
+                  {lang === "fr" ? "2026" : "2026"}
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
