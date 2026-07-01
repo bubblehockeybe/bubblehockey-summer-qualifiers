@@ -388,22 +388,23 @@ export default function Home() {
           alt="Brussels Pinball Museum"
           style={{ height: "40px", width: "auto", imageRendering: "auto", filter: "brightness(1.1)" }}
         />
-        <div className="hidden md:flex gap-6 items-center">
+        <div className="hidden md:flex gap-4 items-center">
           {navItems.map((item) => (
             <a
               key={item.key}
               href={`#${item.anchor}`}
               style={{
                 fontFamily: "'Press Start 2P', cursive",
-                fontSize: "0.5rem",
-                color: item.anchor === "news" ? "#ffd700" : "#00f5ff",
+                fontSize: "0.45rem",
+                color: item.anchor === "news" ? "#ffd700" : "#b06aff",
                 textDecoration: "none",
-                letterSpacing: "0.1em",
-                ...(item.anchor === "news" ? { textShadow: "0 0 8px #ffd70088" } : {}),
+                letterSpacing: "0.05em",
+                whiteSpace: "nowrap",
+                textShadow: item.anchor === "news" ? "0 0 8px #ffd70088" : "0 0 6px #b06aff66",
               }}
-              className="hover:text-yellow-300 transition-colors"
+              className="hover:opacity-80 transition-opacity"
             >
-              {item.anchor === "news" ? `\u2605 ${item.key}` : item.key}
+              {item.anchor === "news" ? `\u2605 ${item.key}` : item.anchor === "halloffame" ? "HALL OF FAME" : item.key}
             </a>
           ))}
         </div>
