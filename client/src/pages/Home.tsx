@@ -773,8 +773,8 @@ export default function Home() {
               const borderColor = isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : getHeatBorder(count, maxHeat);
               const bgColor = isLastChance ? "#ff2d5511" : isQualifDay ? "#ffd70011" : getHeatColor(count, maxHeat);
               const glowColor = isLastChance ? "0 0 8px #ff2d5555" : isQualifDay ? "0 0 8px #ffd70055" : getHeatGlow(count, maxHeat);
-              const timeLabel = isQualifDay ? (lang === "fr" ? "20h-21h" : "8-9 PM") : (lang === "fr" ? "19h-20h" : "7-8 PM");
-              const typeLabel = isQualifDay ? t(lang, "calendrier_lastchance") : t(lang, "calendrier_training");
+              const timeLabel = isQualifDay ? (lang === "fr" ? "19h-20h + 20h-21h" : "7-8 PM + 8-9 PM") : (lang === "fr" ? "19h-20h" : "7-8 PM");
+              const typeLabel = isQualifDay ? (lang === "fr" ? "ENTRAINEMENT + QUALIF" : "TRAINING + QUALIF") : t(lang, "calendrier_training");
               const dateColor = isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : "#ffd700";
               return (
                 <motion.div
@@ -799,9 +799,16 @@ export default function Home() {
                     <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : "#606080", letterSpacing: "0.05em" }}>
                       {typeLabel}
                     </div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: isLastChance ? "#ff2d5599" : isQualifDay ? "#ffd70099" : "#404060", letterSpacing: "0.05em" }}>
-                      {timeLabel}
-                    </div>
+                    {isQualifDay ? (
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.22rem", color: "#ffd70099", letterSpacing: "0.05em", lineHeight: "1.6" }}>
+                        <span style={{ color: "#00f5ff99" }}>{lang === "fr" ? "19h-20h" : "7-8 PM"}</span><br />
+                        <span style={{ color: "#ffd70099" }}>{lang === "fr" ? "20h-21h" : "8-9 PM"}</span>
+                      </div>
+                    ) : (
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: "#404060", letterSpacing: "0.05em" }}>
+                        {timeLabel}
+                      </div>
+                    )}
                     {count > 0 && (
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: isLastChance ? "#ff2d55" : "#00f5ff" }}>
                         {count} {count === 1 ? t(lang, "calendrier_equipe") : t(lang, "calendrier_equipes")}
