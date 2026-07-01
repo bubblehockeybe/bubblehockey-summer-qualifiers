@@ -47,7 +47,7 @@ function PixelBackground() {
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: `url('/manus-storage/stars-bg-large_70a7733d.jpg')`,
+        backgroundImage: `url('/manus-storage/stars-bg-large_e2e7dec1.jpg')`,
         backgroundRepeat: "repeat",
         backgroundSize: "2400px 2400px",
         opacity: 0.35,
@@ -295,15 +295,15 @@ export default function Home() {
   ];
 
   const sessionDates = [
-    { date: "05/07", label: t(lang, "date_jul5"), key: "d0507" },
-    { date: "12/07", label: t(lang, "date_jul12"), key: "d1207" },
-    { date: "19/07", label: t(lang, "date_jul19"), key: "d1907" },
-    { date: "26/07", label: t(lang, "date_jul26"), key: "d2607" },
-    { date: "02/08", label: t(lang, "date_aug2"), key: "d0208" },
-    { date: "09/08", label: t(lang, "date_aug9"), key: "d0908" },
-    { date: "16/08", label: t(lang, "date_aug16"), key: "d1608" },
-    { date: "23/08", label: t(lang, "date_aug23"), key: "d2308" },
-    { date: "30/08", label: t(lang, "date_aug30"), key: "d3008" },
+    { date: "06/07", label: t(lang, "date_jul6"), key: "d0607", isQualif: false },
+    { date: "13/07", label: t(lang, "date_jul13"), key: "d1307", isQualif: false },
+    { date: "20/07", label: t(lang, "date_jul20"), key: "d2007", isQualif: false },
+    { date: "26/07", label: t(lang, "date_jul26"), key: "d2607", isQualif: true },
+    { date: "03/08", label: t(lang, "date_aug3"), key: "d0308", isQualif: false },
+    { date: "10/08", label: t(lang, "date_aug10"), key: "d1008", isQualif: false },
+    { date: "17/08", label: t(lang, "date_aug17"), key: "d1708", isQualif: false },
+    { date: "24/08", label: t(lang, "date_aug24"), key: "d2408", isQualif: false },
+    { date: "30/08", label: t(lang, "date_aug30"), key: "d3008", isQualif: true },
   ];
 
   const sessionSteps = [
@@ -1115,7 +1115,7 @@ export default function Home() {
             >
               <div className="flex flex-col items-center text-center gap-5">
                 <div className="rounded-full overflow-hidden flex items-center justify-center" style={{ width: 140, height: 140, background: "#000", flexShrink: 0 }}>
-                  <img src="/manus-storage/logo-senne_cbb8320f.png" alt="Brasserie de la Senne" style={{ width: 130, height: 130, objectFit: "contain" }} />
+                  <img src="/logo-senne.png" alt="Brasserie de la Senne" style={{ width: 130, height: 130, objectFit: "contain" }} />
                 </div>
                 <div>
                   <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#ffd700" }}>BIÈRE OFFICIELLE</div>
@@ -1132,7 +1132,7 @@ export default function Home() {
             >
               <div className="flex flex-col items-center text-center gap-5">
                 <div className="flex items-center justify-center" style={{ width: 220, height: 150, flexShrink: 0 }}>
-                  <img src="/manus-storage/logo-superchexx-badge_9fc14365.png" alt="ICE Super Chexx Pro" style={{ width: 220, height: 150, objectFit: "contain", borderRadius: "8px" }} />
+                  <img src="/logo-superchexx-badge.png" alt="ICE Super Chexx Pro" style={{ width: 220, height: 150, objectFit: "contain", borderRadius: "8px" }} />
                 </div>
                 <div>
                   <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#00c8ff" }}>MACHINE OFFICIELLE</div>
@@ -1241,15 +1241,15 @@ export default function Home() {
                   onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
                 >
                   <option value="" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_date_placeholder")}</option>
-                  <option value="Dimanche 5 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul5")}</option>
-                  <option value="Dimanche 12 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul12")}</option>
-                  <option value="Dimanche 19 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul19")}</option>
-                  <option value="Dimanche 26 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul26")}</option>
-                  <option value="Dimanche 2 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug2")}</option>
-                  <option value="Dimanche 9 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug9")}</option>
-                  <option value="Dimanche 16 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug16")}</option>
-                  <option value="Dimanche 23 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug23")}</option>
-                  <option value="Dimanche 30 aout (derniere chance)" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug30_opt")}</option>
+                  <option value="Dimanche 6 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul6")}</option>
+                  <option value="Dimanche 13 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul13")}</option>
+                  <option value="Dimanche 20 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul20")}</option>
+                  <option value="Dimanche 26 juillet (QUALIFICATION)" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul26")}</option>
+                  <option value="Dimanche 3 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug3")}</option>
+                  <option value="Dimanche 10 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug10")}</option>
+                  <option value="Dimanche 17 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug17")}</option>
+                  <option value="Dimanche 24 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug24")}</option>
+                  <option value="Dimanche 30 aout (QUALIFICATION)" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug30_opt")}</option>
                 </select>
               </div>
               <div className="mb-6">
@@ -1270,8 +1270,9 @@ export default function Home() {
                     outline: "none",
                   }}
                 >
-                  <option value="qualification" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_qualif")}</option>
-                  <option value="decouverte" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_deco")}</option>
+                  <option value="qualification_jul26" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_qualif")}</option>
+                  <option value="qualification_aug30" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_qualif2")}</option>
+                  <option value="entrainement" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_deco")}</option>
                 </select>
               </div>
               {/* Case à cocher règles */}
