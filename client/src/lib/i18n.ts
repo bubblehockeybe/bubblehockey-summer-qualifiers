@@ -52,7 +52,7 @@ export const translations = {
     lejeu_tag4: "COACHING GRATUIT",
 
     // Timeline
-    timeline_title: "UN ETE POUR APPRENDRE.\n12-13 SEPT POUR GAGNER.",
+    timeline_title: "UN ETE POUR S'ENTRAINER.\n26 JUILLET ET 30 AOUT POUR SE QUALIFIER.\n12-13 SEPT POUR GAGNER.",
     timeline_badge1: "INSERT COIN",
     timeline_badge2: "LEVEL UP",
     timeline_badge3: "LAST CHANCE",
@@ -247,7 +247,7 @@ export const translations = {
     lejeu_tag4: "FREE COACHING",
 
     // Timeline
-    timeline_title: "A SUMMER TO LEARN.\nSEPT 12-13 TO WIN.",
+    timeline_title: "A SUMMER TO TRAIN.\nJULY 26 AND AUG 30 TO QUALIFY.\nSEPT 12-13 TO WIN.",
     timeline_badge1: "INSERT COIN",
     timeline_badge2: "LEVEL UP",
     timeline_badge3: "LAST CHANCE",
