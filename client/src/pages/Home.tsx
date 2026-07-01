@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import type { QualifiedTeam, NewsItem } from "./Admin";
 import { type Lang, t } from "@/lib/i18n";
+import { supabase } from "@/lib/supabase";
 
 const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
 const NEWS_KEY = "bh_news";
@@ -236,18 +237,43 @@ export default function Home() {
   const [sessionDate, setSessionDate] = useState("");
   const [rulesAccepted, setRulesAccepted] = useState(false);
 
-  const [qualifiedTeams, setQualifiedTeams] = useState<QualifiedTeam[]>(() => {
-    try { return JSON.parse(localStorage.getItem(QUALIFIED_TEAMS_KEY) || "[]"); } catch { return []; }
-  });
+  const [qualifiedTeams, setQualifiedTeams] = useState<QualifiedTeam[]>([]);
 
   const [newsItems, setNewsItems] = useState<NewsItem[]>(() => {
     try { return JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"); } catch { return []; }
   });
 
+  // Charger les équipes qualifiées depuis Supabase
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const { data } = await supabase
+        .from("qualified_teams")
+        .select("*")
+        .order("slot", { ascending: true });
+      if (data) {
+        setQualifiedTeams(data.map((r: any) => ({
+          id: String(r.id),
+          name: r.name,
+          date: r.date,
+          slot: r.slot,
+        })));
+      }
+    };
+    fetchTeams();
+    // Rafraîchir en temps réel via Supabase Realtime
+    const channel = supabase
+      .channel("qualified_teams_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "qualified_teams" }, () => {
+        fetchTeams();
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  // Sync news depuis localStorage (inchangé)
   useEffect(() => {
     const handler = () => {
       try {
-        setQualifiedTeams(JSON.parse(localStorage.getItem(QUALIFIED_TEAMS_KEY) || "[]"));
         setNewsItems(JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"));
       } catch {}
     };
