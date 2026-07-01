@@ -461,11 +461,11 @@ export default function Home() {
               style={{
                 fontFamily: "'Press Start 2P', cursive",
                 fontSize: "0.55rem",
-                color: item.anchor === "news" ? "#ffd700" : "#00f5ff",
+                color: item.anchor === "news" ? "#ffd700" : "#b06aff",
                 textDecoration: "none",
                 letterSpacing: "0.1em",
                 padding: "14px 20px",
-                borderBottom: "1px solid #00f5ff11",
+                borderBottom: "1px solid #b06aff22",
                 display: "block",
               }}
             >
@@ -585,8 +585,8 @@ export default function Home() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mt-3">
             {[
-              { label: t(lang, "hero_stat1_label"), value: "15€" },
-              { label: t(lang, "hero_stat2_label"), value: "10€" },
+              { label: t(lang, "hero_stat1_label"), value: "10€" },
+              { label: t(lang, "hero_stat2_label"), value: "7€" },
               { label: t(lang, "hero_stat3_label"), value: "12-13/09" },
             ].map((stat, i) => (
               <div key={i} className="text-center py-3" style={{ border: "2px solid #00f5ff22", background: "#00f5ff06" }}>
