@@ -745,7 +745,11 @@ export default function Home() {
               <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9201;</span>
               <div>
                 <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>{t(lang, "calendrier_heure_label")}</div>
-                <div style={{ fontSize: "0.7rem", color: "#d0d0e0" }}>{t(lang, "calendrier_heure_val")}</div>
+                <div style={{ fontSize: "0.7rem" }}>
+                  <span style={{ color: "#00f5ff" }}>{lang === "fr" ? "Entrainement 19h-20h" : "Training 7-8 PM"}</span>
+                  <span style={{ color: "#d0d0e0" }}> | </span>
+                  <span style={{ color: "#ffd700" }}>{lang === "fr" ? "Qualifications 20h-21h" : "Qualifiers 8-9 PM"}</span>
+                </div>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -766,7 +770,37 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-            {sessionDates.map((s, i) => {
+            {[...sessionDates, { date: "12-13/09", label: "GRANDE FINALE", key: "finale", isQualif: false, isFinale: true }].map((s, i) => {
+              const isFinale = (s as any).isFinale === true;
+              if (isFinale) {
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <div
+                      className="text-center py-3 px-2 flex flex-col gap-2"
+                      style={{
+                        border: "2px solid #ff2d55",
+                        background: "#ff2d5511",
+                        boxShadow: "0 0 12px #ff2d5566",
+                        transition: "all 0.4s ease",
+                      }}
+                    >
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.5rem, 1.5vw, 0.75rem)", color: "#ff2d55", textShadow: "0 0 8px #ff2d55", lineHeight: 1.4 }}>
+                        {lang === "fr" ? "GRANDE\nFINALE" : "GRAND\nFINAL"}
+                      </div>
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: "#ff2d55", letterSpacing: "0.05em" }}>
+                        {lang === "fr" ? "12-13 SEPT" : "SEPT 12-13"}
+                      </div>
+                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.22rem", color: "#ff2d5599", letterSpacing: "0.05em" }}>2026</div>
+                    </div>
+                  </motion.div>
+                );
+              }
               const count = heatVotes[s.key] || 0;
               const voted = heatVoted[s.key] || false;
               const isLastChance = s.date === "30/08";
@@ -838,34 +872,7 @@ export default function Home() {
               );
             })}
           </div>
-          {/* Carré GRANDE FINALE rouge */}
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <div
-                className="text-center py-3 px-2 flex flex-col gap-2"
-                style={{
-                  border: "2px solid #ff2d55",
-                  background: "#ff2d5511",
-                  boxShadow: "0 0 12px #ff2d5566",
-                }}
-              >
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.5rem, 1.5vw, 0.75rem)", color: "#ff2d55", textShadow: "0 0 8px #ff2d55", lineHeight: 1.4 }}>
-                  {lang === "fr" ? "GRANDE\nFINALE" : "GRAND\nFINAL"}
-                </div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: "#ff2d55", letterSpacing: "0.05em" }}>
-                  {lang === "fr" ? "12-13 SEPT" : "SEPT 12-13"}
-                </div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.22rem", color: "#ff2d5599", letterSpacing: "0.05em" }}>
-                  {lang === "fr" ? "2026" : "2026"}
-                </div>
-              </div>
-            </motion.div>
-          </div>
+
         </div>
       </section>
 
