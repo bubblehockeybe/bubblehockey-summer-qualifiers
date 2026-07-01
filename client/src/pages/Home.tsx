@@ -768,9 +768,13 @@ export default function Home() {
               const count = heatVotes[s.key] || 0;
               const voted = heatVoted[s.key] || false;
               const isLastChance = s.date === "30/08";
-              const borderColor = isLastChance ? "#ff2d55" : getHeatBorder(count, maxHeat);
-              const bgColor = isLastChance ? "#ff2d5511" : getHeatColor(count, maxHeat);
-              const glowColor = isLastChance ? "0 0 8px #ff2d5555" : getHeatGlow(count, maxHeat);
+              const isQualifDay = s.isQualif;
+              const borderColor = isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : getHeatBorder(count, maxHeat);
+              const bgColor = isLastChance ? "#ff2d5511" : isQualifDay ? "#ffd70011" : getHeatColor(count, maxHeat);
+              const glowColor = isLastChance ? "0 0 8px #ff2d5555" : isQualifDay ? "0 0 8px #ffd70055" : getHeatGlow(count, maxHeat);
+              const timeLabel = isQualifDay ? (lang === "fr" ? "20h-21h" : "8-9 PM") : (lang === "fr" ? "19h-20h" : "7-8 PM");
+              const typeLabel = isQualifDay ? t(lang, "calendrier_lastchance") : t(lang, "calendrier_training");
+              const dateColor = isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : "#ffd700";
               return (
                 <motion.div
                   key={i}
@@ -788,11 +792,14 @@ export default function Home() {
                       transition: "all 0.4s ease",
                     }}
                   >
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2vw, 1.3rem)", color: isLastChance ? "#ff2d55" : "#ffd700", textShadow: `0 0 8px ${isLastChance ? "#ff2d55" : "#ffd700"}` }}>
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2vw, 1.3rem)", color: dateColor, textShadow: `0 0 8px ${dateColor}` }}>
                       {s.date.split("/")[0]}
                     </div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: isLastChance ? "#ff2d55" : "#606080", letterSpacing: "0.05em" }}>
-                      {isLastChance ? t(lang, "calendrier_lastchance") : s.label.split(" ").slice(lang === "fr" ? 2 : 1).join(" ")}
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : "#606080", letterSpacing: "0.05em" }}>
+                      {typeLabel}
+                    </div>
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: isLastChance ? "#ff2d5599" : isQualifDay ? "#ffd70099" : "#404060", letterSpacing: "0.05em" }}>
+                      {timeLabel}
                     </div>
                     {count > 0 && (
                       <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: isLastChance ? "#ff2d55" : "#00f5ff" }}>
