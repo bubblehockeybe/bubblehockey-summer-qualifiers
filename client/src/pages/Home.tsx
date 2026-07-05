@@ -8,7 +8,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import type { QualifiedTeam, NewsItem } from "./Admin";
+import type { QualifiedTeam } from "./Admin";
 import { type Lang, t } from "@/lib/i18n";
 import { supabase } from "@/lib/supabase";
 
@@ -239,10 +239,6 @@ export default function Home() {
 
   const [qualifiedTeams, setQualifiedTeams] = useState<QualifiedTeam[]>([]);
 
-  const [newsItems, setNewsItems] = useState<NewsItem[]>(() => {
-    try { return JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"); } catch { return []; }
-  });
-
   // Charger les équipes qualifiées depuis Supabase
   useEffect(() => {
     const fetchTeams = async () => {
@@ -268,17 +264,6 @@ export default function Home() {
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, []);
-
-  // Sync news depuis localStorage (inchangé)
-  useEffect(() => {
-    const handler = () => {
-      try {
-        setNewsItems(JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"));
-      } catch {}
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
   }, []);
 
   const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
@@ -351,7 +336,7 @@ export default function Home() {
     { key: t(lang, "nav_lejeu"), anchor: "lejeu" },
     { key: t(lang, "nav_sessions"), anchor: "sessions" },
     { key: t(lang, "nav_calendrier"), anchor: "calendrier" },
-    ...(newsItems.length > 0 ? [{ key: t(lang, "nav_news"), anchor: "news" }] : []),
+
     { key: t(lang, "nav_halloffame"), anchor: "halloffame" },
     { key: t(lang, "nav_faq"), anchor: "faq" },
     { key: t(lang, "nav_sponsors"), anchor: "sponsors" },
@@ -1080,42 +1065,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* ── NEWS ── */}
-      {newsItems.length > 0 && (
-        <section id="news" className="py-16 px-4" style={{ background: "rgba(10,10,20,0.96)", borderTop: "2px solid #00f5ff33", borderBottom: "2px solid #00f5ff22" }}>
-          <div className="max-w-3xl mx-auto">
-            <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2rem", lineHeight: 1.6 }}>
-              {t(lang, "nav_news")}
-            </h2>
-            <div className="space-y-4">
-              {[...newsItems].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0)).map((n) => (
-                <motion.div
-                  key={n.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <div style={{ border: `2px solid ${n.pinned ? "#ffd70066" : "#00f5ff33"}`, background: n.pinned ? "#ffd70008" : "#00f5ff06", padding: "16px 20px" }}>
-                    <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {n.pinned && (
-                          <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ffd700", border: "1px solid #ffd700", padding: "2px 6px" }}>
-                            {lang === "fr" ? "EPINGLE" : "PINNED"}
-                          </span>
-                        )}
-                        <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: n.pinned ? "#ffd700" : "#00f5ff" }}>{n.title}</span>
-                      </div>
-                      <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.55rem", color: "#404060", whiteSpace: "nowrap" }}>{n.date}</span>
-                    </div>
-                    <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#d0d0e0", lineHeight: 2, whiteSpace: "pre-wrap" }}>{n.body}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ── FAQ ── */}
       <section id="faq" className="py-20 px-4" style={{ background: "rgba(13,13,26,0.96)", borderTop: "2px solid #00f5ff22" }}>

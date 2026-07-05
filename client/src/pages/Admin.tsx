@@ -8,9 +8,7 @@ import { useState, useEffect } from "react";
 import { supabase, ADMIN_EMAIL } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 
-// Clés localStorage pour les news (inchangé)
 export const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
-export const NEWS_KEY = "bh_news";
 
 export interface QualifiedTeam {
   id: string;
@@ -19,13 +17,7 @@ export interface QualifiedTeam {
   slot: number;
 }
 
-export interface NewsItem {
-  id: string;
-  title: string;
-  body: string;
-  date: string;
-  pinned: boolean;
-}
+
 
 const sessionDates = [
   "6 juillet", "13 juillet", "20 juillet", "26 juillet",
@@ -382,129 +374,13 @@ function TeamsManager() {
   );
 }
 
-// ── GESTION NEWS (localStorage, inchangé) ─────────────────────────────────
-function NewsManager() {
-  const [news, setNews] = useState<NewsItem[]>(() => {
-    try { return JSON.parse(localStorage.getItem(NEWS_KEY) || "[]"); } catch { return []; }
-  });
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [pinned, setPinned] = useState(false);
-  const [editId, setEditId] = useState<string | null>(null);
 
-  const save = (updated: NewsItem[]) => {
-    setNews(updated);
-    localStorage.setItem(NEWS_KEY, JSON.stringify(updated));
-  };
-
-  const today = () => new Date().toLocaleDateString("fr-BE", { day: "numeric", month: "long", year: "numeric" });
-
-  const addNews = () => {
-    if (!title.trim() || !body.trim()) return;
-    if (editId) {
-      save(news.map((n) => n.id === editId ? { ...n, title: title.trim(), body: body.trim(), pinned } : n));
-      setEditId(null);
-    } else {
-      const item: NewsItem = { id: Date.now().toString(), title: title.trim(), body: body.trim(), date: today(), pinned };
-      save([item, ...news]);
-    }
-    setTitle("");
-    setBody("");
-    setPinned(false);
-  };
-
-  const startEdit = (n: NewsItem) => {
-    setEditId(n.id);
-    setTitle(n.title);
-    setBody(n.body);
-    setPinned(n.pinned);
-  };
-
-  const removeNews = (id: string) => save(news.filter((n) => n.id !== id));
-  const togglePin = (id: string) => save(news.map((n) => n.id === id ? { ...n, pinned: !n.pinned } : n));
-
-  const inputStyle = {
-    width: "100%",
-    background: "#00000080",
-    border: "2px solid #00f5ff44",
-    color: "#e0e0e0",
-    padding: "8px 10px",
-    fontFamily: "'Space Mono', monospace",
-    fontSize: "0.7rem",
-    outline: "none",
-    boxSizing: "border-box" as const,
-  };
-
-  return (
-    <div>
-      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "1.5rem" }}>
-        NEWS & ANNONCES
-      </div>
-      <PixelBorder color="#00f5ff" className="mb-6">
-        <div className="p-4" style={{ background: "#00f5ff08" }}>
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.38rem", color: "#00f5ff", marginBottom: "12px" }}>
-            {editId ? "MODIFIER LA NEWS" : "NOUVELLE ANNONCE"}
-          </div>
-          <div className="space-y-3">
-            <div>
-              <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.32rem", color: "#606080", display: "block", marginBottom: "6px" }}>TITRE</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex: Resultats du 6 juillet" style={inputStyle} onFocus={(e) => (e.target.style.borderColor = "#00f5ff")} onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")} />
-            </div>
-            <div>
-              <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.32rem", color: "#606080", display: "block", marginBottom: "6px" }}>CONTENU</label>
-              <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Contenu de l'annonce..." rows={4} style={{ ...inputStyle, resize: "vertical" }} onFocus={(e) => (e.target.style.borderColor = "#00f5ff")} onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")} />
-            </div>
-            <div className="flex items-center gap-3">
-              <div onClick={() => setPinned(!pinned)} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", border: `2px solid ${pinned ? "#ffd700" : "#404060"}`, padding: "6px 12px", background: pinned ? "#ffd70011" : "transparent" }}>
-                <div style={{ width: "14px", height: "14px", border: `2px solid ${pinned ? "#ffd700" : "#606080"}`, background: pinned ? "#ffd700" : "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {pinned && <span style={{ color: "#0a0a0f", fontSize: "10px", fontWeight: "bold" }}>✓</span>}
-                </div>
-                <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: pinned ? "#ffd700" : "#606080" }}>EPINGLER</span>
-              </div>
-              <button onClick={addNews} style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", background: "#00f5ff", color: "#0a0a0f", border: "2px solid #00f5ff", padding: "10px 16px", cursor: "pointer" }}>
-                {editId ? "SAUVEGARDER" : "+ PUBLIER"}
-              </button>
-              {editId && (
-                <button onClick={() => { setEditId(null); setTitle(""); setBody(""); setPinned(false); }} style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", background: "transparent", color: "#606080", border: "1px solid #606080", padding: "10px 12px", cursor: "pointer" }}>
-                  ANNULER
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </PixelBorder>
-      {news.length === 0 ? (
-        <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#404060", textAlign: "center", padding: "2rem" }}>Aucune news publiee.</div>
-      ) : (
-        <div className="space-y-3">
-          {news.map((n) => (
-            <div key={n.id} style={{ border: `2px solid ${n.pinned ? "#ffd70066" : "#00f5ff22"}`, background: n.pinned ? "#ffd70008" : "#00f5ff06", padding: "14px" }}>
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div>
-                  {n.pinned && <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: "#ffd700", border: "1px solid #ffd700", padding: "2px 6px", marginRight: "8px" }}>EPINGLE</span>}
-                  <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#e0e0e0" }}>{n.title}</span>
-                </div>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.55rem", color: "#404060", whiteSpace: "nowrap" }}>{n.date}</span>
-              </div>
-              <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.6rem", color: "#808090", lineHeight: 1.8, marginBottom: "10px" }}>{n.body}</p>
-              <div className="flex gap-2">
-                <button onClick={() => togglePin(n.id)} style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", background: "transparent", color: "#ffd700", border: "1px solid #ffd70044", padding: "4px 8px", cursor: "pointer" }}>{n.pinned ? "DESEPINGLER" : "EPINGLER"}</button>
-                <button onClick={() => startEdit(n)} style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", background: "transparent", color: "#00f5ff", border: "1px solid #00f5ff44", padding: "4px 8px", cursor: "pointer" }}>EDIT</button>
-                <button onClick={() => removeNews(n.id)} style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", background: "transparent", color: "#ff2d55", border: "1px solid #ff2d5544", padding: "4px 8px", cursor: "pointer" }}>SUPPRIMER</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ── PAGE ADMIN PRINCIPALE ──────────────────────────────────────────────────
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"teams" | "news">("teams");
+
 
   useEffect(() => {
     // Récupérer la session courante (y compris après redirect OAuth)
@@ -563,28 +439,7 @@ export default function Admin() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-4 py-10">
-        <div className="flex gap-2 mb-8">
-          {(["teams", "news"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "0.45rem",
-                padding: "10px 18px",
-                background: tab === t ? (t === "teams" ? "#ffd700" : "#00f5ff") : "transparent",
-                color: tab === t ? "#0a0a0f" : "#606080",
-                border: `2px solid ${tab === t ? (t === "teams" ? "#ffd700" : "#00f5ff") : "#404060"}`,
-                cursor: "pointer",
-                transition: "all 0.15s",
-              }}
-            >
-              {t === "teams" ? "EQUIPES" : "NEWS"}
-            </button>
-          ))}
-        </div>
-
-        {tab === "teams" ? <TeamsManager /> : <NewsManager />}
+        <TeamsManager />
       </div>
     </div>
   );
