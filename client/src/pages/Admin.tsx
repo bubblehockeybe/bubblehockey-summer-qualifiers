@@ -20,8 +20,8 @@ export interface QualifiedTeam {
 
 
 const sessionDates = [
-  "6 juillet", "13 juillet", "20 juillet", "26 juillet",
-  "3 aout", "10 aout", "17 aout", "24 aout", "30 aout",
+  "5 juillet", "12 juillet", "19 juillet", "26 juillet",
+  "2 aout", "9 aout", "16 aout", "23 aout", "30 aout",
 ];
 
 function PixelBorder({ children, color = "#00f5ff", className = "" }: { children: React.ReactNode; color?: string; className?: string }) {

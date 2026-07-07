@@ -173,14 +173,14 @@ export const translations = {
 
     // Dates sessions
     date_sun: "DIM",
-    date_jul6: "DIM 6 JUILLET",
-    date_jul13: "DIM 13 JUILLET",
-    date_jul20: "DIM 20 JUILLET",
+    date_jul5: "DIM 5 JUILLET",
+    date_jul12: "DIM 12 JUILLET",
+    date_jul19: "DIM 19 JUILLET",
     date_jul26: "DIM 26 JUILLET",
-    date_aug3: "DIM 3 AOUT",
-    date_aug10: "DIM 10 AOUT",
-    date_aug17: "DIM 17 AOUT",
-    date_aug24: "DIM 24 AOUT",
+    date_aug2: "DIM 2 AOUT",
+    date_aug9: "DIM 9 AOUT",
+    date_aug16: "DIM 16 AOUT",
+    date_aug23: "DIM 23 AOUT",
     date_aug30: "DIM 30 AOUT",
     date_aug30_opt: "DIMANCHE 30 AOUT - DERNIERE QUALIFICATION",
 
@@ -368,14 +368,14 @@ export const translations = {
 
     // Dates sessions
     date_sun: "SUN",
-    date_jul6: "SUN JULY 6",
-    date_jul13: "SUN JULY 13",
-    date_jul20: "SUN JULY 20",
+    date_jul5: "SUN JULY 5",
+    date_jul12: "SUN JULY 12",
+    date_jul19: "SUN JULY 19",
     date_jul26: "SUN JULY 26",
-    date_aug3: "SUN AUG 3",
-    date_aug10: "SUN AUG 10",
-    date_aug17: "SUN AUG 17",
-    date_aug24: "SUN AUG 24",
+    date_aug2: "SUN AUG 2",
+    date_aug9: "SUN AUG 9",
+    date_aug16: "SUN AUG 16",
+    date_aug23: "SUN AUG 23",
     date_aug30: "SUN AUG 30",
     date_aug30_opt: "SUNDAY AUGUST 30 - LAST QUALIFIER",
 

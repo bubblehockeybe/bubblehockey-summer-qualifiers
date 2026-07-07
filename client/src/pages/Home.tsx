@@ -306,14 +306,14 @@ export default function Home() {
   ];
 
   const sessionDates = [
-    { date: "06/07", label: t(lang, "date_jul6"), key: "d0607", isQualif: false },
-    { date: "13/07", label: t(lang, "date_jul13"), key: "d1307", isQualif: false },
-    { date: "20/07", label: t(lang, "date_jul20"), key: "d2007", isQualif: false },
+    { date: "05/07", label: t(lang, "date_jul5"), key: "d0507", isQualif: false },
+    { date: "12/07", label: t(lang, "date_jul12"), key: "d1207", isQualif: false },
+    { date: "19/07", label: t(lang, "date_jul19"), key: "d1907", isQualif: false },
     { date: "26/07", label: t(lang, "date_jul26"), key: "d2607", isQualif: true },
-    { date: "03/08", label: t(lang, "date_aug3"), key: "d0308", isQualif: false },
-    { date: "10/08", label: t(lang, "date_aug10"), key: "d1008", isQualif: false },
-    { date: "17/08", label: t(lang, "date_aug17"), key: "d1708", isQualif: false },
-    { date: "24/08", label: t(lang, "date_aug24"), key: "d2408", isQualif: false },
+    { date: "02/08", label: t(lang, "date_aug2"), key: "d0208", isQualif: false },
+    { date: "09/08", label: t(lang, "date_aug9"), key: "d0908", isQualif: false },
+    { date: "16/08", label: t(lang, "date_aug16"), key: "d1608", isQualif: false },
+    { date: "23/08", label: t(lang, "date_aug23"), key: "d2308", isQualif: false },
     { date: "30/08", label: t(lang, "date_aug30"), key: "d3008", isQualif: true },
   ];
 
@@ -1264,14 +1264,14 @@ export default function Home() {
                   onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
                 >
                   <option value="" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_date_placeholder")}</option>
-                  <option value="Dimanche 6 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul6")}</option>
-                  <option value="Dimanche 13 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul13")}</option>
-                  <option value="Dimanche 20 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul20")}</option>
+                  <option value="Dimanche 5 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul5")}</option>
+                  <option value="Dimanche 12 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul12")}</option>
+                  <option value="Dimanche 19 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul19")}</option>
                   <option value="Dimanche 26 juillet (QUALIFICATION)" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul26")}</option>
-                  <option value="Dimanche 3 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug3")}</option>
-                  <option value="Dimanche 10 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug10")}</option>
-                  <option value="Dimanche 17 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug17")}</option>
-                  <option value="Dimanche 24 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug24")}</option>
+                  <option value="Dimanche 2 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug2")}</option>
+                  <option value="Dimanche 9 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug9")}</option>
+                  <option value="Dimanche 16 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug16")}</option>
+                  <option value="Dimanche 23 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug23")}</option>
                   <option value="Dimanche 30 aout (QUALIFICATION)" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug30_opt")}</option>
                 </select>
               </div>
