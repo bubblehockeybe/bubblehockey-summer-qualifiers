@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { type Lang, t } from "@/lib/i18n";
 import { supabase } from "@/lib/supabase";
+import { MapView } from "@/components/Map";
 
 const LANG_KEY = "bh_lang";
 
@@ -419,26 +420,30 @@ export default function Home() {
             
             {/* Google Maps */}
             <PixelBorder color="#ff2d55">
-              <div className="p-6" style={{ background: "#ff2d5508", minHeight: "300px" }}>
-                <a
-                  href="https://maps.google.com/?q=Brussels+Pinball+Museum+1501+Chaussée+de+Wavre+Auderghem"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                    height: "100%",
-                    textDecoration: "none",
-                    color: "#ff2d55",
-                    fontFamily: "'Press Start 2P', cursive",
-                    fontSize: "0.5rem",
-                    textAlign: "center",
+              <div className="p-6" style={{ background: "#ff2d5508", minHeight: "300px", padding: 0 }}>
+                <MapView
+                  className="w-full h-full"
+                  initialCenter={{ lat: 50.8235, lng: 4.4015 }}
+                  initialZoom={16}
+                  onMapReady={(map) => {
+                    // Ajouter un marqueur pour le Brussels Pinball Museum
+                    const marker = new google.maps.Marker({
+                      position: { lat: 50.8235, lng: 4.4015 },
+                      map: map,
+                      title: "Brussels Pinball Museum",
+                      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                    });
+                    
+                    // Info window au clic sur le marqueur
+                    const infoWindow = new google.maps.InfoWindow({
+                      content: `<div style="color: #000; font-weight: bold;">Brussels Pinball Museum<br/>1501 Chaussée de Wavre<br/>1160 Auderghem</div>`,
+                    });
+                    
+                    marker.addListener("click", () => {
+                      infoWindow.open(map, marker);
+                    });
                   }}
-                >
-                  {lang === "fr" ? "📍 VOIR SUR GOOGLE MAPS" : "📍 VIEW ON GOOGLE MAPS"}
-                </a>
+                />
               </div>
             </PixelBorder>
           </div>
