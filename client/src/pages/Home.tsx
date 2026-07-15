@@ -383,23 +383,155 @@ export default function Home() {
           </PixelBorder>
         </section>
 
-        {/* Info Footer */}
-        <section className="mt-16 text-center" style={{ borderTop: "2px solid #ffd70033", paddingTop: "2rem" }}>
-          <p style={{ fontSize: "0.65rem", color: "#9090b0", lineHeight: 2 }}>
-            {lang === "fr" ? (
-              <>
-                <strong>Brussels Pinball Museum</strong><br />
-                1501 Chaussée de Wavre, 1160 Auderghem<br />
-                Dimanche 19h-20h (entraînement) + 20h-21h (qualification les 26/07 et 30/08)
-              </>
-            ) : (
-              <>
-                <strong>Brussels Pinball Museum</strong><br />
-                1501 Chaussée de Wavre, 1160 Auderghem<br />
-                Sunday 7-8 PM (training) + 8-9 PM (qualification on 7/26 and 8/30)
-              </>
-            )}
-          </p>
+        {/* Infos pratiques */}
+        <section className="mt-16" style={{ borderTop: "2px solid #ffd70033", paddingTop: "2rem" }}>
+          <h3 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1.5rem", letterSpacing: "0.05em", textAlign: "center" }}>
+            {lang === "fr" ? "INFOS PRATIQUES" : "PRACTICAL INFO"}
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Adresse et horaires */}
+            <PixelBorder color="#ffd700">
+              <div className="p-6" style={{ background: "#ffd70008" }}>
+                <p style={{ fontSize: "0.65rem", color: "#9090b0", lineHeight: 2 }}>
+                  {lang === "fr" ? (
+                    <>
+                      <strong style={{ color: "#ffd700" }}>Brussels Pinball Museum</strong><br />
+                      1501 Chaussée de Wavre<br />
+                      1160 Auderghem, Bruxelles<br /><br />
+                      <strong style={{ color: "#00f5ff" }}>Horaires</strong><br />
+                      Dimanche 19h-20h (entraînement)<br />
+                      20h-21h (qualification 26/07 & 30/08)
+                    </>
+                  ) : (
+                    <>
+                      <strong style={{ color: "#ffd700" }}>Brussels Pinball Museum</strong><br />
+                      1501 Chaussée de Wavre<br />
+                      1160 Auderghem, Brussels<br /><br />
+                      <strong style={{ color: "#00f5ff" }}>Hours</strong><br />
+                      Sunday 7-8 PM (training)<br />
+                      8-9 PM (qualification 7/26 & 8/30)
+                    </>
+                  )}
+                </p>
+              </div>
+            </PixelBorder>
+            
+            {/* Google Maps */}
+            <PixelBorder color="#ff2d55">
+              <div className="p-6" style={{ background: "#ff2d5508", minHeight: "300px" }}>
+                <a
+                  href="https://maps.google.com/?q=Brussels+Pinball+Museum+1501+Chaussée+de+Wavre+Auderghem"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    height: "100%",
+                    textDecoration: "none",
+                    color: "#ff2d55",
+                    fontFamily: "'Press Start 2P', cursive",
+                    fontSize: "0.5rem",
+                    textAlign: "center",
+                  }}
+                >
+                  {lang === "fr" ? "📍 VOIR SUR GOOGLE MAPS" : "📍 VIEW ON GOOGLE MAPS"}
+                </a>
+              </div>
+            </PixelBorder>
+          </div>
+          
+          {/* Boutons de partage social */}
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <p style={{ fontSize: "0.6rem", color: "#00f5ff", marginBottom: "1rem", fontFamily: "'Press Start 2P', cursive", letterSpacing: "0.05em" }}>
+              {lang === "fr" ? "PARTAGER" : "SHARE"}
+            </p>
+            <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+              <a
+                href="https://www.instagram.com/brusselspinballmuseum"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "50px",
+                  height: "50px",
+                  border: "2px solid #ff2d55",
+                  color: "#ff2d55",
+                  textDecoration: "none",
+                  fontSize: "1.5rem",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#ff2d5520";
+                  e.currentTarget.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                📷
+              </a>
+              <a
+                href="https://www.facebook.com/brusselspinballmuseum"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "50px",
+                  height: "50px",
+                  border: "2px solid #00f5ff",
+                  color: "#00f5ff",
+                  textDecoration: "none",
+                  fontSize: "1.5rem",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#00f5ff20";
+                  e.currentTarget.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                f
+              </a>
+              <a
+                href="https://www.tiktok.com/@brusselspinballmuseum"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "50px",
+                  height: "50px",
+                  border: "2px solid #ffd700",
+                  color: "#ffd700",
+                  textDecoration: "none",
+                  fontSize: "1.5rem",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#ffd70020";
+                  e.currentTarget.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                🎵
+              </a>
+            </div>
+          </div>
         </section>
       </main>
     </div>
