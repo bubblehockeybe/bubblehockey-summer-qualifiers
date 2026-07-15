@@ -420,28 +420,32 @@ export default function Home() {
             
             {/* Google Maps */}
             <PixelBorder color="#ff2d55">
-              <div className="p-6" style={{ background: "#ff2d5508", minHeight: "300px", padding: 0 }}>
+              <div style={{ background: "#ff2d5508", minHeight: "400px", padding: 0, display: "flex", flexDirection: "column" }}>
                 <MapView
-                  className="w-full h-full"
+                  className="flex-1"
                   initialCenter={{ lat: 50.8235, lng: 4.4015 }}
                   initialZoom={16}
                   onMapReady={(map) => {
-                    // Ajouter un marqueur pour le Brussels Pinball Museum
-                    const marker = new google.maps.Marker({
-                      position: { lat: 50.8235, lng: 4.4015 },
-                      map: map,
-                      title: "Brussels Pinball Museum",
-                      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                    });
-                    
-                    // Info window au clic sur le marqueur
-                    const infoWindow = new google.maps.InfoWindow({
-                      content: `<div style="color: #000; font-weight: bold;">Brussels Pinball Museum<br/>1501 Chaussée de Wavre<br/>1160 Auderghem</div>`,
-                    });
-                    
-                    marker.addListener("click", () => {
-                      infoWindow.open(map, marker);
-                    });
+                    try {
+                      // Ajouter un marqueur pour le Brussels Pinball Museum
+                      const marker = new google.maps.Marker({
+                        position: { lat: 50.8235, lng: 4.4015 },
+                        map: map,
+                        title: "Brussels Pinball Museum",
+                        icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                      });
+                      
+                      // Info window au clic sur le marqueur
+                      const infoWindow = new google.maps.InfoWindow({
+                        content: `<div style="color: #000; font-weight: bold;">Brussels Pinball Museum<br/>1501 Chaussée de Wavre<br/>1160 Auderghem</div>`,
+                      });
+                      
+                      marker.addListener("click", () => {
+                        infoWindow.open(map, marker);
+                      });
+                    } catch (error) {
+                      console.error("Error setting up map marker:", error);
+                    }
                   }}
                 />
               </div>
@@ -454,10 +458,12 @@ export default function Home() {
               {lang === "fr" ? "PARTAGER" : "SHARE"}
             </p>
             <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+              {/* Instagram */}
               <a
                 href="https://www.instagram.com/brusselspinballmuseum"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Instagram"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -467,8 +473,8 @@ export default function Home() {
                   border: "2px solid #ff2d55",
                   color: "#ff2d55",
                   textDecoration: "none",
-                  fontSize: "1.5rem",
                   transition: "all 0.2s",
+                  borderRadius: "2px",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = "#ff2d5520";
@@ -479,12 +485,16 @@ export default function Home() {
                   e.currentTarget.style.transform = "scale(1)";
                 }}
               >
-                📷
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
+                </svg>
               </a>
+              {/* Facebook */}
               <a
                 href="https://www.facebook.com/brusselspinballmuseum"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Facebook"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -494,8 +504,8 @@ export default function Home() {
                   border: "2px solid #00f5ff",
                   color: "#00f5ff",
                   textDecoration: "none",
-                  fontSize: "1.5rem",
                   transition: "all 0.2s",
+                  borderRadius: "2px",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = "#00f5ff20";
@@ -506,12 +516,16 @@ export default function Home() {
                   e.currentTarget.style.transform = "scale(1)";
                 }}
               >
-                f
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
               </a>
+              {/* TikTok */}
               <a
                 href="https://www.tiktok.com/@brusselspinballmuseum"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="TikTok"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -521,8 +535,8 @@ export default function Home() {
                   border: "2px solid #ffd700",
                   color: "#ffd700",
                   textDecoration: "none",
-                  fontSize: "1.5rem",
                   transition: "all 0.2s",
+                  borderRadius: "2px",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = "#ffd70020";
@@ -533,7 +547,9 @@ export default function Home() {
                   e.currentTarget.style.transform = "scale(1)";
                 }}
               >
-                🎵
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.498 3.094c1.356-.027 2.463-.264 3.15-.804v2.905c-.584.403-1.282.692-2.022.887.912.85 1.453 2.118 1.453 3.511 0 5.027-4.065 9.09-9.09 9.09-5.027 0-9.1-4.063-9.1-9.09 0-4.795 3.708-8.776 8.409-8.944-.168-.556-.275-1.148-.275-1.764 0-2.792 2.258-5.05 5.05-5.05 1.995 0 3.73 1.163 4.596 2.857.822-.127 1.596-.38 2.309-.753-.27.847-.843 1.555-1.584 2.001.73-.087 1.427-.28 2.084-.567-.482.713-1.091 1.343-1.779 1.85zm-7.508 15.384c3.169 0 5.788-2.616 5.788-5.785 0-3.17-2.619-5.786-5.788-5.786-3.17 0-5.787 2.616-5.787 5.786 0 3.169 2.617 5.785 5.787 5.785z"/>
+                </svg>
               </a>
             </div>
           </div>

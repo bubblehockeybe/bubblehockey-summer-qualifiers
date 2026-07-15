@@ -69,14 +69,14 @@
  *
  * -------------------------------
  * ✅ SUMMARY
- * - “map-attached” → AdvancedMarkerElement, DirectionsRenderer, Layers.
- * - “standalone” → Geocoder, DirectionsService, DistanceMatrixService, ElevationService.
- * - “data-only” → Place, Geometry utilities.
+ * - "map-attached" → AdvancedMarkerElement, DirectionsRenderer, Layers.
+ * - "standalone" → Geocoder, DirectionsService, DistanceMatrixService, ElevationService.
+ * - "data-only" → Place, Geometry utilities.
  */
 
 /// <reference types="@types/google.maps" />
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePersistFn } from "@/hooks/usePersistFn";
 import { cn } from "@/lib/utils";
 
@@ -93,18 +93,31 @@ const FORGE_BASE_URL =
 const MAPS_PROXY_URL = `${FORGE_BASE_URL}/v1/maps/proxy`;
 
 function loadMapScript() {
-  return new Promise(resolve => {
+  return new Promise<void>((resolve, reject) => {
+    // Check if already loaded
+    if (window.google?.maps) {
+      console.log("Google Maps already loaded");
+      resolve();
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = `${MAPS_PROXY_URL}/maps/api/js?key=${API_KEY}&v=weekly&libraries=marker,places,geocoding,geometry`;
     script.async = true;
+    script.defer = true;
     script.crossOrigin = "anonymous";
+    
     script.onload = () => {
-      resolve(null);
-      script.remove(); // Clean up immediately
+      console.log("Google Maps script loaded successfully");
+      // Wait a tick to ensure google is available
+      setTimeout(() => resolve(), 0);
     };
+    
     script.onerror = () => {
-      console.error("Failed to load Google Maps script");
+      console.error("Failed to load Google Maps script from:", script.src);
+      reject(new Error("Failed to load Google Maps script"));
     };
+    
     document.head.appendChild(script);
   });
 }
@@ -124,24 +137,48 @@ export function MapView({
 }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const init = usePersistFn(async () => {
-    await loadMapScript();
-    if (!mapContainer.current) {
-      console.error("Map container not found");
-      return;
-    }
-    map.current = new window.google.maps.Map(mapContainer.current, {
-      zoom: initialZoom,
-      center: initialCenter,
-      mapTypeControl: true,
-      fullscreenControl: true,
-      zoomControl: true,
-      streetViewControl: true,
-      mapId: "DEMO_MAP_ID",
-    });
-    if (onMapReady) {
-      onMapReady(map.current);
+    try {
+      setLoading(true);
+      setError(null);
+      
+      await loadMapScript();
+      
+      if (!mapContainer.current) {
+        console.error("Map container not found");
+        setError("Map container not found");
+        return;
+      }
+      
+      if (!window.google?.maps) {
+        console.error("Google Maps not available after script load");
+        setError("Google Maps library not available");
+        return;
+      }
+      
+      map.current = new window.google.maps.Map(mapContainer.current, {
+        zoom: initialZoom,
+        center: initialCenter,
+        mapTypeControl: true,
+        fullscreenControl: true,
+        zoomControl: true,
+        streetViewControl: true,
+        mapId: "DEMO_MAP_ID",
+      });
+      
+      if (onMapReady && map.current) {
+        onMapReady(map.current);
+      }
+      
+      setLoading(false);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error initializing map:", err);
+      setError(errorMessage);
+      setLoading(false);
     }
   });
 
@@ -150,6 +187,25 @@ export function MapView({
   }, [init]);
 
   return (
-    <div ref={mapContainer} className={cn("w-full h-[500px]", className)} />
+    <div 
+      className={cn("w-full relative", className)} 
+      style={{ minHeight: "400px", display: "flex", flexDirection: "column" }}
+    >
+      <div 
+        ref={mapContainer} 
+        className="w-full flex-1" 
+        style={{ minHeight: "400px" }}
+      />
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+          <div className="text-white text-sm">Loading map...</div>
+        </div>
+      )}
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+          <div className="text-red-400 text-sm text-center p-4">{error}</div>
+        </div>
+      )}
+    </div>
   );
 }
