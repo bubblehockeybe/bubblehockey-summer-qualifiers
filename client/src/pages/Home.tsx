@@ -197,9 +197,7 @@ export default function Home() {
       {/* Header */}
       <header className="relative z-10 border-b border-cyan-500 border-opacity-30" style={{ background: "rgba(10,10,15,0.95)" }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", letterSpacing: "0.1em" }}>
-            BUBBLE HOCKEY
-          </h1>
+          <img src="/manus-storage/logo-bpm_36460586.webp" alt="Brussels Pinball Museum" style={{ height: "clamp(2rem, 6vw, 3.5rem)", width: "auto", objectFit: "contain" }} />
           <LangSwitcher lang={lang} setLang={setLang} />
         </div>
       </header>
