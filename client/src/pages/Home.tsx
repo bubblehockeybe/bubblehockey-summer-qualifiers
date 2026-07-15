@@ -1,25 +1,17 @@
 /**
+ * Bubble Hockey - Simple Training Interface
  * Design: Rétro Arcade 8-bit Néon
  * Fond noir #0a0a0f, cyan électrique #00f5ff, rouge arcade #ff2d55, jaune score #ffd700
  * Press Start 2P pour titres, Space Mono pour corps
- * Bordures pixel, scan lines, effets néon, compteurs animés
- * i18n: FR/EN via lib/i18n.ts
+ * Compteur en direct des entraînements depuis Supabase
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import type { QualifiedTeam } from "./Admin";
 import { type Lang, t } from "@/lib/i18n";
 import { supabase } from "@/lib/supabase";
 
-const QUALIFIED_TEAMS_KEY = "bh_qualified_teams";
-const NEWS_KEY = "bh_news";
 const LANG_KEY = "bh_lang";
-
-const HERO_IMG =
-  "/superchexx-photo.png";
-const TROPHY_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/pixel-trophy-8bit-PXBreF3SdxXKf2sKpDiC4Z.webp";
 
 // Composant bordure pixel style arcade
 function PixelBorder({ children, color = "#00f5ff", className = "" }: { children: React.ReactNode; color?: string; className?: string }) {
@@ -41,89 +33,32 @@ function PixelBorder({ children, color = "#00f5ff", className = "" }: { children
   );
 }
 
-// Fond avec grille isometrique et etoiles pixel
+// Fond avec grille et étoiles pixel
 function PixelBackground() {
   return (
     <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: `url('/manus-storage/stars-bg-large_e2e7dec1.jpg')`,
-        backgroundRepeat: "repeat",
-        backgroundSize: "2400px 2400px",
-        opacity: 0.35,
+        backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.05) 1px, transparent 1px)",
+        backgroundSize: "32px 32px",
+        opacity: 0.3,
+      }} />
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: "linear-gradient(0deg, rgba(0,245,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px)",
+        backgroundSize: "64px 64px",
+        opacity: 0.2,
       }} />
     </div>
   );
 }
 
-// Particules pixel flottantes
-function PixelParticles() {
-  const particles = Array.from({ length: 28 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: [4, 6, 8][Math.floor(Math.random() * 3)],
-    color: ["#00f5ff", "#ff2d55", "#ffd700", "#00ff88"][Math.floor(Math.random() * 4)],
-    duration: 3 + Math.random() * 5,
-    delay: Math.random() * 4,
-  }));
-  return (
-    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 1 }}>
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          style={{
-            position: "absolute",
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-            background: p.color,
-            boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
-            imageRendering: "pixelated",
-          }}
-          animate={{ y: [-10, 10, -10], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// Texte qui clignote style arcade
-function BlinkText({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    const ti = setInterval(() => setVisible((v) => !v), 600);
-    return () => clearInterval(ti);
-  }, []);
-  return (
-    <span className={className} style={{ opacity: visible ? 1 : 0, transition: "opacity 0.05s" }}>
-      {children}
-    </span>
-  );
-}
-
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let start = 0;
-    const step = Math.ceil(target / 40);
-    const ti = setInterval(() => {
-      start += step;
-      if (start >= target) { setCount(target); clearInterval(ti); }
-      else setCount(start);
-    }, 40);
-    return () => clearInterval(ti);
-  }, [target]);
-  return <span>{count}{suffix}</span>;
-}
-
-// Sélecteur de langue inline (pour nav desktop)
+// Sélecteur de langue
 function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
-    <div className="flex items-center" style={{ gap: "2px" }}>
+    <div className="flex items-center gap-2">
       {(["fr", "en"] as Lang[]).map((l) => (
         <button
           key={l}
@@ -149,76 +84,6 @@ function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => voi
   );
 }
 
-// Sélecteur de langue pour le menu mobile (plus grand)
-function LangSwitcherMobile({ lang, setLang, onClose }: { lang: Lang; setLang: (l: Lang) => void; onClose: () => void }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
-        padding: "14px 20px",
-        borderBottom: "1px solid #00f5ff11",
-      }}
-    >
-      <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd70066", letterSpacing: "0.1em", marginRight: "4px" }}>
-        LANG:
-      </span>
-      {(["fr", "en"] as Lang[]).map((l) => (
-        <button
-          key={l}
-          onClick={() => { setLang(l); onClose(); }}
-          style={{
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "0.55rem",
-            padding: "7px 12px",
-            background: lang === l ? "#ffd700" : "transparent",
-            color: lang === l ? "#0a0a0f" : "#ffd70088",
-            border: `2px solid ${lang === l ? "#ffd700" : "#ffd70033"}`,
-            cursor: "pointer",
-            letterSpacing: "0.05em",
-            transition: "all 0.15s",
-          }}
-          className="active:scale-95"
-        >
-          {l.toUpperCase()}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// Heatmap helpers
-const HEAT_STORAGE_KEY = "bh_heat_votes";
-const HEAT_VOTED_KEY = "bh_heat_voted";
-
-function getHeatColor(count: number, max: number): string {
-  if (count === 0 || max === 0) return "transparent";
-  const ratio = count / max;
-  if (ratio < 0.25) return "rgba(0,245,255,0.08)";
-  if (ratio < 0.5) return "rgba(0,245,255,0.18)";
-  if (ratio < 0.75) return "rgba(255,165,0,0.22)";
-  return "rgba(255,45,85,0.30)";
-}
-
-function getHeatBorder(count: number, max: number): string {
-  if (count === 0 || max === 0) return "#00f5ff33";
-  const ratio = count / max;
-  if (ratio < 0.25) return "#00f5ff66";
-  if (ratio < 0.5) return "#00f5ffaa";
-  if (ratio < 0.75) return "#ffa500cc";
-  return "#ff2d55";
-}
-
-function getHeatGlow(count: number, max: number): string {
-  if (count === 0 || max === 0) return "none";
-  const ratio = count / max;
-  if (ratio < 0.25) return "0 0 6px #00f5ff44";
-  if (ratio < 0.5) return "0 0 10px #00f5ff88";
-  if (ratio < 0.75) return "0 0 14px #ffa500aa";
-  return "0 0 18px #ff2d55cc";
-}
-
 export default function Home() {
   const [lang, setLangState] = useState<Lang>(() => {
     try { return (localStorage.getItem(LANG_KEY) as Lang) || "fr"; } catch { return "fr"; }
@@ -229,130 +94,85 @@ export default function Home() {
     try { localStorage.setItem(LANG_KEY, l); } catch {}
   };
 
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [teamName, setTeamName] = useState("");
+  // États pour l'inscription
+  const [playerName, setPlayerName] = useState("");
   const [playerEmail, setPlayerEmail] = useState("");
-  const [sessionType, setSessionType] = useState("qualification");
   const [sessionDate, setSessionDate] = useState("");
-  const [rulesAccepted, setRulesAccepted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
 
-  const [qualifiedTeams, setQualifiedTeams] = useState<QualifiedTeam[]>([]);
+  // Compteur en direct des entraînements
+  const [trainingSignups, setTrainingSignups] = useState<Record<string, number>>({});
 
-  // Charger les équipes qualifiées depuis Supabase
+  // Dates des entraînements
+  const trainingDates = [
+    { date: "05/07", key: "5_july", label: lang === "fr" ? "5 juillet" : "July 5" },
+    { date: "12/07", key: "12_july", label: lang === "fr" ? "12 juillet" : "July 12" },
+    { date: "19/07", key: "19_july", label: lang === "fr" ? "19 juillet" : "July 19" },
+    { date: "26/07", key: "26_july", label: lang === "fr" ? "26 juillet" : "July 26" },
+    { date: "02/08", key: "2_aug", label: lang === "fr" ? "2 août" : "Aug 2" },
+    { date: "09/08", key: "9_aug", label: lang === "fr" ? "9 août" : "Aug 9" },
+    { date: "16/08", key: "16_aug", label: lang === "fr" ? "16 août" : "Aug 16" },
+    { date: "23/08", key: "23_aug", label: lang === "fr" ? "23 août" : "Aug 23" },
+    { date: "30/08", key: "30_aug", label: lang === "fr" ? "30 août" : "Aug 30" },
+  ];
+
+  // Charger les compteurs en temps réel
   useEffect(() => {
-    const fetchTeams = async () => {
+    const fetchTrainingSessions = async () => {
       const { data } = await supabase
-        .from("qualified_teams")
-        .select("*")
-        .order("slot", { ascending: true });
+        .from("training_sessions")
+        .select("date");
       if (data) {
-        setQualifiedTeams(data.map((r: any) => ({
-          id: String(r.id),
-          name: r.name,
-          date: r.date,
-          slot: r.slot,
-        })));
+        const counts: Record<string, number> = {};
+        data.forEach((row: any) => {
+          // Normaliser la date pour correspondre aux clés
+          const dateStr = row.date;
+          const dateKey = trainingDates.find(d => d.label === dateStr)?.key;
+          if (dateKey) {
+            counts[dateKey] = (counts[dateKey] || 0) + 1;
+          }
+        });
+        setTrainingSignups(counts);
       }
     };
-    fetchTeams();
-    // Rafraîchir en temps réel via Supabase Realtime
+    fetchTrainingSessions();
+    // Realtime updates
     const channel = supabase
-      .channel("qualified_teams_changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "qualified_teams" }, () => {
-        fetchTeams();
+      .channel("training_sessions_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "training_sessions" }, () => {
+        fetchTrainingSessions();
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const [heatVotes, setHeatVotes] = useState<Record<string, number>>(() => {
+  // Soumettre l'inscription
+  const handleSubmit = async () => {
+    if (!playerName.trim() || !playerEmail.trim() || !sessionDate) {
+      setSubmitMessage(lang === "fr" ? "Remplissez tous les champs" : "Fill all fields");
+      return;
+    }
+    setIsSubmitting(true);
+    setSubmitMessage("");
     try {
-      const stored = localStorage.getItem(HEAT_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : {};
-    } catch { return {}; }
-  });
-  const [heatVoted, setHeatVoted] = useState<Record<string, boolean>>(() => {
-    try {
-      const stored = localStorage.getItem(HEAT_VOTED_KEY);
-      return stored ? JSON.parse(stored) : {};
-    } catch { return {}; }
-  });
-
-  const handleHeatVote = useCallback((key: string) => {
-    if (heatVoted[key]) return;
-    const newVotes = { ...heatVotes, [key]: (heatVotes[key] || 0) + 1 };
-    const newVoted = { ...heatVoted, [key]: true };
-    setHeatVotes(newVotes);
-    setHeatVoted(newVoted);
-    try {
-      localStorage.setItem(HEAT_STORAGE_KEY, JSON.stringify(newVotes));
-      localStorage.setItem(HEAT_VOTED_KEY, JSON.stringify(newVoted));
-    } catch {}
-  }, [heatVotes, heatVoted]);
-
-  const maxHeat = Math.max(1, ...Object.values(heatVotes));
-
-  const PLACES_TOTALES = 16;
-  const PLACES_PRISES = qualifiedTeams.length;
-  const placesRestantes = PLACES_TOTALES - PLACES_PRISES;
-
-  // Données dynamiques traduites
-  const timelineSteps = [
-    { num: "01", label: t(lang, "timeline_label1"), badge: t(lang, "timeline_badge1"), title: t(lang, "timeline_title1"), desc: t(lang, "timeline_desc1"), color: "#00f5ff" },
-    { num: "02", label: t(lang, "timeline_label2"), badge: t(lang, "timeline_badge2"), title: t(lang, "timeline_title2"), desc: t(lang, "timeline_desc2"), color: "#ff2d55" },
-    { num: "03", label: t(lang, "timeline_label3"), badge: t(lang, "timeline_badge3"), title: t(lang, "timeline_title3"), desc: t(lang, "timeline_desc3"), color: "#ffd700" },
-    { num: "04", label: t(lang, "timeline_label4"), badge: t(lang, "timeline_badge4"), title: t(lang, "timeline_title4"), desc: t(lang, "timeline_desc4"), color: "#ffd700" },
-  ];
-
-  const sessionDates = [
-    { date: "05/07", label: t(lang, "date_jul5"), key: "d0507", isQualif: false },
-    { date: "12/07", label: t(lang, "date_jul12"), key: "d1207", isQualif: false },
-    { date: "19/07", label: t(lang, "date_jul19"), key: "d1907", isQualif: false },
-    { date: "26/07", label: t(lang, "date_jul26"), key: "d2607", isQualif: true },
-    { date: "02/08", label: t(lang, "date_aug2"), key: "d0208", isQualif: false },
-    { date: "09/08", label: t(lang, "date_aug9"), key: "d0908", isQualif: false },
-    { date: "16/08", label: t(lang, "date_aug16"), key: "d1608", isQualif: false },
-    { date: "23/08", label: t(lang, "date_aug23"), key: "d2308", isQualif: false },
-    { date: "30/08", label: t(lang, "date_aug30"), key: "d3008", isQualif: true },
-  ];
-
-  const sessionSteps = [
-    { icon: "🎮", time: "5-10 MIN", title: t(lang, "session_step1_title"), desc: t(lang, "session_step1_desc"), free: true },
-    { icon: "🏒", time: "15-20 MIN", title: t(lang, "session_step2_title"), desc: t(lang, "session_step2_desc"), free: true },
-    { icon: "🏆", time: "30-45 MIN", title: t(lang, "session_step3_title"), desc: t(lang, "session_step3_desc"), free: false },
-    { icon: "📊", time: "5-10 MIN", title: t(lang, "session_step4_title"), desc: t(lang, "session_step4_desc"), free: false },
-  ];
-
-  const faqItems = [
-    { q: t(lang, "faq_q1"), a: t(lang, "faq_a1") },
-    { q: t(lang, "faq_q2"), a: t(lang, "faq_a2") },
-    { q: t(lang, "faq_q3"), a: t(lang, "faq_a3") },
-    { q: t(lang, "faq_q4"), a: t(lang, "faq_a4") },
-    { q: t(lang, "faq_q5"), a: t(lang, "faq_a5") },
-  ];
-
-  const navItems = [
-    { key: t(lang, "nav_lejeu"), anchor: "lejeu" },
-    { key: t(lang, "nav_sessions"), anchor: "sessions" },
-    { key: t(lang, "nav_calendrier"), anchor: "calendrier" },
-
-    { key: t(lang, "nav_halloffame"), anchor: "halloffame" },
-    { key: t(lang, "nav_faq"), anchor: "faq" },
-    { key: t(lang, "nav_sponsors"), anchor: "sponsors" },
-  ];
-
-  const handleSubmit = () => {
-    if (!teamName.trim() || !playerEmail.trim() || !rulesAccepted) return;
-    const subject = encodeURIComponent(`${t(lang, "email_subject")} - ${teamName}`);
-    const typeLabel = sessionType === "qualification" ? t(lang, "email_type_qualif") : t(lang, "email_type_deco");
-    const dateLabel = sessionDate || (lang === "fr" ? "Non precisee" : "Not specified");
-    const body = encodeURIComponent(
-      `${t(lang, "email_team")} : ${teamName}\n${t(lang, "email_email")} : ${playerEmail}\n${t(lang, "email_date")} : ${dateLabel}\n${t(lang, "email_type")} : ${typeLabel}\n\n${t(lang, "email_body")}`
-    );
-    const mailtoLink = `mailto:brusselspinballmuseum@gmail.com?subject=${subject}&body=${body}`;
-    window.open(mailtoLink, "_blank");
-    setTimeout(() => { window.location.href = mailtoLink; }, 300);
+      const { error } = await supabase
+        .from("training_sessions")
+        .insert([{ date: sessionDate, name: playerName, email: playerEmail }]);
+      if (!error) {
+        setPlayerName("");
+        setPlayerEmail("");
+        setSessionDate("");
+        setSubmitMessage(lang === "fr" ? "Inscription confirmée !" : "Registration confirmed!");
+        setTimeout(() => setSubmitMessage(""), 3000);
+      } else {
+        setSubmitMessage(lang === "fr" ? "Erreur lors de l'inscription" : "Registration error");
+      }
+    } catch (err) {
+      setSubmitMessage(lang === "fr" ? "Erreur" : "Error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -368,468 +188,58 @@ export default function Home() {
 
       {/* Scan lines overlay */}
       <div
-        className="pointer-events-none fixed inset-0 z-50"
-        style={{
-          background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.13) 3px, rgba(0,0,0,0.13) 4px)",
-          mixBlendMode: "multiply",
-        }}
-      />
-      {/* Bruit CRT */}
-      <div
         className="pointer-events-none fixed inset-0"
         style={{
-          zIndex: 49,
-          opacity: 0.03,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundSize: "256px 256px",
+          backgroundImage: "repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)",
+          backgroundSize: "100% 2px",
+          zIndex: 1,
         }}
       />
 
-      {/* ── NAV ── */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3"
-        style={{
-          background: "#0a0a0f",
-          borderBottom: "2px solid #00f5ff",
-          boxShadow: "0 0 12px #00f5ff55",
-        }}
-      >
-        <img
-          src="/logo-bpm-transparent.png"
-          alt="Brussels Pinball Museum"
-          style={{ height: "40px", width: "auto", imageRendering: "auto", filter: "brightness(1.1)" }}
-        />
-        <div className="hidden md:flex gap-4 items-center">
-          {navItems.map((item) => (
-            <a
-              key={item.key}
-              href={`#${item.anchor}`}
-              style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "0.45rem",
-                color: item.anchor === "news" ? "#ffd700" : "#b06aff",
-                textDecoration: "none",
-                letterSpacing: "0.05em",
-                whiteSpace: "nowrap",
-                textShadow: item.anchor === "news" ? "0 0 8px #ffd70088" : "0 0 6px #b06aff66",
-              }}
-              className="hover:opacity-80 transition-opacity"
-            >
-              {item.anchor === "news" ? `\u2605 ${item.key}` : item.anchor === "halloffame" ? "HALL OF FAME" : item.key}
-            </a>
-          ))}
+      {/* Header */}
+      <header className="relative z-10 border-b border-cyan-500 border-opacity-30" style={{ background: "rgba(10,10,15,0.95)" }}>
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", letterSpacing: "0.1em" }}>
+            BUBBLE HOCKEY
+          </h1>
+          <LangSwitcher lang={lang} setLang={setLang} />
         </div>
+      </header>
 
-        {/* Bouton S'inscrire (desktop) + sélecteur langue + burger (mobile) */}
-        <div className="flex items-center gap-3">
-          {/* Sélecteur langue desktop */}
-          <div className="hidden md:flex">
-            <LangSwitcher lang={lang} setLang={setLang} />
-          </div>
-          <a href="#inscription" className="hidden md:block">
-            <button
-              style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "0.5rem",
-                background: "#ff2d55",
-                color: "#fff",
-                border: "2px solid #ff2d55",
-                padding: "8px 14px",
-                cursor: "pointer",
-                boxShadow: "0 0 10px #ff2d55",
-                letterSpacing: "0.05em",
-              }}
-              className="hover:bg-red-400 transition-colors active:scale-95"
-            >
-              {t(lang, "nav_inscrire")}
-            </button>
-          </a>
-          {/* Burger button mobile */}
-          <button
-            className="md:hidden flex flex-col justify-center items-center gap-1.5 p-2"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Menu"
-            style={{ background: "transparent", border: "none", cursor: "pointer" }}
-          >
-            <span style={{ display: "block", width: 22, height: 2, background: menuOpen ? "#ffd700" : "#00f5ff", transition: "all 0.2s", transform: menuOpen ? "rotate(45deg) translate(3px, 3px)" : "none" }} />
-            <span style={{ display: "block", width: 22, height: 2, background: menuOpen ? "#ffd700" : "#00f5ff", transition: "all 0.2s", opacity: menuOpen ? 0 : 1 }} />
-            <span style={{ display: "block", width: 22, height: 2, background: menuOpen ? "#ffd700" : "#00f5ff", transition: "all 0.2s", transform: menuOpen ? "rotate(-45deg) translate(3px, -3px)" : "none" }} />
-          </button>
-        </div>
-      </nav>
-
-      {/* Menu mobile deroulant */}
-      {menuOpen && (
-        <div
-          className="fixed top-[58px] left-0 right-0 z-40 md:hidden flex flex-col"
-          style={{ background: "#0a0a0f", borderBottom: "2px solid #00f5ff", boxShadow: "0 8px 24px #00f5ff22" }}
-        >
-          {navItems.map((item) => (
-            <a
-              key={item.key}
-              href={`#${item.anchor}`}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "0.55rem",
-                color: item.anchor === "news" ? "#ffd700" : "#b06aff",
-                textDecoration: "none",
-                letterSpacing: "0.1em",
-                padding: "14px 20px",
-                borderBottom: "1px solid #b06aff22",
-                display: "block",
-              }}
-            >
-              {item.anchor === "news" ? `\u2605 ${item.key}` : item.key}
-            </a>
-          ))}
-          {/* Sélecteur langue dans le burger */}
-          <LangSwitcherMobile lang={lang} setLang={setLang} onClose={() => setMenuOpen(false)} />
-          <a
-            href="#inscription"
-            onClick={() => setMenuOpen(false)}
-            style={{
-              fontFamily: "'Press Start 2P', cursive",
-              fontSize: "0.55rem",
-              background: "#ff2d55",
-              color: "#fff",
-              textDecoration: "none",
-              letterSpacing: "0.1em",
-              padding: "14px 20px",
-              display: "block",
-              textAlign: "center",
-            }}
-          >
-            ▶ {t(lang, "nav_inscrire")}
-          </a>
-        </div>
-      )}
-
-      {/* ── HERO ── */}
-      <section className="relative flex flex-col items-center justify-center pt-20 pb-6 overflow-hidden" style={{ minHeight: "auto" }}>
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,8,28,0.55) 0%, rgba(10,8,28,0.3) 50%, rgba(10,8,28,0.6) 100%)" }} />
-
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center">
-          <div>
-            <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.1 }}>
-              <div style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "clamp(1.4rem, 5vw, 3.4rem)",
-                lineHeight: 1.2,
-                color: "#ffffff",
-                textShadow: "-3px 0 #ff2d55, 3px 0 #00f5ff, 0 0 20px rgba(255,255,255,0.3)",
-                marginBottom: "0.2rem",
-                letterSpacing: "0.05em",
-              }}>{t(lang, "hero_title1")}</div>
-              <div style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "clamp(1.4rem, 5vw, 3.4rem)",
-                lineHeight: 1.2,
-                color: "#ffffff",
-                textShadow: "-3px 0 #ff2d55, 3px 0 #00f5ff, 0 0 20px rgba(255,255,255,0.3)",
-                marginBottom: "0.5rem",
-                letterSpacing: "0.05em",
-              }}>{t(lang, "hero_title2")}</div>
-              <div style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "clamp(0.8rem, 2.5vw, 1.6rem)",
-                color: "#ffd700",
-                textShadow: "0 0 16px #ffd700, 0 0 30px #ff8800",
-                letterSpacing: "0.12em",
-                marginBottom: "0.3rem",
-              }}>{t(lang, "hero_subtitle")}</div>
-              <div style={{
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "clamp(0.45rem, 1.2vw, 0.7rem)",
-                color: "#cc44ff",
-                letterSpacing: "0.35em",
-                marginBottom: "1.2rem",
-              }}>{t(lang, "hero_hosted")}</div>
-            </motion.div>
-
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-              style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 1.9, maxWidth: "500px", margin: "0 auto 1.5rem" }}
-            >
-              {t(lang, "hero_desc1")}{" "}
-              {t(lang, "hero_desc2")}{" "}
-              <span style={{ color: "#ffd700" }}>{t(lang, "hero_finale")}</span>
-            </motion.p>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
-              className="flex flex-wrap gap-3 justify-center mb-4"
-            >
-              <a href="#inscription">
-                <button style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", background: "#ff2d55", color: "#fff", border: "3px solid #ff2d55", padding: "12px 20px", cursor: "pointer", boxShadow: "0 0 14px #ff2d55, 4px 4px 0 #8b0000", letterSpacing: "0.05em" }}
-                  className="hover:brightness-110 active:scale-95 transition-all">
-                  {t(lang, "hero_btn_inscrire")}
-                </button>
-              </a>
-              <a href="#lejeu">
-                <button style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", background: "transparent", color: "#00f5ff", border: "3px solid #00f5ff", padding: "12px 20px", cursor: "pointer", boxShadow: "0 0 14px #00f5ff44, 4px 4px 0 #003344", letterSpacing: "0.05em" }}
-                  className="hover:bg-cyan-950 active:scale-95 transition-all">
-                  {t(lang, "hero_btn_lejeu")}
-                </button>
-              </a>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Barre inférieure : compteur + stats */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
-          className="relative z-10 mt-6 w-full max-w-3xl px-4"
-        >
-          <div style={{ border: "2px solid #ffd700", background: "#ffd70008", padding: "10px 16px", boxShadow: "0 0 12px #ffd70055" }}>
-            <div className="flex items-center justify-between flex-wrap gap-3">
-              <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.38rem", color: "#ffd700", letterSpacing: "0.12em", marginBottom: "4px" }}>{t(lang, "hero_places_label")}</div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.3rem)", color: placesRestantes <= 4 ? "#ff2d55" : "#ffd700", textShadow: `0 0 10px ${placesRestantes <= 4 ? "#ff2d55" : "#ffd700"}` }}>
-                  {placesRestantes} / {PLACES_TOTALES}
-                </div>
-              </div>
-              <div className="flex gap-1 flex-wrap justify-end">
-                {Array.from({ length: PLACES_TOTALES }).map((_, i) => (
-                  <div key={i} style={{ width: "12px", height: "12px", background: i < PLACES_PRISES ? "#303040" : "#ffd700", boxShadow: i < PLACES_PRISES ? "none" : "0 0 4px #ffd700" }} />
-                ))}
-              </div>
-            </div>
-          </div>
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 mt-3">
-            {[
-              { label: t(lang, "hero_stat1_label"), value: "10€" },
-              { label: t(lang, "hero_stat2_label"), value: "7€" },
-              { label: t(lang, "hero_stat3_label"), value: "12-13/09" },
-            ].map((stat, i) => (
-              <div key={i} className="text-center py-3" style={{ border: "2px solid #00f5ff22", background: "#00f5ff06" }}>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.8rem, 2vw, 1.4rem)", color: "#ffd700", textShadow: "0 0 8px #ffd700" }}>{stat.value}</div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: "#9090b0", marginTop: "4px" }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ── C'EST QUOI ── */}
-      <section id="lejeu" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(13,10,31,0.96) 50%, rgba(10,10,15,0.96) 100%)" }}>
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.04) 1px, transparent 1px)", backgroundSize: "32px 32px", zIndex: 0 }} />
-        <div className="max-w-5xl mx-auto">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-            {t(lang, "lejeu_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
+      {/* Main Content */}
+      <main className="relative z-10 max-w-5xl mx-auto px-4 py-12">
+        {/* Hero */}
+        <section className="text-center mb-16">
+          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.2rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.4 }}>
+            {lang === "fr" ? "ENTRAINEMENTS GRATUITS" : "FREE TRAINING"}
           </h2>
-          <div className="grid md:grid-cols-2 gap-10 items-start">
-            <div>
-              <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#d0d0e0", marginBottom: "1.5rem" }}>
-                {t(lang, "lejeu_p1")}
-              </p>
-              <p style={{ fontSize: "0.75rem", lineHeight: 2.2, color: "#d0d0e0", marginBottom: "2rem" }}>
-                {t(lang, "lejeu_p2")}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {([t(lang, "lejeu_tag1"), t(lang, "lejeu_tag2"), t(lang, "lejeu_tag3"), t(lang, "lejeu_tag4")] as string[]).map((tag) => (
-                  <span
-                    key={tag}
-                    style={{
-                      fontFamily: "'Press Start 2P', cursive",
-                      fontSize: "0.4rem",
-                      color: "#ffd700",
-                      border: "2px solid #ffd700",
-                      padding: "6px 10px",
-                      background: "#ffd70011",
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <PixelBorder color="#ff2d55">
-              <img
-                src={HERO_IMG}
-                alt="Bubble hockey"
-                className="w-full object-cover"
-                style={{ display: "block", imageRendering: "auto" }}
-              />
-            </PixelBorder>
-          </div>
-        </div>
-      </section>
+          <p style={{ fontSize: "0.8rem", color: "#b0b0c0", lineHeight: 2, marginBottom: "2rem" }}>
+            {lang === "fr"
+              ? "Chaque dimanche soir au Brussels Pinball Museum. Inscrivez-vous pour que nous sachions que vous venez."
+              : "Every Sunday evening at Brussels Pinball Museum. Sign up so we know you're coming."}
+          </p>
+        </section>
 
-      {/* ── TIMELINE ── */}
-      <section id="calendrier" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(10,16,32,0.96) 40%, rgba(16,10,10,0.96) 100%)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,45,85,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,85,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", zIndex: 0 }} />
-        <div className="max-w-5xl mx-auto">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "3rem", lineHeight: 1.6 }}>
-            {t(lang, "timeline_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
-          </h2>
-          <div className="space-y-6">
-            {timelineSteps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-              >
-                <PixelBorder color={step.color}>
-                  <div className="p-5 flex flex-col sm:flex-row gap-4 items-start" style={{ background: `${step.color}08` }}>
-                    <div className="flex-shrink-0 text-center" style={{ minWidth: "80px" }}>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1.8rem", color: step.color, textShadow: `0 0 12px ${step.color}` }}>
-                        {step.num}
-                      </div>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: step.color, marginTop: "4px", letterSpacing: "0.1em" }}>
-                        {step.badge}
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#9090b0", marginBottom: "4px", letterSpacing: "0.1em" }}>
-                        {step.label}
-                      </div>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.75rem", color: step.color, marginBottom: "8px", textShadow: `0 0 8px ${step.color}` }}>
-                        {step.title}
-                      </div>
-                      <p style={{ fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 2 }}>{step.desc}</p>
-                    </div>
-                  </div>
-                </PixelBorder>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+        {/* Calendrier avec compteur */}
+        <section className="mb-16">
+          <h3 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1.5rem", letterSpacing: "0.05em" }}>
+            {lang === "fr" ? "DIMANCHES DISPONIBLES" : "AVAILABLE SUNDAYS"}
+          </h3>
+          <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
+            {trainingDates.map((d) => {
+              const count = trainingSignups[d.key] || 0;
+              const confirmed = count >= 4;
+              const borderColor = confirmed ? "#ff2d55" : count > 0 ? "#ffa500" : "#00f5ff33";
+              const bgColor = confirmed ? "#ff2d5511" : count > 0 ? "rgba(255,165,0,0.08)" : "transparent";
+              const glowColor = confirmed ? "0 0 10px #ff2d5588" : count > 0 ? "0 0 8px #ffa50055" : "none";
 
-      {/* ── FORMAT SESSIONS ── */}
-      <section id="sessions" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(10,26,10,0.96) 50%, rgba(10,10,15,0.96) 100%)" }}>
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(0,255,136,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px", zIndex: 0 }} />
-        <div className="max-w-5xl mx-auto">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "3rem", lineHeight: 1.6 }}>
-            {t(lang, "sessions_title")}
-          </h2>
-          <div className="mb-6 flex flex-wrap gap-4 items-center">
-            <div className="flex items-center gap-2">
-              <span style={{ background: "#00f5ff", color: "#0a0a0f", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>{t(lang, "sessions_gratuit")}</span>
-              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "sessions_gratuit_desc")}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span style={{ background: "#ff2d55", color: "#fff", fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", padding: "4px 8px" }}>{t(lang, "sessions_payant")}</span>
-              <span style={{ fontSize: "0.65rem", color: "#d0d0e0" }}>{t(lang, "sessions_payant_desc")}</span>
-            </div>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-            {sessionSteps.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                style={{ height: "100%", display: "flex", flexDirection: "column" }}
-              >
-                <PixelBorder color={item.free ? "#00f5ff" : "#ff2d55"} className="flex flex-col flex-1 h-full">
-                  <div className="p-4 text-center" style={{ background: item.free ? "#00f5ff08" : "#ff2d5508", flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-                    <div style={{ fontSize: "2rem", marginBottom: "8px" }}>{item.icon}</div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", padding: "3px 8px", marginBottom: "8px", display: "inline-block", background: item.free ? "#00f5ff" : "#ff2d55", color: item.free ? "#0a0a0f" : "#fff" }}>
-                      {item.free ? t(lang, "sessions_gratuit") : t(lang, "sessions_payant")}
-                    </div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#ffd700", marginBottom: "6px" }}>{item.time}</div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: item.free ? "#00f5ff" : "#ff2d55", marginBottom: "8px", textShadow: `0 0 6px ${item.free ? "#00f5ff" : "#ff2d55"}` }}>{item.title}</div>
-                    <p style={{ fontSize: "0.6rem", color: "#c0c0d0", lineHeight: 1.8 }}>{item.desc}</p>
-                  </div>
-                </PixelBorder>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CALENDRIER DATES ── */}
-      <section id="calendrier-dates" className="py-16 px-4" style={{ position: "relative", background: "rgba(8,8,18,0.97)", borderTop: "2px solid #ffd70022", borderBottom: "2px solid #ffd70022" }}>
-        <div className="max-w-5xl mx-auto">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "0.75rem", lineHeight: 1.6 }}>
-            {t(lang, "calendrier_title")}
-          </h2>
-          <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ff2d55", letterSpacing: "0.2em", marginBottom: "1.5rem", marginTop: "0.5rem" }}>
-            {t(lang, "calendrier_subtitle")}
-          </div>
-          <div className="flex flex-wrap gap-6 mb-8">
-            <div className="flex items-start gap-3">
-              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ff2d55" }}>&#9201;</span>
-              <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>{t(lang, "calendrier_heure_label")}</div>
-                <div style={{ fontSize: "0.7rem" }}>
-                  <span style={{ color: "#00f5ff" }}>{lang === "fr" ? "Entrainement 19h-20h" : "Training 7-8 PM"}</span>
-                  <span style={{ color: "#d0d0e0" }}> | </span>
-                  <span style={{ color: "#ffd700" }}>{lang === "fr" ? "Qualifications 20h-21h" : "Qualifiers 8-9 PM"}</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#ffd700" }}>&#9679;</span>
-              <div>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#00f5ff", marginBottom: "4px" }}>{t(lang, "calendrier_lieu_label")}</div>
-                <a
-                  href="https://maps.google.com/?q=1501+chaussee+de+wavre+1160+Auderghem+Bruxelles"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ fontSize: "0.7rem", color: "#ffd700", textDecoration: "none" }}
-                  className="hover:underline"
-                >
-                  Brussels Pinball Museum<br />
-                  <span style={{ color: "#d0d0e0" }}>1501 chaussee de Wavre, 1160 Auderghem</span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-            {[...sessionDates, { date: "12-13/09", label: "GRANDE FINALE", key: "finale", isQualif: false, isFinale: true }].map((s, i) => {
-              const isFinale = (s as any).isFinale === true;
-              if (isFinale) {
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    <div
-                      className="text-center py-3 px-2 flex flex-col gap-2"
-                      style={{
-                        border: "2px solid #ff2d55",
-                        background: "#ff2d5511",
-                        boxShadow: "0 0 12px #ff2d5566",
-                        transition: "all 0.4s ease",
-                      }}
-                    >
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.5rem, 1.5vw, 0.75rem)", color: "#ff2d55", textShadow: "0 0 8px #ff2d55", lineHeight: 1.4 }}>
-                        {lang === "fr" ? "GRANDE\nFINALE" : "GRAND\nFINAL"}
-                      </div>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: "#ff2d55", letterSpacing: "0.05em" }}>
-                        {lang === "fr" ? "12-13 SEPT" : "SEPT 12-13"}
-                      </div>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.22rem", color: "#ff2d5599", letterSpacing: "0.05em" }}>2026</div>
-                    </div>
-                  </motion.div>
-                );
-              }
-              const count = heatVotes[s.key] || 0;
-              const voted = heatVoted[s.key] || false;
-              const isLastChance = s.date === "30/08";
-              const isQualifDay = s.isQualif;
-              // Les deux qualifs sont en jaune
-              const borderColor = isQualifDay ? "#ffd700" : getHeatBorder(count, maxHeat);
-              const bgColor = isQualifDay ? "#ffd70011" : getHeatColor(count, maxHeat);
-              const glowColor = isQualifDay ? "0 0 10px #ffd70066" : getHeatGlow(count, maxHeat);
-              const timeLabel = isQualifDay ? (lang === "fr" ? "19h-20h + 20h-21h" : "7-8 PM + 8-9 PM") : (lang === "fr" ? "19h-20h" : "7-8 PM");
-              const typeLabel = isQualifDay ? (lang === "fr" ? "ENTRAINEMENT + QUALIF" : "TRAINING + QUALIF") : t(lang, "calendrier_training");
-              const dateColor = isQualifDay ? "#ffd700" : "#ffd700";
               return (
                 <motion.div
-                  key={i}
+                  key={d.key}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: 0.05 }}
                 >
                   <div
                     className="text-center py-3 px-2 flex flex-col gap-2"
@@ -840,369 +250,39 @@ export default function Home() {
                       transition: "all 0.4s ease",
                     }}
                   >
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2vw, 1.3rem)", color: dateColor, textShadow: `0 0 8px ${dateColor}` }}>
-                      {s.date.split("/")[0]}
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.9rem", color: "#ffd700", textShadow: "0 0 6px #ffd700" }}>
+                      {d.date.split("/")[0]}
                     </div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.3rem", color: isLastChance ? "#ff2d55" : isQualifDay ? "#ffd700" : "#606080", letterSpacing: "0.05em" }}>
-                      {typeLabel}
+                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.25rem", color: confirmed ? "#ff2d55" : "#606080", letterSpacing: "0.05em" }}>
+                      {confirmed ? "✓ GO" : `${count}/4`}
                     </div>
-                    {isQualifDay ? (
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.22rem", color: "#ffd70099", letterSpacing: "0.05em", lineHeight: "1.6" }}>
-                        <span style={{ color: "#00f5ff99" }}>{lang === "fr" ? "19h-20h" : "7-8 PM"}</span><br />
-                        <span style={{ color: "#ffd70099" }}>{lang === "fr" ? "20h-21h" : "8-9 PM"}</span>
-                      </div>
-                    ) : (
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.28rem", color: "#404060", letterSpacing: "0.05em" }}>
-                        {timeLabel}
-                      </div>
-                    )}
-                    {count > 0 && (
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: isLastChance ? "#ff2d55" : "#00f5ff" }}>
-                        {count} {count === 1 ? t(lang, "calendrier_equipe") : t(lang, "calendrier_equipes")}
-                      </div>
-                    )}
-                    <button
-                      onClick={() => handleHeatVote(s.key)}
-                      disabled={voted}
-                      style={{
-                        fontFamily: "'Press Start 2P', cursive",
-                        fontSize: "0.3rem",
-                        padding: "4px 6px",
-                        border: voted ? "1px solid #404060" : "1px solid #00f5ff",
-                        background: voted ? "#ffffff0a" : "#00f5ff11",
-                        color: voted ? "#404060" : "#00f5ff",
-                        cursor: voted ? "default" : "pointer",
-                        transition: "all 0.2s",
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      {voted ? t(lang, "calendrier_vote_done") : t(lang, "calendrier_vote_btn")}
-                    </button>
                   </div>
                 </motion.div>
               );
             })}
           </div>
-
-        </div>
-      </section>
-
-      {/* ── QUALIFICATION ── */}
-      <section className="py-20 px-4" style={{ background: "rgba(8,8,18,0.99)", borderTop: "2px solid #ff2d5533", borderBottom: "2px solid #ff2d5533" }}>
-        <div className="max-w-5xl mx-auto">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 12px #ff2d55", marginBottom: "3rem", lineHeight: 1.6 }}>
-            {t(lang, "qualif_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
-          </h2>
-          <p style={{ fontSize: "0.7rem", color: "#d0d0e0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            {t(lang, "qualif_desc")}
+          <p style={{ fontSize: "0.6rem", color: "#9090b0", marginTop: "1rem", textAlign: "center" }}>
+            {lang === "fr" ? "À partir de 4 inscrits, la session est confirmée" : "Session confirmed with 4+ registrations"}
           </p>
-          <div className="grid md:grid-cols-2 gap-6 mb-10">
-            {[
-              { icon: "🏆", title: t(lang, "qualif_card1_title"), desc: t(lang, "qualif_card1_desc"), color: "#ffd700" },
-              { icon: "🔄", title: t(lang, "qualif_card2_title"), desc: t(lang, "qualif_card2_desc"), color: "#00f5ff" },
-              { icon: "⚡", title: t(lang, "qualif_card3_title"), desc: t(lang, "qualif_card3_desc"), color: "#ff2d55" },
-              { icon: "🏖️", title: t(lang, "qualif_card4_title"), desc: t(lang, "qualif_card4_desc"), color: "#ffd700" },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <PixelBorder color={item.color}>
-                  <div className="p-5 flex gap-4 items-start" style={{ background: `${item.color}08` }}>
-                    <span style={{ fontSize: "1.8rem" }}>{item.icon}</span>
-                    <div>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: item.color, marginBottom: "8px", textShadow: `0 0 8px ${item.color}` }}>
-                        {item.title}
-                      </div>
-                      <p style={{ fontSize: "0.65rem", color: "#d0d0e0", lineHeight: 2 }}>{item.desc}</p>
-                    </div>
-                  </div>
-                </PixelBorder>
-              </motion.div>
-            ))}
-          </div>
+        </section>
 
-          <PixelBorder color="#ffd700">
-            <div className="p-6" style={{ background: "#ffd70008" }}>
-              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#ffd700", marginBottom: "1rem", letterSpacing: "0.15em" }}>
-                {t(lang, "qualif_bareme")}
-              </div>
-              <div className="flex flex-wrap gap-4">
-                {[
-                  { label: t(lang, "qualif_victoire"), pts: "3 PTS", color: "#ffd700" },
-                  { label: t(lang, "qualif_egalite"), pts: "1 PT", color: "#00f5ff" },
-                  { label: t(lang, "qualif_defaite"), pts: "0 PT", color: "#9090b0" },
-                ].map((r) => (
-                  <div key={r.label} className="flex items-center gap-3">
-                    <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#d0d0e0" }}>{r.label}</span>
-                    <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: r.color, textShadow: `0 0 8px ${r.color}`, background: `${r.color}22`, padding: "4px 10px", border: `2px solid ${r.color}` }}>
-                      {r.pts}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </PixelBorder>
-        </div>
-      </section>
-
-      {/* ── FORMAT FINALE ── */}
-      <section className="py-20 px-4" style={{ background: "rgba(8,8,18,0.99)", borderTop: "2px solid #ffd70022" }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ffd700", textShadow: "0 0 12px #ffd700", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-                {t(lang, "finale_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
-              </h2>
+        {/* Formulaire d'inscription */}
+        <section>
+          <h3 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "1.5rem", letterSpacing: "0.05em" }}>
+            {lang === "fr" ? "S'INSCRIRE" : "SIGN UP"}
+          </h3>
+          <PixelBorder color="#00f5ff">
+            <div className="p-6" style={{ background: "#00f5ff08" }}>
               <div className="space-y-4">
-                {[
-                  { num: "01", title: t(lang, "finale_step1_title"), desc: t(lang, "finale_step1_desc") },
-                  { num: "02", title: t(lang, "finale_step2_title"), desc: t(lang, "finale_step2_desc") },
-                  { num: "03", title: t(lang, "finale_step3_title"), desc: t(lang, "finale_step3_desc") },
-                  { num: "04", title: t(lang, "finale_step4_title"), desc: t(lang, "finale_step4_desc") },
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-4 items-start">
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1.2rem", color: "#ff2d55", textShadow: "0 0 10px #ff2d55", minWidth: "40px" }}>
-                      {item.num}
-                    </div>
-                    <div>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.55rem", color: "#00f5ff", marginBottom: "4px" }}>{item.title}</div>
-                      <p style={{ fontSize: "0.65rem", color: "#c0c0d0", lineHeight: 2 }}>{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col items-center gap-6">
-              <PixelBorder color="#ffd700">
-                <img src={TROPHY_IMG} alt="Trophy" className="w-full max-w-xs" style={{ imageRendering: "pixelated" }} />
-              </PixelBorder>
-              <div className="text-center">
-                <BlinkText>
-                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: "#ffd700", textShadow: "0 0 10px #ffd700" }}>
-                    {t(lang, "finale_champion")}
-                  </div>
-                </BlinkText>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── HALL OF FAME ── */}
-      <section id="halloffame" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(135deg, rgba(10,10,15,0.96) 0%, rgba(26,15,0,0.96) 50%, rgba(10,10,15,0.96) 100%)", borderTop: "2px solid #ffd70033", borderBottom: "2px solid #ffd70033" }}>
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, rgba(255,215,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px", zIndex: 0 }} />
-        <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 3vw, 2rem)", color: "#ffd700", textShadow: "0 0 20px #ffd700, 0 0 40px #ffd70055", marginBottom: "0.5rem" }}>
-            {t(lang, "hof_title")}
-          </h2>
-          <p style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.8rem", color: "#888", marginBottom: "3rem" }}>
-            {t(lang, "hof_subtitle")}
-          </p>
-
-          {qualifiedTeams.length === 0 && (
-            <div style={{ border: "2px solid #ffd70033", background: "#ffd70008", padding: "3rem 2rem", textAlign: "center", marginBottom: "2rem" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1.5rem", filter: "grayscale(0.3)" }}>🏆</div>
-              <BlinkText>
-                <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: "#ffd700", letterSpacing: "0.15em", textShadow: "0 0 10px #ffd700" }}>
-                  {t(lang, "hof_empty")}
-                </div>
-              </BlinkText>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "1.5rem" }}>
-                {t(lang, "hof_empty_date")}
-              </div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.75rem", color: "#555", marginTop: "0.5rem" }}>
-                {t(lang, "hof_empty_rythme")}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {Array.from({ length: 16 }).map((_, i) => {
-              const team = qualifiedTeams.find((t2) => t2.slot === i + 1);
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.04 }}
-                  style={{
-                    border: team ? "2px solid #ffd700" : "2px solid #ffd70022",
-                    background: team ? "#ffd70014" : "#ffd70006",
-                    padding: "12px 8px",
-                    textAlign: "center",
-                    position: "relative",
-                    boxShadow: team ? "0 0 8px #ffd70055" : "none",
-                    transition: "all 0.3s",
-                  }}
-                >
-                  <div style={{ position: "absolute", top: -2, left: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
-                  <div style={{ position: "absolute", top: -2, right: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
-                  <div style={{ position: "absolute", bottom: -2, left: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
-                  <div style={{ position: "absolute", bottom: -2, right: -2, width: 6, height: 6, background: team ? "#ffd700" : "#ffd70033" }} />
-                  <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.35rem", color: team ? "#ffd70099" : "#ffd70044", marginBottom: "6px" }}>{t(lang, "hof_slot")} {String(i + 1).padStart(2, "0")}</div>
-                  {team ? (
-                    <>
-                      <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem", color: "#ffd700", textShadow: "0 0 6px #ffd700", lineHeight: 1.6, wordBreak: "break-word" }}>{team.name}</div>
-                      <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.5rem", color: "#888", marginTop: "4px" }}>{t(lang, "hof_qualified_on")} {team.date}</div>
-                    </>
-                  ) : (
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#2a2a3a" }}>???</div>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
-
-          <div className="mt-6 text-center">
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.7rem", color: "#444" }}>
-              {qualifiedTeams.length} / 16 {t(lang, "hof_places")}{qualifiedTeams.length < 16 ? ` · ${t(lang, "hof_next")}` : ` · ${t(lang, "hof_full")}`}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section id="faq" className="py-20 px-4" style={{ background: "rgba(13,13,26,0.96)", borderTop: "2px solid #00f5ff22" }}>
-        <div className="max-w-3xl mx-auto">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(0.9rem, 2.5vw, 1.5rem)", color: "#00f5ff", textShadow: "0 0 12px #00f5ff", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-            {t(lang, "faq_title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
-          </h2>
-          <div className="space-y-4">
-            {faqItems.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-              >
-                <PixelBorder color={openFaq === i ? "#ffd700" : "#00f5ff44"}>
-                  <button
-                    className="w-full text-left p-5 flex items-start justify-between gap-4"
-                    style={{ background: openFaq === i ? "#ffd70008" : "transparent", cursor: "pointer" }}
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  >
-                    <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: openFaq === i ? "#ffd700" : "#00f5ff", lineHeight: 2 }}>
-                      {item.q}
-                    </span>
-                    <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.7rem", color: "#ffd700", flexShrink: 0 }}>
-                      {openFaq === i ? "▲" : "▼"}
-                    </span>
-                  </button>
-                  {openFaq === i && (
-                    <div className="px-5 pb-5" style={{ fontSize: "0.65rem", color: "#d0d0e0", lineHeight: 2.2, borderTop: "1px solid #ffd70033", paddingTop: "12px" }}>
-                      {item.a}
-                    </div>
-                  )}
-                </PixelBorder>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── INSCRIPTION ── */}
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION SPONSORS
-      ═══════════════════════════════════════════════════════════════ */}
-      <section id="sponsors" className="py-20 px-4" style={{
-        position: "relative",
-        background: "linear-gradient(135deg, rgba(8,8,18,0.99) 0%, rgba(10,10,28,0.99) 50%, rgba(8,8,18,0.99) 100%)",
-        borderTop: "2px solid #ffd70033",
-        borderBottom: "2px solid #ffd70033",
-      }}>
-        <div className="max-w-4xl mx-auto">
-          {/* Titre section */}
-          <div className="text-center mb-14">
-            <div className="inline-block px-4 py-1 mb-4 text-xs tracking-widest font-bold" style={{ background: "rgba(255,215,0,0.08)", border: "1px solid #ffd70044", color: "#ffd700", fontFamily: "'Press Start 2P', monospace" }}>
-              ★ PARTENAIRES ★
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-3" style={{ color: "#fff", fontFamily: "'Press Start 2P', monospace", fontSize: "clamp(1.4rem, 4vw, 2.5rem)" }}>
-              {t(lang, "sponsors_title")}
-            </h2>
-            <p className="text-sm" style={{ color: "#888", letterSpacing: "0.05em" }}>{t(lang, "sponsors_subtitle")}</p>
-          </div>
-
-          {/* Sponsors principaux */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
-
-            {/* Brasserie de la Senne */}
-            <a href="https://www.brasseriedelasenne.be/" target="_blank" rel="noopener noreferrer"
-              className="group block rounded-lg p-8 transition-all duration-300"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,215,0,0.15)", textDecoration: "none" }}
-            >
-              <div className="flex flex-col items-center text-center gap-5">
-                <div className="rounded-full overflow-hidden flex items-center justify-center" style={{ width: 140, height: 140, background: "#000", flexShrink: 0 }}>
-                  <img src="/logo-senne.png" alt="Brasserie de la Senne" style={{ width: 130, height: 130, objectFit: "contain" }} />
-                </div>
                 <div>
-                  <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#ffd700" }}>BIÈRE OFFICIELLE</div>
-                  <h3 className="text-xl font-black mb-3" style={{ color: "#fff" }}>Brasserie de la Senne</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#aaa" }}>{t(lang, "sponsors_senne_desc")}</p>
-                </div>
-              </div>
-            </a>
-
-            {/* ICE - Innovative Concepts in Entertainment */}
-            <a href="https://bubblehockey.com/" target="_blank" rel="noopener noreferrer"
-              className="group block rounded-lg p-8 transition-all duration-300"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,200,255,0.15)", textDecoration: "none" }}
-            >
-              <div className="flex flex-col items-center text-center gap-5">
-                <div className="flex items-center justify-center" style={{ width: 220, height: 150, flexShrink: 0 }}>
-                  <img src="/logo-superchexx-badge.png" alt="ICE Super Chexx Pro" style={{ width: 220, height: 150, objectFit: "contain", borderRadius: "8px" }} />
-                </div>
-                <div>
-                  <div className="text-xs font-bold tracking-widest mb-1" style={{ color: "#00c8ff" }}>MACHINE OFFICIELLE</div>
-                  <h3 className="text-xl font-black mb-3" style={{ color: "#fff" }}>ICE Super Chexx Pro</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#aaa" }}>{t(lang, "sponsors_ice_desc")}</p>
-                </div>
-              </div>
-            </a>
-          </div>
-
-          {/* Devenir sponsor */}
-          <div className="text-center rounded-lg py-10 px-6" style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed rgba(255,255,255,0.1)" }}>
-            <p className="text-xs tracking-widest mb-2" style={{ color: "#666" }}>VOUS AUSSI ?</p>
-            <h3 className="text-2xl font-black mb-3" style={{ color: "#fff", fontFamily: "'Press Start 2P', monospace", fontSize: "clamp(1rem, 3vw, 1.4rem)" }}>{t(lang, "sponsors_become")}</h3>
-            <p className="text-sm mb-6" style={{ color: "#888" }}>{t(lang, "sponsors_become_desc")}</p>
-            <a href="mailto:brusselspinballmuseum@gmail.com?subject=Sponsoring Bubble Hockey Summer Qualifiers 2026"
-              className="inline-block px-8 py-3 font-bold text-sm tracking-widest transition-all duration-200"
-              style={{ background: "transparent", border: "2px solid #ffd700", color: "#ffd700", fontFamily: "'Press Start 2P', monospace", fontSize: "0.65rem" }}
-            >
-              {t(lang, "sponsors_contact")} →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section id="inscription" className="py-20 px-4" style={{ position: "relative", background: "linear-gradient(180deg, rgba(10,10,15,0.96) 0%, rgba(26,10,15,0.96) 60%, rgba(10,10,15,0.96) 100%)" }}>
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px)", backgroundSize: "36px 36px", zIndex: 0 }} />
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1rem, 3vw, 1.8rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.6 }}>
-            {t(lang, "inscription_title")}
-          </h2>
-          <p style={{ fontSize: "0.7rem", color: "#c0c0d0", lineHeight: 2.2, marginBottom: "2.5rem" }}>
-            {t(lang, "inscription_desc").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
-          </p>
-
-          <PixelBorder color="#ff2d55">
-            <div className="p-8 text-left" style={{ background: "#ff2d5508" }}>
-              <div className="grid sm:grid-cols-2 gap-5 mb-5">
-                <div>
-                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                    {t(lang, "inscription_label_team")}
+                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "6px", letterSpacing: "0.05em" }}>
+                    {lang === "fr" ? "NOM" : "NAME"}
                   </label>
                   <input
                     type="text"
-                    value={teamName}
-                    onChange={(e) => setTeamName(e.target.value)}
-                    placeholder={t(lang, "inscription_placeholder_team")}
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    placeholder={lang === "fr" ? "Votre nom" : "Your name"}
                     style={{
                       width: "100%",
                       background: "#00000080",
@@ -1218,9 +298,10 @@ export default function Home() {
                     onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
                   />
                 </div>
+
                 <div>
-                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                    {t(lang, "inscription_label_email")}
+                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "6px", letterSpacing: "0.05em" }}>
+                    EMAIL
                   </label>
                   <input
                     type="email"
@@ -1242,165 +323,89 @@ export default function Home() {
                     onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
                   />
                 </div>
-              </div>
-              <div className="mb-5">
-                <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                  {t(lang, "inscription_label_date")}
-                </label>
-                <select
-                  value={sessionDate}
-                  onChange={(e) => setSessionDate(e.target.value)}
-                  style={{
-                    width: "100%",
-                    background: "#00000080",
-                    border: "2px solid #00f5ff44",
-                    color: sessionDate ? "#e0e0e0" : "#606080",
-                    padding: "10px 12px",
-                    fontFamily: "'Space Mono', monospace",
-                    fontSize: "0.7rem",
-                    outline: "none",
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
-                  onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
-                >
-                  <option value="" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_date_placeholder")}</option>
-                  <option value="Dimanche 5 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul5")}</option>
-                  <option value="Dimanche 12 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul12")}</option>
-                  <option value="Dimanche 19 juillet" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul19")}</option>
-                  <option value="Dimanche 26 juillet (QUALIFICATION)" style={{ background: "#0a0a1f" }}>{t(lang, "date_jul26")}</option>
-                  <option value="Dimanche 2 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug2")}</option>
-                  <option value="Dimanche 9 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug9")}</option>
-                  <option value="Dimanche 16 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug16")}</option>
-                  <option value="Dimanche 23 aout" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug23")}</option>
-                  <option value="Dimanche 30 aout (QUALIFICATION)" style={{ background: "#0a0a1f" }}>{t(lang, "date_aug30_opt")}</option>
-                </select>
-              </div>
-              <div className="mb-6">
-                <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "8px", letterSpacing: "0.1em" }}>
-                  {t(lang, "inscription_label_type")}
-                </label>
-                <select
-                  value={sessionType}
-                  onChange={(e) => setSessionType(e.target.value)}
-                  style={{
-                    width: "100%",
-                    background: "#00000080",
-                    border: "2px solid #00f5ff44",
-                    color: "#e0e0e0",
-                    padding: "10px 12px",
-                    fontFamily: "'Space Mono', monospace",
-                    fontSize: "0.7rem",
-                    outline: "none",
-                  }}
-                >
-                  <option value="qualification_jul26" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_qualif")}</option>
-                  <option value="qualification_aug30" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_qualif2")}</option>
-                  <option value="entrainement" style={{ background: "#0a0a1f" }}>{t(lang, "inscription_type_deco")}</option>
-                </select>
-              </div>
-              {/* Case à cocher règles */}
-              <div
-                className="mb-5"
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "12px",
-                  background: rulesAccepted ? "#00f5ff08" : "#ff2d5508",
-                  border: `2px solid ${rulesAccepted ? "#00f5ff44" : "#ff2d5544"}`,
-                  padding: "12px 14px",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-                onClick={() => setRulesAccepted(!rulesAccepted)}
-              >
-                <div
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    minWidth: "18px",
-                    border: `2px solid ${rulesAccepted ? "#00f5ff" : "#ff2d55"}`,
-                    background: rulesAccepted ? "#00f5ff" : "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginTop: "2px",
-                    transition: "all 0.15s",
-                  }}
-                >
-                  {rulesAccepted && (
-                    <span style={{ color: "#0a0a0f", fontSize: "12px", fontWeight: "bold", lineHeight: 1 }}>✓</span>
-                  )}
-                </div>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.6rem", color: rulesAccepted ? "#a0a0c0" : "#808090", lineHeight: 1.8 }}>
-                  {t(lang, "inscription_rules")}{" "}
-                  <a
-                    href="#faq"
-                    onClick={(e) => e.stopPropagation()}
-                    style={{ color: "#00f5ff", textDecoration: "underline" }}
-                  >
-                    {t(lang, "inscription_rules_link")}
-                  </a>
-                  {" "}{t(lang, "inscription_rules_after")}
-                </span>
-              </div>
 
-              <button
-                onClick={handleSubmit}
-                disabled={!rulesAccepted}
-                style={{
-                  width: "100%",
-                  fontFamily: "'Press Start 2P', cursive",
-                  fontSize: "0.6rem",
-                  background: rulesAccepted ? "#ff2d55" : "#3a1a22",
-                  color: rulesAccepted ? "#fff" : "#604050",
-                  border: `3px solid ${rulesAccepted ? "#ff2d55" : "#3a1a22"}`,
-                  padding: "14px",
-                  cursor: rulesAccepted ? "pointer" : "not-allowed",
-                  boxShadow: rulesAccepted ? "0 0 16px #ff2d55, 4px 4px 0 #8b0000" : "none",
-                  letterSpacing: "0.05em",
-                  transition: "all 0.2s",
-                }}
-                className="active:scale-95 transition-all"
-              >
-                {t(lang, "inscription_btn")}
-              </button>
-              <p style={{ fontSize: "0.55rem", color: "#9090b0", textAlign: "center", marginTop: "12px", lineHeight: 1.8 }}>
-                {t(lang, "inscription_note")}
-              </p>
+                <div>
+                  <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "6px", letterSpacing: "0.05em" }}>
+                    {lang === "fr" ? "DIMANCHE" : "SUNDAY"}
+                  </label>
+                  <select
+                    value={sessionDate}
+                    onChange={(e) => setSessionDate(e.target.value)}
+                    style={{
+                      width: "100%",
+                      background: "#00000080",
+                      border: "2px solid #00f5ff44",
+                      color: sessionDate ? "#e0e0e0" : "#606080",
+                      padding: "10px 12px",
+                      fontFamily: "'Space Mono', monospace",
+                      fontSize: "0.7rem",
+                      outline: "none",
+                    }}
+                    onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
+                    onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
+                  >
+                    <option value="" style={{ background: "#0a0a1f" }}>
+                      {lang === "fr" ? "Choisir une date" : "Choose a date"}
+                    </option>
+                    {trainingDates.map((d) => (
+                      <option key={d.key} value={d.label} style={{ background: "#0a0a1f" }}>
+                        {d.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  style={{
+                    width: "100%",
+                    fontFamily: "'Press Start 2P', cursive",
+                    fontSize: "0.6rem",
+                    background: "#ff2d55",
+                    color: "#fff",
+                    border: "3px solid #ff2d55",
+                    padding: "12px",
+                    cursor: isSubmitting ? "not-allowed" : "pointer",
+                    boxShadow: "0 0 16px #ff2d55, 4px 4px 0 #8b0000",
+                    letterSpacing: "0.05em",
+                    transition: "all 0.2s",
+                    opacity: isSubmitting ? 0.6 : 1,
+                  }}
+                  className="active:scale-95"
+                >
+                  {isSubmitting ? (lang === "fr" ? "..." : "...") : (lang === "fr" ? "S'INSCRIRE" : "SIGN UP")}
+                </button>
+
+                {submitMessage && (
+                  <p style={{ fontSize: "0.6rem", color: submitMessage.includes("confirmée") || submitMessage.includes("confirmed") ? "#00f5ff" : "#ff2d55", textAlign: "center", marginTop: "8px" }}>
+                    {submitMessage}
+                  </p>
+                )}
+              </div>
             </div>
           </PixelBorder>
-        </div>
-      </section>
+        </section>
 
-      {/* ── FOOTER ── */}
-      <footer
-        className="py-10 px-4 text-center"
-        style={{ background: "#050508", borderTop: "2px solid #00f5ff33" }}
-      >
-        <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "0.5rem" }}>
-          {t(lang, "footer_title")}
-        </div>
-        <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#404060", marginBottom: "0.5rem" }}>
-          {t(lang, "footer_sub")}
-        </div>
-        <div style={{ fontSize: "0.6rem", color: "#404060", marginBottom: "1rem" }}>
-          {t(lang, "footer_addr")} &nbsp;|&nbsp; {t(lang, "footer_hours")}
-        </div>
-        <a
-          href="https://bubblehockey.be"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.65rem", color: "#9090b0" }}
-          className="hover:text-cyan-400 transition-colors"
-        >
-          bubblehockey.be
-        </a>
-        <div className="mt-6">
-          <span style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#303050" }}>
-            {t(lang, "footer_copy")}
-          </span>
-        </div>
-      </footer>
+        {/* Info Footer */}
+        <section className="mt-16 text-center" style={{ borderTop: "2px solid #ffd70033", paddingTop: "2rem" }}>
+          <p style={{ fontSize: "0.65rem", color: "#9090b0", lineHeight: 2 }}>
+            {lang === "fr" ? (
+              <>
+                <strong>Brussels Pinball Museum</strong><br />
+                1501 Chaussée de Wavre, 1160 Auderghem<br />
+                Dimanche 19h-20h (entraînement) + 20h-21h (qualification les 26/07 et 30/08)
+              </>
+            ) : (
+              <>
+                <strong>Brussels Pinball Museum</strong><br />
+                1501 Chaussée de Wavre, 1160 Auderghem<br />
+                Sunday 7-8 PM (training) + 8-9 PM (qualification on 7/26 and 8/30)
+              </>
+            )}
+          </p>
+        </section>
+      </main>
     </div>
   );
 }

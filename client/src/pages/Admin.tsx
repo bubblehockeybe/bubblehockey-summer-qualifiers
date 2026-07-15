@@ -140,6 +140,73 @@ function AccessDenied({ email, onLogout }: { email: string; onLogout: () => void
   );
 }
 
+// ── GESTION SESSIONS ENTRAINEMENT ────────────────────────────────────────────
+function TrainingSessionsManager() {
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSessions = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("training_sessions")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (!error) {
+      setSessions(data || []);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchSessions(); }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("training_sessions_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "training_sessions" }, () => {
+        fetchSessions();
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  const groupedByDate = sessions.reduce((acc: Record<string, any[]>, s: any) => {
+    if (!acc[s.date]) acc[s.date] = [];
+    acc[s.date].push(s);
+    return acc;
+  }, {});
+
+  return (
+    <div>
+      <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.8rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "1.5rem" }}>
+        INSCRIPTIONS ENTRAINEMENTS
+      </h2>
+      {loading ? (
+        <div style={{ color: "#606080" }}>Chargement...</div>
+      ) : Object.keys(groupedByDate).length === 0 ? (
+        <div style={{ color: "#606080", fontSize: "0.65rem" }}>Aucune inscription pour le moment</div>
+      ) : (
+        <div className="space-y-6">
+          {Object.entries(groupedByDate).map(([date, signups]) => (
+            <div key={date}>
+              <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.6rem", color: signups.length >= 4 ? "#ff2d55" : "#ffd700", marginBottom: "0.8rem" }}>
+                {date} ({signups.length}/4) {signups.length >= 4 && "✓ GO"}
+              </div>
+              <div className="space-y-2">
+                {(signups as any[]).map((s: any) => (
+                  <div key={s.id} style={{ fontSize: "0.6rem", color: "#c0c0d0", padding: "8px 12px", background: "#00f5ff08", border: "1px solid #00f5ff22" }}>
+                    <div>{s.name}</div>
+                    <div style={{ fontSize: "0.55rem", color: "#808090" }}>{s.email}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── GESTION EQUIPES (Supabase) ─────────────────────────────────────────────
 function TeamsManager() {
   const [teams, setTeams] = useState<QualifiedTeam[]>([]);
@@ -438,8 +505,11 @@ export default function Admin() {
         </div>
       </nav>
 
-      <div className="max-w-3xl mx-auto px-4 py-10">
-        <TeamsManager />
+      <div className="max-w-3xl mx-auto px-4 py-10 space-y-12">
+        <TrainingSessionsManager />
+        <div style={{ borderTop: "2px solid #ffd70033", paddingTop: "2rem" }}>
+          <TeamsManager />
+        </div>
       </div>
     </div>
   );
