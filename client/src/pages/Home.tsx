@@ -1,7 +1,7 @@
 /**
  * Bubble Hockey - Simple Training Interface
- * Design: Rétro Arcade 8-bit Néon
- * Fond noir #0a0a0f, cyan électrique #00f5ff, rouge arcade #ff2d55, jaune score #ffd700
+ * Design: Rétro Arcade 8-bit Néon + Hockey sur Glace
+ * Fond noir #0a0a0f avec bleus glacés, cyan électrique #00f5ff, rouge arcade #ff2d55, jaune score #ffd700
  * Press Start 2P pour titres, Space Mono pour corps
  * Compteur en direct des entraînements depuis Supabase
  */
@@ -34,24 +34,144 @@ function PixelBorder({ children, color = "#00f5ff", className = "" }: { children
   );
 }
 
-// Fond avec grille et étoiles pixel
+// Fond hockey sur glace animé avec effets néon arcade
 function PixelBackground() {
   return (
-    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
+    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0, overflow: "hidden" }}>
+      {/* Base glace sombre avec gradient bleu glacé */}
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: "radial-gradient(circle, rgba(0,245,255,0.05) 1px, transparent 1px)",
-        backgroundSize: "32px 32px",
-        opacity: 0.3,
+        background: "linear-gradient(135deg, #0a0a1f 0%, #0f1a3f 25%, #0a1f2e 50%, #0f1a3f 75%, #0a0a1f 100%)",
       }} />
+
+      {/* Texture de glace avec reflets lumineux */}
       <div style={{
         position: "absolute",
         inset: 0,
-        backgroundImage: "linear-gradient(0deg, rgba(0,245,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px)",
-        backgroundSize: "64px 64px",
-        opacity: 0.2,
+        backgroundImage: `
+          radial-gradient(circle at 20% 30%, rgba(0,245,255,0.12) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, rgba(100,200,255,0.08) 0%, transparent 50%),
+          radial-gradient(circle at 50% 50%, rgba(0,200,255,0.06) 0%, transparent 40%)
+        `,
+        opacity: 0.7,
       }} />
+
+      {/* Grille hockey (lignes de la patinoire) */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: `
+          linear-gradient(0deg, rgba(0,245,255,0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,245,255,0.1) 1px, transparent 1px)
+        `,
+        backgroundSize: "80px 80px",
+        opacity: 0.4,
+      }} />
+
+      {/* Ligne médiane (centre ice) - trait blanc/cyan animé */}
+      <div style={{
+        position: "absolute",
+        top: "50%",
+        left: 0,
+        right: 0,
+        height: "3px",
+        background: "linear-gradient(90deg, transparent 0%, rgba(0,245,255,0.5) 25%, rgba(0,245,255,0.8) 50%, rgba(0,245,255,0.5) 75%, transparent 100%)",
+        transform: "translateY(-50%)",
+        boxShadow: "0 0 20px rgba(0,245,255,0.6), 0 0 40px rgba(0,200,255,0.4), inset 0 0 10px rgba(255,255,255,0.2)",
+        animation: "centerLinePulse 3s ease-in-out infinite",
+      }} />
+
+      {/* Zones de but (coins bleus glacés) */}
+      <div style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "25%",
+        height: "100%",
+        background: "radial-gradient(ellipse at center, rgba(0,150,255,0.08) 0%, transparent 70%)",
+        boxShadow: "inset 0 0 80px rgba(0,200,255,0.15)",
+      }} />
+      <div style={{
+        position: "absolute",
+        top: 0,
+        right: 0,
+        width: "25%",
+        height: "100%",
+        background: "radial-gradient(ellipse at center, rgba(0,150,255,0.08) 0%, transparent 70%)",
+        boxShadow: "inset 0 0 80px rgba(0,200,255,0.15)",
+      }} />
+
+      {/* Traces de patins animées (mouvements fluides) */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        background: `
+          radial-gradient(ellipse 400px 120px at 30% 20%, rgba(0,245,255,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse 300px 100px at 70% 80%, rgba(100,200,255,0.05) 0%, transparent 60%),
+          radial-gradient(ellipse 350px 110px at 50% 40%, rgba(0,200,255,0.04) 0%, transparent 60%)
+        `,
+        animation: "drift 25s ease-in-out infinite",
+      }} />
+
+      {/* Effet néon pulsant (ambiance arcade hockey) */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(circle at 50% 50%, rgba(0,245,255,0.03) 0%, transparent 100%)",
+        animation: "neonPulse 4s ease-in-out infinite",
+      }} />
+
+      {/* Scan lines (effet CRT arcade) */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: "repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px)",
+        backgroundSize: "100% 2px",
+        opacity: 0.6,
+      }} />
+
+      {/* Animations */}
+      <style>{`
+        @keyframes drift {
+          0%, 100% {
+            opacity: 0.4;
+            transform: translateX(0) translateY(0);
+          }
+          25% {
+            opacity: 0.6;
+            transform: translateX(30px) translateY(-15px);
+          }
+          50% {
+            opacity: 0.5;
+            transform: translateX(-20px) translateY(10px);
+          }
+          75% {
+            opacity: 0.6;
+            transform: translateX(15px) translateY(-8px);
+          }
+        }
+        @keyframes neonPulse {
+          0%, 100% {
+            opacity: 0.03;
+            filter: blur(0px);
+          }
+          50% {
+            opacity: 0.1;
+            filter: blur(3px);
+          }
+        }
+        @keyframes centerLinePulse {
+          0%, 100% {
+            opacity: 0.6;
+            boxShadow: 0 0 20px rgba(0,245,255,0.6), 0 0 40px rgba(0,200,255,0.4), inset 0 0 10px rgba(255,255,255,0.2);
+          }
+          50% {
+            opacity: 1;
+            boxShadow: 0 0 30px rgba(0,245,255,0.8), 0 0 60px rgba(0,200,255,0.6), inset 0 0 15px rgba(255,255,255,0.3);
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -205,84 +325,82 @@ export default function Home() {
       {/* Header */}
       <header className="relative z-10 border-b border-cyan-500 border-opacity-30" style={{ background: "rgba(10,10,15,0.95)" }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <img src="/manus-storage/logo-bpm_36460586.webp" alt="Brussels Pinball Museum" style={{ height: "clamp(2rem, 6vw, 3.5rem)", width: "auto", objectFit: "contain" }} />
+          <div className="flex items-center gap-3">
+            <img src="/manus-storage/logo-bpm_36460586.webp" alt="Brussels Pinball Museum" style={{ height: "50px" }} />
+            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", letterSpacing: "0.05em", lineHeight: 1.2 }}>
+              BUBBLE<br />HOCKEY
+            </div>
+          </div>
           <LangSwitcher lang={lang} setLang={setLang} />
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 max-w-5xl mx-auto px-4 py-12">
-        {/* Hero */}
-        <section className="text-center mb-16">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.2rem, 4vw, 2.2rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55", marginBottom: "1rem", lineHeight: 1.4 }}>
-            {lang === "fr" ? "ENTRAINEMENTS GRATUITS" : "FREE TRAINING"}
-          </h2>
-          <p style={{ fontSize: "0.8rem", color: "#b0b0c0", lineHeight: 2, marginBottom: "2rem" }}>
+      {/* Main content */}
+      <main className="relative z-10 max-w-6xl mx-auto px-4 py-8">
+        {/* Hero section */}
+        <section className="text-center mb-12">
+          <h1 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55, 0 0 32px #ff2d55", marginBottom: "1rem", letterSpacing: "0.05em" }}>
+            {lang === "fr" ? "ENTRAÎNEMENTS GRATUITS" : "FREE TRAINING"}
+          </h1>
+          <p style={{ fontSize: "clamp(0.65rem, 2vw, 0.8rem)", color: "#b0b0d0", lineHeight: 1.6 }}>
             {lang === "fr"
               ? "Chaque dimanche soir au Brussels Pinball Museum. Inscrivez-vous pour que nous sachions que vous venez."
               : "Every Sunday evening at Brussels Pinball Museum. Sign up so we know you're coming."}
           </p>
         </section>
 
-        {/* Calendrier avec compteur */}
-        <section className="mb-16">
-          <h3 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1.5rem", letterSpacing: "0.05em" }}>
+        {/* Training dates section */}
+        <section className="mb-12">
+          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1.5rem", letterSpacing: "0.05em", textAlign: "center" }}>
             {lang === "fr" ? "DIMANCHES DISPONIBLES" : "AVAILABLE SUNDAYS"}
-          </h3>
-          <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
-            {trainingDates.map((d) => {
-              const count = trainingSignups[d.key] || 0;
-              const confirmed = count >= 4;
-              const borderColor = confirmed ? "#ff2d55" : count > 0 ? "#ffa500" : "#00f5ff33";
-              const bgColor = confirmed ? "#ff2d5511" : count > 0 ? "rgba(255,165,0,0.08)" : "transparent";
-              const glowColor = confirmed ? "0 0 10px #ff2d5588" : count > 0 ? "0 0 8px #ffa50055" : "none";
-
-              return (
-                <motion.div
-                  key={d.key}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.05 }}
-                >
-                  <div
-                    className="text-center py-3 px-2 flex flex-col gap-2"
-                    style={{
-                      border: `2px solid ${borderColor}`,
-                      background: bgColor,
-                      boxShadow: glowColor,
-                      transition: "all 0.4s ease",
-                    }}
-                  >
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.9rem", color: "#ffd700", textShadow: "0 0 6px #ffd700" }}>
-                      {d.date.split("/")[0]}
-                    </div>
-                    <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.25rem", color: confirmed ? "#ff2d55" : "#606080", letterSpacing: "0.05em" }}>
-                      {confirmed ? "✓ GO" : `${count}/4`}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+          </h2>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-1 sm:gap-2 mb-4">
+            {trainingDates.map((d) => (
+              <motion.button
+                key={d.key}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 20px #00f5ff" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSessionDate(d.label)}
+                style={{
+                  fontFamily: "'Press Start 2P', cursive",
+                  fontSize: "0.7rem",
+                  padding: "8px",
+                  background: sessionDate === d.label ? "#00f5ff22" : "transparent",
+                  border: `2px solid ${sessionDate === d.label ? "#00f5ff" : "#00f5ff44"}`,
+                  color: "#ffd700",
+                  cursor: "pointer",
+                  letterSpacing: "0.05em",
+                  transition: "all 0.2s",
+                  textAlign: "center",
+                }}
+              >
+                {d.date}
+                <div style={{ fontSize: "0.5rem", color: "#00f5ff", marginTop: "2px" }}>
+                  {trainingSignups[d.key] || 0}/4
+                </div>
+              </motion.button>
+            ))}
           </div>
-          <p style={{ fontSize: "0.6rem", color: "#9090b0", marginTop: "1rem", textAlign: "center" }}>
-            {lang === "fr" ? "À partir de 4 inscrits, la session est confirmée" : "Session confirmed with 4+ registrations"}
+          <p style={{ fontSize: "0.6rem", color: "#606080", textAlign: "center" }}>
+            {lang === "fr" ? "À partir de 4 inscrits, la session est confirmée" : "From 4 sign-ups, the session is confirmed"}
           </p>
         </section>
 
-        {/* Formulaire d'inscription */}
-        <section>
-          <h3 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "1.5rem", letterSpacing: "0.05em" }}>
+        {/* Registration section */}
+        <section className="mb-12">
+          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "1.5rem", letterSpacing: "0.05em", textAlign: "center" }}>
             {lang === "fr" ? "S'INSCRIRE" : "SIGN UP"}
-          </h3>
+          </h2>
+
           <PixelBorder color="#00f5ff">
-            <div className="p-6" style={{ background: "#00f5ff08" }}>
-              <div className="space-y-4">
+            <div style={{ padding: "1.5rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 <div>
                   <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "6px", letterSpacing: "0.05em" }}>
                     {lang === "fr" ? "NOM" : "NAME"}
                   </label>
-                  <input
+                  <motion.input
+                    whileFocus={{ boxShadow: "0 0 16px #00f5ff" }}
                     type="text"
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
@@ -292,11 +410,12 @@ export default function Home() {
                       background: "#00000080",
                       border: "2px solid #00f5ff44",
                       color: "#e0e0e0",
-                      padding: "10px 12px",
+                      padding: "clamp(8px, 2vw, 12px)",
                       fontFamily: "'Space Mono', monospace",
-                      fontSize: "0.7rem",
+                      fontSize: "clamp(0.65rem, 1.5vw, 0.7rem)",
                       outline: "none",
                       boxSizing: "border-box",
+                      transition: "all 0.2s",
                     }}
                     onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
                     onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
@@ -307,7 +426,8 @@ export default function Home() {
                   <label style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.4rem", color: "#00f5ff", display: "block", marginBottom: "6px", letterSpacing: "0.05em" }}>
                     EMAIL
                   </label>
-                  <input
+                  <motion.input
+                    whileFocus={{ boxShadow: "0 0 16px #00f5ff" }}
                     type="email"
                     value={playerEmail}
                     onChange={(e) => setPlayerEmail(e.target.value)}
@@ -317,11 +437,12 @@ export default function Home() {
                       background: "#00000080",
                       border: "2px solid #00f5ff44",
                       color: "#e0e0e0",
-                      padding: "10px 12px",
+                      padding: "clamp(8px, 2vw, 12px)",
                       fontFamily: "'Space Mono', monospace",
-                      fontSize: "0.7rem",
+                      fontSize: "clamp(0.65rem, 1.5vw, 0.7rem)",
                       outline: "none",
                       boxSizing: "border-box",
+                      transition: "all 0.2s",
                     }}
                     onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
                     onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
@@ -340,10 +461,11 @@ export default function Home() {
                       background: "#00000080",
                       border: "2px solid #00f5ff44",
                       color: sessionDate ? "#e0e0e0" : "#606080",
-                      padding: "10px 12px",
+                      padding: "clamp(8px, 2vw, 12px)",
                       fontFamily: "'Space Mono', monospace",
-                      fontSize: "0.7rem",
+                      fontSize: "clamp(0.65rem, 1.5vw, 0.7rem)",
                       outline: "none",
+                      transition: "all 0.2s",
                     }}
                     onFocus={(e) => (e.target.style.borderColor = "#00f5ff")}
                     onBlur={(e) => (e.target.style.borderColor = "#00f5ff44")}
@@ -359,9 +481,11 @@ export default function Home() {
                   </select>
                 </div>
 
-                <button
+                <motion.button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
+                  whileHover={{ scale: 1.02, boxShadow: "0 0 24px #ff2d55" }}
+                  whileTap={{ scale: 0.98 }}
                   style={{
                     width: "100%",
                     fontFamily: "'Press Start 2P', cursive",
@@ -379,25 +503,35 @@ export default function Home() {
                   className="active:scale-95"
                 >
                   {isSubmitting ? (lang === "fr" ? "..." : "...") : (lang === "fr" ? "S'INSCRIRE" : "SIGN UP")}
-                </button>
+                </motion.button>
 
                 {submitMessage && (
                   <div>
-                    <p style={{ fontSize: "0.6rem", color: submitMessage.includes("confirmée") || submitMessage.includes("confirmed") ? "#00f5ff" : "#ff2d55", textAlign: "center", marginTop: "8px" }}>
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      style={{ fontSize: "0.6rem", color: submitMessage.includes("confirmée") || submitMessage.includes("confirmed") ? "#00f5ff" : "#ff2d55", textAlign: "center", marginTop: "8px" }}
+                    >
                       {submitMessage}
-                    </p>
+                    </motion.p>
                     {showShareButtons && lastRegisteredDate && (
-                      <div style={{ marginTop: "12px", textAlign: "center" }}>
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        style={{ marginTop: "12px", textAlign: "center" }}
+                      >
                         <p style={{ fontSize: "0.5rem", color: "#00f5ff", marginBottom: "8px", fontFamily: "'Press Start 2P', cursive", letterSpacing: "0.05em" }}>
                           {lang === "fr" ? "PARTAGER MON INSCRIPTION" : "SHARE MY SIGNUP"}
                         </p>
                         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", flexWrap: "wrap" }}>
                           {/* Instagram Share */}
-                          <a
+                          <motion.a
+                            whileHover={{ scale: 1.15, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
                             href={`https://www.instagram.com/`}
                             onClick={(e) => {
                               e.preventDefault();
-                              const text = lang === "fr" 
+                              const text = lang === "fr"
                                 ? `Je me suis inscrit au Bubble Hockey le ${lastRegisteredDate} au Brussels Pinball Museum! Venez me rejoindre 🎮 bubblehockey.be`
                                 : `I signed up for Bubble Hockey on ${lastRegisteredDate} at Brussels Pinball Museum! Come join me 🎮 bubblehockey.be`;
                               window.open(`https://www.instagram.com/?text=${encodeURIComponent(text)}`, "_blank");
@@ -430,13 +564,15 @@ export default function Home() {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
                             </svg>
-                          </a>
+                          </motion.a>
                           {/* Facebook Share */}
-                          <a
+                          <motion.a
+                            whileHover={{ scale: 1.15, rotate: -5 }}
+                            whileTap={{ scale: 0.9 }}
                             href={`https://www.facebook.com/sharer/sharer.php?u=bubblehockey.be`}
                             onClick={(e) => {
                               e.preventDefault();
-                              const text = lang === "fr" 
+                              const text = lang === "fr"
                                 ? `Je me suis inscrit au Bubble Hockey le ${lastRegisteredDate} au Brussels Pinball Museum! Venez me rejoindre 🎮`
                                 : `I signed up for Bubble Hockey on ${lastRegisteredDate} at Brussels Pinball Museum! Come join me 🎮`;
                               window.open(`https://www.facebook.com/sharer/sharer.php?u=bubblehockey.be&quote=${encodeURIComponent(text)}`, "_blank");
@@ -469,13 +605,15 @@ export default function Home() {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                             </svg>
-                          </a>
+                          </motion.a>
                           {/* TikTok Share */}
-                          <a
+                          <motion.a
+                            whileHover={{ scale: 1.15, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
                             href={`https://www.tiktok.com/`}
                             onClick={(e) => {
                               e.preventDefault();
-                              const text = lang === "fr" 
+                              const text = lang === "fr"
                                 ? `Je me suis inscrit au Bubble Hockey le ${lastRegisteredDate} au Brussels Pinball Museum! Venez me rejoindre 🎮 bubblehockey.be`
                                 : `I signed up for Bubble Hockey on ${lastRegisteredDate} at Brussels Pinball Museum! Come join me 🎮 bubblehockey.be`;
                               window.open(`https://www.tiktok.com/?text=${encodeURIComponent(text)}`, "_blank");
@@ -508,9 +646,9 @@ export default function Home() {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                               <path d="M19.498 3.094c1.356-.027 2.463-.264 3.15-.804v2.905c-.584.403-1.282.692-2.022.887.912.85 1.453 2.118 1.453 3.511 0 5.027-4.065 9.09-9.09 9.09-5.027 0-9.1-4.063-9.1-9.09 0-4.795 3.708-8.776 8.409-8.944-.168-.556-.275-1.148-.275-1.764 0-2.792 2.258-5.05 5.05-5.05 1.995 0 3.73 1.163 4.596 2.857.822-.127 1.596-.38 2.309-.753-.27.847-.843 1.555-1.584 2.001.73-.087 1.427-.28 2.084-.567-.482.713-1.091 1.343-1.779 1.85zm-7.508 15.384c3.169 0 5.788-2.616 5.788-5.785 0-3.17-2.619-5.786-5.788-5.786-3.17 0-5.787 2.616-5.787 5.786 0 3.169 2.617 5.785 5.787 5.785z"/>
                             </svg>
-                          </a>
+                          </motion.a>
                         </div>
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                 )}
@@ -524,7 +662,7 @@ export default function Home() {
           <h3 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1.5rem", letterSpacing: "0.05em", textAlign: "center" }}>
             {lang === "fr" ? "INFOS PRATIQUES" : "PRACTICAL INFO"}
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Adresse et horaires */}
             <PixelBorder color="#ffd700">
@@ -545,14 +683,14 @@ export default function Home() {
                       1501 Chaussée de Wavre<br />
                       1160 Auderghem, Brussels<br /><br />
                       <strong style={{ color: "#00f5ff" }}>Hours</strong><br />
-                      Sunday 7-8 PM (training)<br />
-                      8-9 PM (qualification 7/26 & 8/30)
+                      Sunday 7pm-8pm (training)<br />
+                      8pm-9pm (qualification 26/07 & 30/08)
                     </>
                   )}
                 </p>
               </div>
             </PixelBorder>
-            
+
             {/* Google Maps */}
             <PixelBorder color="#ff2d55">
               <div style={{ background: "#ff2d5508", minHeight: "400px", padding: 0, display: "flex", flexDirection: "column" }}>
@@ -569,12 +707,12 @@ export default function Home() {
                         title: "Brussels Pinball Museum",
                         icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
                       });
-                      
+
                       // Info window au clic sur le marqueur
                       const infoWindow = new google.maps.InfoWindow({
                         content: `<div style="color: #000; font-weight: bold;">Brussels Pinball Museum<br/>1501 Chaussée de Wavre<br/>1160 Auderghem</div>`,
                       });
-                      
+
                       marker.addListener("click", () => {
                         infoWindow.open(map, marker);
                       });
@@ -586,16 +724,17 @@ export default function Home() {
               </div>
             </PixelBorder>
           </div>
-          
-          {/* Boutons de partage social */}
+
+          {/* Boutons de partage social (bas de page) */}
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
             <p style={{ fontSize: "0.6rem", color: "#00f5ff", marginBottom: "1rem", fontFamily: "'Press Start 2P', cursive", letterSpacing: "0.05em" }}>
               {lang === "fr" ? "PARTAGER" : "SHARE"}
             </p>
             <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/brusselspinballmuseum"
+              <motion.a
+                whileHover={{ scale: 1.2, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+                href="https://www.instagram.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Instagram"
@@ -611,22 +750,15 @@ export default function Home() {
                   transition: "all 0.2s",
                   borderRadius: "2px",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#ff2d5520";
-                  e.currentTarget.style.transform = "scale(1.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
                 </svg>
-              </a>
-              {/* Facebook */}
-              <a
-                href="https://www.facebook.com/brusselspinballmuseum"
+              </motion.a>
+              <motion.a
+                whileHover={{ scale: 1.2, rotate: -5 }}
+                whileTap={{ scale: 0.9 }}
+                href="https://www.facebook.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Facebook"
@@ -642,22 +774,15 @@ export default function Home() {
                   transition: "all 0.2s",
                   borderRadius: "2px",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#00f5ff20";
-                  e.currentTarget.style.transform = "scale(1.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-              </a>
-              {/* TikTok */}
-              <a
-                href="https://www.tiktok.com/@brusselspinballmuseum"
+              </motion.a>
+              <motion.a
+                whileHover={{ scale: 1.2, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+                href="https://www.tiktok.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="TikTok"
@@ -673,19 +798,11 @@ export default function Home() {
                   transition: "all 0.2s",
                   borderRadius: "2px",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#ffd70020";
-                  e.currentTarget.style.transform = "scale(1.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19.498 3.094c1.356-.027 2.463-.264 3.15-.804v2.905c-.584.403-1.282.692-2.022.887.912.85 1.453 2.118 1.453 3.511 0 5.027-4.065 9.09-9.09 9.09-5.027 0-9.1-4.063-9.1-9.09 0-4.795 3.708-8.776 8.409-8.944-.168-.556-.275-1.148-.275-1.764 0-2.792 2.258-5.05 5.05-5.05 1.995 0 3.73 1.163 4.596 2.857.822-.127 1.596-.38 2.309-.753-.27.847-.843 1.555-1.584 2.001.73-.087 1.427-.28 2.084-.567-.482.713-1.091 1.343-1.779 1.85zm-7.508 15.384c3.169 0 5.788-2.616 5.788-5.785 0-3.17-2.619-5.786-5.788-5.786-3.17 0-5.787 2.616-5.787 5.786 0 3.169 2.617 5.785 5.787 5.785z"/>
                 </svg>
-              </a>
+              </motion.a>
             </div>
           </div>
         </section>
