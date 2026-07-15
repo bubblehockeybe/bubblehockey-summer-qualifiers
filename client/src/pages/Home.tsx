@@ -176,6 +176,179 @@ function PixelBackground() {
   );
 }
 
+// Composant de célébration néon/pixel art
+function CelebrationOverlay({ show }: { show: boolean }) {
+  if (!show) return null;
+
+  return (
+    <div style={{
+      position: "fixed",
+      inset: 0,
+      zIndex: 100,
+      pointerEvents: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden",
+    }}>
+      {/* Fond semi-transparent avec effet néon */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(circle at 50% 50%, rgba(0,245,255,0.2) 0%, transparent 70%)",
+          backdropFilter: "blur(2px)",
+        }}
+      />
+
+      {/* Texte de célébration avec glow */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 100, damping: 15 }}
+        style={{
+          position: "relative",
+          zIndex: 10,
+          textAlign: "center",
+          fontFamily: "'Press Start 2P', cursive",
+          fontSize: "clamp(1.5rem, 5vw, 3rem)",
+          color: "#ffd700",
+          textShadow: "0 0 20px #ffd700, 0 0 40px #ff2d55, 0 0 60px #00f5ff",
+          letterSpacing: "0.1em",
+          lineHeight: 1.2,
+        }}
+      >
+        🎮 BRAVO! 🎮
+      </motion.div>
+
+      {/* Confettis néon */}
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{
+            x: 0,
+            y: 0,
+            opacity: 1,
+            rotate: 0,
+          }}
+          animate={{
+            x: (Math.random() - 0.5) * 400,
+            y: (Math.random() - 0.5) * 400,
+            opacity: 0,
+            rotate: Math.random() * 360,
+          }}
+          transition={{
+            duration: 1.5 + Math.random() * 0.5,
+            ease: "easeOut",
+            delay: Math.random() * 0.2,
+          }}
+          style={{
+            position: "absolute",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            background: [
+              "#00f5ff",
+              "#ff2d55",
+              "#ffd700",
+              "#00ff88",
+              "#ff00ff",
+            ][i % 5],
+            boxShadow: `0 0 10px ${[
+              "#00f5ff",
+              "#ff2d55",
+              "#ffd700",
+              "#00ff88",
+              "#ff00ff",
+            ][i % 5]}`,
+            top: "50%",
+            left: "50%",
+          }}
+        />
+      ))}
+
+      {/* Éclairs néon */}
+      {[...Array(5)].map((_, i) => (
+        <motion.div
+          key={`flash-${i}`}
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 0.3,
+            delay: i * 0.1,
+            repeat: 2,
+          }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            background: `radial-gradient(circle at ${Math.random() * 100}% ${Math.random() * 100}%, rgba(${[0, 245, 255][i % 3]}, ${[245, 200, 255][i % 3]}, 255, 0.3) 0%, transparent 50%)`,
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+
+      {/* Ligne horizontale animée */}
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        style={{
+          position: "absolute",
+          width: "80vw",
+          height: "2px",
+          background: "linear-gradient(90deg, transparent 0%, #00f5ff 25%, #ffd700 50%, #ff2d55 75%, transparent 100%)",
+          boxShadow: "0 0 20px #00f5ff, 0 0 40px #ffd700",
+          top: "50%",
+          transformOrigin: "center",
+        }}
+      />
+
+      {/* Ligne verticale animée */}
+      <motion.div
+        initial={{ scaleY: 0, opacity: 0 }}
+        animate={{ scaleY: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        style={{
+          position: "absolute",
+          width: "2px",
+          height: "80vh",
+          background: "linear-gradient(180deg, transparent 0%, #ff2d55 25%, #00f5ff 50%, #ffd700 75%, transparent 100%)",
+          boxShadow: "0 0 20px #ff2d55, 0 0 40px #00f5ff",
+          left: "50%",
+          transformOrigin: "center",
+        }}
+      />
+
+      {/* Texte supplémentaire */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        style={{
+          position: "absolute",
+          bottom: "20%",
+          fontFamily: "'Space Mono', monospace",
+          fontSize: "clamp(0.8rem, 2vw, 1.2rem)",
+          color: "#00f5ff",
+          textShadow: "0 0 10px #00f5ff",
+          textAlign: "center",
+          zIndex: 11,
+        }}
+      >
+        <div>INSCRIPTION CONFIRMÉE</div>
+        <div style={{ marginTop: "0.5rem", fontSize: "0.9em", color: "#ffd700" }}>À bientôt sur la glace!</div>
+      </motion.div>
+    </div>
+  );
+}
+
 // Sélecteur de langue
 function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
@@ -223,6 +396,7 @@ export default function Home() {
   const [submitMessage, setSubmitMessage] = useState("");
   const [showShareButtons, setShowShareButtons] = useState(false);
   const [lastRegisteredDate, setLastRegisteredDate] = useState("");
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Compteur en direct des entraînements
   const [trainingSignups, setTrainingSignups] = useState<Record<string, number>>({});
@@ -282,11 +456,15 @@ export default function Home() {
         .insert([{ date: sessionDate, name: playerName, email: playerEmail }]);
       if (!error) {
         setLastRegisteredDate(sessionDate);
+        setShowCelebration(true);
         setShowShareButtons(true);
         setPlayerName("");
         setPlayerEmail("");
         setSessionDate("");
         setSubmitMessage(lang === "fr" ? "Inscription confirmée !" : "Registration confirmed!");
+        setTimeout(() => {
+          setShowCelebration(false);
+        }, 2000);
         setTimeout(() => {
           setSubmitMessage("");
           setShowShareButtons(false);
@@ -311,6 +489,7 @@ export default function Home() {
       }}
     >
       <PixelBackground />
+      <CelebrationOverlay show={showCelebration} />
 
       {/* Scan lines overlay */}
       <div
