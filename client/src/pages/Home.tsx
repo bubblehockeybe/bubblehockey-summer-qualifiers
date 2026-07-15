@@ -106,8 +106,6 @@ export default function Home() {
 
   // Dates des entraînements
   const trainingDates = [
-    { date: "05/07", key: "5_july", label: lang === "fr" ? "5 juillet" : "July 5" },
-    { date: "12/07", key: "12_july", label: lang === "fr" ? "12 juillet" : "July 12" },
     { date: "19/07", key: "19_july", label: lang === "fr" ? "19 juillet" : "July 19" },
     { date: "26/07", key: "26_july", label: lang === "fr" ? "26 juillet" : "July 26" },
     { date: "02/08", key: "2_aug", label: lang === "fr" ? "2 août" : "Aug 2" },

@@ -20,7 +20,7 @@ export interface QualifiedTeam {
 
 
 const sessionDates = [
-  "5 juillet", "12 juillet", "19 juillet", "26 juillet",
+  "19 juillet", "26 juillet",
   "2 aout", "9 aout", "16 aout", "23 aout", "30 aout",
 ];
 
