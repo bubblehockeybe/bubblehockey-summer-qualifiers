@@ -515,9 +515,13 @@ export default function Home() {
       <main className="relative z-10 max-w-6xl mx-auto px-4 py-8">
         {/* Hero section */}
         <section className="text-center mb-12">
-          <h1 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55, 0 0 32px #ff2d55", marginBottom: "1rem", letterSpacing: "0.05em" }}>
-            {lang === "fr" ? "ENTRAÎNEMENTS GRATUITS" : "FREE TRAINING"}
-          </h1>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/hockey-stick-icon-77WzX2jciR6TkR7zBofe3y.webp" alt="Hockey" style={{ height: "clamp(2rem, 8vw, 3.5rem)", filter: "drop-shadow(0 0 10px #ff2d55) drop-shadow(0 0 20px #00f5ff)" }} />
+            <h1 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#ff2d55", textShadow: "0 0 16px #ff2d55, 0 0 32px #ff2d55, 0 0 48px #00f5ff", letterSpacing: "0.08em", fontWeight: 900, margin: 0 }}>
+              {lang === "fr" ? "ENTRAÎNEMENTS GRATUITS" : "FREE TRAINING"}
+            </h1>
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310419663031771759/Wc8SEqmDGnz6gpuB6cLXPf/hockey-stick-icon-77WzX2jciR6TkR7zBofe3y.webp" alt="Hockey" style={{ height: "clamp(2rem, 8vw, 3.5rem)", filter: "drop-shadow(0 0 10px #ff2d55) drop-shadow(0 0 20px #00f5ff)", transform: "scaleX(-1)" }} />
+          </div>
           <p style={{ fontSize: "clamp(0.65rem, 2vw, 0.8rem)", color: "#b0b0d0", lineHeight: 1.6 }}>
             {lang === "fr"
               ? "Chaque dimanche soir au Brussels Pinball Museum. Inscrivez-vous pour que nous sachions que vous venez."
@@ -527,9 +531,12 @@ export default function Home() {
 
         {/* Training dates section */}
         <section className="mb-12">
-          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1.5rem", letterSpacing: "0.05em", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#ffd700", textShadow: "0 0 8px #ffd700", marginBottom: "1rem", letterSpacing: "0.05em", textAlign: "center" }}>
             {lang === "fr" ? "DIMANCHES DISPONIBLES" : "AVAILABLE SUNDAYS"}
           </h2>
+          <p style={{ fontSize: "0.65rem", color: "#00f5ff", textAlign: "center", marginBottom: "1rem", fontStyle: "italic" }}>
+            {lang === "fr" ? "👇 Cliquez sur le dimanche qui vous intéresse pour vous inscrire 👇" : "👇 Click on the Sunday that interests you to sign up 👇"}
+          </p>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-1 sm:gap-2 mb-4">
             {trainingDates.map((d) => (
               <motion.button
@@ -557,7 +564,7 @@ export default function Home() {
               </motion.button>
             ))}
           </div>
-          <p style={{ fontSize: "0.6rem", color: "#606080", textAlign: "center" }}>
+          <p style={{ fontSize: "0.6rem", color: "#606080", textAlign: "center", marginTop: "1rem" }}>
             {lang === "fr" ? "À partir de 4 inscrits, la session est confirmée" : "From 4 sign-ups, the session is confirmed"}
           </p>
         </section>
