@@ -506,9 +506,6 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/manus-storage/logo-bpm_36460586.webp" alt="Brussels Pinball Museum" style={{ height: "50px" }} />
-            <div style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "0.5rem", color: "#00f5ff", letterSpacing: "0.05em", lineHeight: 1.2 }}>
-              BUBBLE<br />HOCKEY
-            </div>
           </div>
           <LangSwitcher lang={lang} setLang={setLang} />
         </div>
@@ -555,7 +552,7 @@ export default function Home() {
               >
                 {d.date}
                 <div style={{ fontSize: "0.5rem", color: "#00f5ff", marginTop: "2px" }}>
-                  {trainingSignups[d.key] || 0}/4
+                  {trainingSignups[d.key] || 0}
                 </div>
               </motion.button>
             ))}
