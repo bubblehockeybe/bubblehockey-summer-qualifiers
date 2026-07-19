@@ -397,6 +397,7 @@ export default function Home() {
   const [showShareButtons, setShowShareButtons] = useState(false);
   const [lastRegisteredDate, setLastRegisteredDate] = useState("");
   const [showCelebration, setShowCelebration] = useState(false);
+  const [acceptsContact, setAcceptsContact] = useState(false);
 
   // Compteur en direct des entraînements
   const [trainingSignups, setTrainingSignups] = useState<Record<string, number>>({});
@@ -444,8 +445,8 @@ export default function Home() {
 
   // Soumettre l'inscription
   const handleSubmit = async () => {
-    if (!playerName.trim() || !playerEmail.trim() || !sessionDate) {
-      setSubmitMessage(lang === "fr" ? "Remplissez tous les champs" : "Fill all fields");
+    if (!playerName.trim() || !playerEmail.trim() || !sessionDate || !acceptsContact) {
+      setSubmitMessage(lang === "fr" ? "Remplissez tous les champs et acceptez les conditions" : "Fill all fields and accept terms");
       return;
     }
     setIsSubmitting(true);
@@ -572,8 +573,13 @@ export default function Home() {
         {/* Registration section */}
         <section className="mb-12">
           <h2 style={{ fontFamily: "'Press Start 2P', cursive", fontSize: "1rem", color: "#00f5ff", textShadow: "0 0 8px #00f5ff", marginBottom: "1.5rem", letterSpacing: "0.05em", textAlign: "center" }}>
-            {lang === "fr" ? "S'INSCRIRE" : "SIGN UP"}
+            {lang === "fr" ? "JE SUIS INTÉRESSÉ" : "I'M INTERESTED"}
           </h2>
+          <p style={{ fontSize: "0.65rem", color: "#b0b0d0", textAlign: "center", marginBottom: "1.5rem", lineHeight: 1.6 }}>
+            {lang === "fr"
+              ? "Recevez des infos à propos de nos activités bubble hockey en vous inscrivant."
+              : "Receive information about our bubble hockey activities by signing up."}
+          </p>
 
           <PixelBorder color="#00f5ff">
             <div style={{ padding: "1.5rem" }}>
@@ -664,28 +670,57 @@ export default function Home() {
                   </select>
                 </div>
 
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                  <input
+                    type="checkbox"
+                    id="acceptsContact"
+                    checked={acceptsContact}
+                    onChange={(e) => setAcceptsContact(e.target.checked)}
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      cursor: "pointer",
+                      marginTop: "2px",
+                      accentColor: "#ff2d55",
+                    }}
+                  />
+                  <label
+                    htmlFor="acceptsContact"
+                    style={{
+                      fontSize: "0.6rem",
+                      color: "#b0b0d0",
+                      cursor: "pointer",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {lang === "fr"
+                      ? "En m'inscrivant, j'accepte d'être recontacté par mail par le Brussels Pinball Museum"
+                      : "By signing up, I accept being contacted by email by Brussels Pinball Museum"}
+                  </label>
+                </div>
+
                 <motion.button
                   onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  whileHover={{ scale: 1.02, boxShadow: "0 0 24px #ff2d55" }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={isSubmitting || !acceptsContact}
+                  whileHover={{ scale: !acceptsContact || isSubmitting ? 1 : 1.02, boxShadow: !acceptsContact || isSubmitting ? "none" : "0 0 24px #ff2d55" }}
+                  whileTap={{ scale: !acceptsContact || isSubmitting ? 1 : 0.98 }}
                   style={{
                     width: "100%",
                     fontFamily: "'Press Start 2P', cursive",
                     fontSize: "0.6rem",
-                    background: "#ff2d55",
+                    background: acceptsContact ? "#ff2d55" : "#666666",
                     color: "#fff",
-                    border: "3px solid #ff2d55",
+                    border: `3px solid ${acceptsContact ? "#ff2d55" : "#666666"}`,
                     padding: "12px",
-                    cursor: isSubmitting ? "not-allowed" : "pointer",
-                    boxShadow: "0 0 16px #ff2d55, 4px 4px 0 #8b0000",
+                    cursor: isSubmitting || !acceptsContact ? "not-allowed" : "pointer",
+                    boxShadow: acceptsContact ? "0 0 16px #ff2d55, 4px 4px 0 #8b0000" : "none",
                     letterSpacing: "0.05em",
                     transition: "all 0.2s",
-                    opacity: isSubmitting ? 0.6 : 1,
+                    opacity: isSubmitting ? 0.6 : acceptsContact ? 1 : 0.5,
                   }}
                   className="active:scale-95"
                 >
-                  {isSubmitting ? (lang === "fr" ? "..." : "...") : (lang === "fr" ? "S'INSCRIRE" : "SIGN UP")}
+                  {isSubmitting ? (lang === "fr" ? "..." : "...") : (lang === "fr" ? "JE M'INSCRIS" : "SIGN ME UP")}
                 </motion.button>
 
                 {submitMessage && (
