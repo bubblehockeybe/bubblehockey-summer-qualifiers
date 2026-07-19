@@ -39,7 +39,7 @@ export async function sendEmail(params: SendEmailParams): Promise<boolean> {
           },
         ],
         from: {
-          email: "noreply@bubblehockey.be",
+          email: "brusselspinballmuseum@gmail.com",
           name: "Bubble Hockey",
         },
         content: [
